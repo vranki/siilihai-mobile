@@ -24,4 +24,7 @@ Page {
             }
         }
     }
+    Text {
+        text: "MainPage";
+    }
 }

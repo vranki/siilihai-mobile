@@ -24,6 +24,11 @@ private slots:
     void subscriptionSelected(int parser);
     void groupSelected(QString id);
     void threadSelected(QString id);
+    void registerUser(QString user, QString password, QString email, bool sync);
+    void registerFinished(bool success, QString motd, bool sync);
+    void loginUser(QString user, QString password);
+    void loginFinished(bool success, QString motd, bool sync);
+    void sendParserReportFinished(bool success);
 protected:
     virtual QString getDataFilePath();
     virtual void showLoginWizard();
@@ -32,12 +37,16 @@ protected:
     virtual void showMainWindow();
     virtual void showCredentialsDialog(ForumSubscription *fsub, QAuthenticator * authenticator);
 private:
+    void displayNextMessage();
     QList<QObject*> subscriptionList, groupList, threadList, messageList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
     ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;
+    QString regOrLoginUser, regOrLoginPass;
+    QStringList messageQueue;
+    bool messageDisplayed;
 };
 
 #endif // SIILIHAIMOBILE_H

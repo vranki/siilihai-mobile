@@ -9,6 +9,10 @@ PageStackWindow {
     signal groupSelected(string id)
     signal threadSelected(string id)
     signal haltSiilihai()
+    signal registerUser(string username, string password, string email, bool sync)
+    signal closeRegistration(bool success, string motd)
+    signal loginUser(string username, string password)
+    signal closeLogin(bool success, string motd)
 
     MainPage {
         id: mainPage
@@ -24,6 +28,13 @@ PageStackWindow {
     MessageListPage {
         id: messageListPage
     }
+    MessagePage {
+        id: messagePage
+    }
+    LoginWizardPage {
+        id: loginWizardPage
+    }
+
     ToolBarLayout {
         id: commonTools
         visible: true
@@ -56,5 +67,24 @@ PageStackWindow {
 
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
+    }
+
+    function showMessage(msg) {
+        console.log("showMessage " + msg)
+        messagePage.text = msg
+        appWindow.pageStack.push(messagePage)
+    }
+    function showLoginWizard() {
+        console.log("showLoginWizard")
+        appWindow.pageStack.push(loginWizardPage)
+    }
+
+    function registrationFinished(success, motd) {
+        console.log("registrationFinished")
+        appWindow.closeRegistration(success, motd)
+    }
+    function loginFinished(success, motd) {
+        console.log("loginFinished")
+        appWindow.closeLogin(success, motd)
     }
 }

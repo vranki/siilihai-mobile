@@ -1,6 +1,7 @@
 #include "siilihaimobile.h"
 #include <QDesktopServices>
 #include <QDebug>
+#include <siilihai/parsermanager.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj)
@@ -10,19 +11,18 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
     QObject *appWindow = rootObject;
-    /*
-    qDebug() << appWindow->objectName();
-    foreach(QObject *c, appWindow->children()) {
-            qDebug() << "\t" << c->objectName();
-    }
-    */
+
     connect(appWindow, SIGNAL(subscriptionSelected(int)), this, SLOT(subscriptionSelected(int)));
     connect(appWindow, SIGNAL(groupSelected(QString)), this, SLOT(groupSelected(QString)));
     connect(appWindow, SIGNAL(threadSelected(QString)), this, SLOT(threadSelected(QString)));
     connect(appWindow, SIGNAL(haltSiilihai()), this, SLOT(haltSiilihai()));
     connect(appWindow, SIGNAL(registerUser(QString, QString, QString, bool)), this, SLOT(registerUser(QString,QString,QString,bool)));
     connect(appWindow, SIGNAL(loginUser(QString, QString)), this, SLOT(loginUser(QString,QString)));
-
+    connect(appWindow, SIGNAL(listSubscriptions()), this, SLOT(listSubscriptions()));
+    connect(appWindow, SIGNAL(subscribeForum(int, QString)), this, SLOT(subscribeForum(int, QString)));
+    connect(appWindow, SIGNAL(subscribeGroups()), this, SLOT(showSubscribeGroups()));
+    connect(appWindow, SIGNAL(setGroupSubscribed(QString, bool)), this, SLOT(setGroupSubscribed(QString, bool)));
+    connect(appWindow, SIGNAL(applyGroupSubscriptions()), this, SLOT(applyGroupSubscriptions()));
     messageDisplayed = true;
 }
 
@@ -33,7 +33,7 @@ QString SiilihaiMobile::getDataFilePath() {
 
 void SiilihaiMobile::subscribeForum() {
     qDebug() << Q_FUNC_INFO;
-    errorDialog(Q_FUNC_INFO);
+    QMetaObject::invokeMethod(rootObject, "showSubscribeWizard");
 }
 
 void SiilihaiMobile::showLoginWizard() {
@@ -154,10 +154,81 @@ void SiilihaiMobile::loginUser(QString user, QString password) {
 }
 
 void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
+    qDebug() << Q_FUNC_INFO;
     ClientLogic::loginFinished(success, motd, sync);
     disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
-    settings->setValue("account/username", regOrLoginUser);
-    settings->setValue("account/password", regOrLoginPass);
-    settings->sync();
+    if(!regOrLoginUser.isEmpty()) {
+        settings->setValue("account/username", regOrLoginUser);
+        settings->setValue("account/password", regOrLoginPass);
+        settings->sync();
+    }
     QMetaObject::invokeMethod(rootObject, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
+}
+
+void SiilihaiMobile::listSubscriptions() {
+    connect(&protocol, SIGNAL(listParsersFinished(QList <ForumParser*>)), this, SLOT(listParsersFinished(QList <ForumParser*>)));
+    protocol.listParsers();
+}
+
+void SiilihaiMobile::listParsersFinished(QList <ForumParser*> parsers) {
+    qDebug() << Q_FUNC_INFO << parsers.size();
+    foreach(ForumParser *p, parsers) {
+        parserList.append(p);
+    }
+    rootContext->setContextProperty("parserList", QVariant::fromValue(parserList));
+}
+
+void SiilihaiMobile::subscribeForum(int id, QString name) {
+    qDebug() << Q_FUNC_INFO << id;
+
+    connect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
+    protocol.getParser(id);
+}
+
+void SiilihaiMobile::getParserFinished(ForumParser *fp) {
+    disconnect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
+
+    ForumSubscription fs(this);
+    fs.setParser(fp->id());
+    fs.setAlias(fp->name());
+//    fs.setUsername(user);
+//    fs.setPassword(pass);
+    fs.setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
+    fs.setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
+
+    Q_ASSERT(fp->isSane());
+    forumAdded(&fs);
+}
+
+void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
+    foreach(ForumGroup *fg, currentSub->values()) {
+        subscribeGroupList.append(fg);
+    }
+    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
+    QMetaObject::invokeMethod(rootObject, "showSubscribeGroups");
+}
+
+void SiilihaiMobile::showSubscribeGroups(){
+    qDebug() << Q_FUNC_INFO;
+    if(!currentSub) return;
+    showSubscribeGroup(currentSub);
+}
+
+void SiilihaiMobile::setGroupSubscribed(QString id, bool sub) {
+    qDebug() << Q_FUNC_INFO << id << sub;
+    if(!currentSub) return;
+    ForumGroup *grp = currentSub->value(id);
+    if(!grp) return;
+    grp->setSubscribed(sub);
+}
+
+void SiilihaiMobile::applyGroupSubscriptions() {
+    qDebug() << Q_FUNC_INFO;
+    foreach(ForumGroup *group, currentSub->values()) {
+        group->markToBeUpdated();
+        group->setHasChanged(true);
+        group->commitChanges();
+    }
+    subscriptionSelected(currentSub->parser());
+    ClientLogic::updateGroupSubscriptions(currentSub);
 }

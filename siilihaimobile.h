@@ -7,6 +7,7 @@
 #include <siilihai/forumgroup.h>
 #include <siilihai/forumthread.h>
 #include <siilihai/forummessage.h>
+#include <siilihai/forumparser.h>
 
 class SiilihaiMobile : public ClientLogic
 {
@@ -29,16 +30,24 @@ private slots:
     void loginUser(QString user, QString password);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
+    void listSubscriptions();
+    void listParsersFinished(QList <ForumParser*>);
+    void subscribeForum(int id, QString name);
+    void getParserFinished(ForumParser *fp);
+    void showSubscribeGroups();
+    void setGroupSubscribed(QString id, bool sub);
+    void applyGroupSubscriptions();
 protected:
     virtual QString getDataFilePath();
     virtual void showLoginWizard();
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
+    virtual void showSubscribeGroup(ForumSubscription* forum);
     virtual void showCredentialsDialog(ForumSubscription *fsub, QAuthenticator * authenticator);
 private:
     void displayNextMessage();
-    QList<QObject*> subscriptionList, groupList, threadList, messageList;
+    QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
     ForumSubscription *currentSub;

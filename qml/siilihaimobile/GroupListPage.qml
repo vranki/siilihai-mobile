@@ -19,5 +19,9 @@ Page {
                 }
             }
         }
+        footer: Button {
+            text: "Manage Subscriptions"
+            onClicked: appWindow.subscribeGroups()
+        }
     }
 }

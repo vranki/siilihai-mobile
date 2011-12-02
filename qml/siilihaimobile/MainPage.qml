@@ -3,15 +3,13 @@ import com.nokia.meego 1.0
 
 Page {
     tools: commonTools
-    QueryDialog {
-        id: dialog
-        message: "kekeke"
-        visible: true
-    }
 
     ListView {
         anchors.fill: parent
         model: subscriptions
+        header: Text {
+            text: "Subscriptions";
+        }
         delegate: Row {
             Button {
                 text: parser + ": " + alias + " (" + unreadCount + ")"
@@ -23,8 +21,10 @@ Page {
                 }
             }
         }
-    }
-    Text {
-        text: "MainPage";
+        footer: Button {
+            anchors.topMargin: 20
+            text: "Subscribe new.."
+            onClicked: appWindow.showSubscribeWizard()
+        }
     }
 }

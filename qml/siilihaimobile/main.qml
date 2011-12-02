@@ -4,6 +4,7 @@ import com.nokia.meego 1.0
 PageStackWindow {
     id: appWindow
     initialPage: mainPage
+    //initialPage: testMsgDisplay
 
     signal subscriptionSelected(int parser)
     signal groupSelected(string id)
@@ -13,15 +14,26 @@ PageStackWindow {
     signal closeRegistration(bool success, string motd)
     signal loginUser(string username, string password)
     signal closeLogin(bool success, string motd)
-
+    signal listSubscriptions()
+    signal subscribeForum(int id, string name)
+    signal subscribeGroups()
+    signal setGroupSubscribed(string id, bool sub)
+    signal applyGroupSubscriptions();
+/*
+    MessageDisplay {
+        id: testMsgDisplay
+        msgSubject: "subject"
+        msgBody: "body"
+        msgAuthor: "author"
+        visible: false
+    }
+*/
     MainPage {
         id: mainPage
     }
-
     GroupListPage {
         id: groupListPage
     }
-
     ThreadListPage {
         id: threadListPage
     }
@@ -33,6 +45,12 @@ PageStackWindow {
     }
     LoginWizardPage {
         id: loginWizardPage
+    }
+    SubscribeWizardPage {
+        id: subscribeWizardPage
+    }
+    SubscribeGroupsPage {
+        id: subscribeGroupsPage
     }
 
     ToolBarLayout {
@@ -86,5 +104,14 @@ PageStackWindow {
     function loginFinished(success, motd) {
         console.log("loginFinished")
         appWindow.closeLogin(success, motd)
+    }
+    function showSubscribeWizard() {
+        console.log("showSubscribeWizard ")
+        appWindow.pageStack.push(subscribeWizardPage)
+        appWindow.listSubscriptions()
+    }
+    function showSubscribeGroups() {
+        console.log("showSubscribeGroups")
+        appWindow.pageStack.push(subscribeGroupsPage)
     }
 }

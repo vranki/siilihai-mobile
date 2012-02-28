@@ -15,10 +15,14 @@ PageStackWindow {
     signal loginUser(string username, string password)
     signal closeLogin(bool success, string motd)
     signal listSubscriptions()
+    signal getParserDetails(int id)
     signal subscribeForum(int id, string name)
+    signal subscribeForumWithCredentials(int id, string name, string user, string pass)
+    signal unSubscribeCurrentForum()
     signal subscribeGroups()
     signal setGroupSubscribed(string id, bool sub)
     signal applyGroupSubscriptions();
+    signal credentialsEntered(string u, string p, bool remember)
 /*
     MessageDisplay {
         id: testMsgDisplay
@@ -49,8 +53,14 @@ PageStackWindow {
     SubscribeWizardPage {
         id: subscribeWizardPage
     }
+    ForumCredentialsPage {
+        id: forumCredentialsPage
+    }
     SubscribeGroupsPage {
         id: subscribeGroupsPage
+    }
+    CredentialsDialogPage {
+        id: credentialsDialogPage
     }
 
     ToolBarLayout {
@@ -80,9 +90,23 @@ PageStackWindow {
                     appWindow.haltSiilihai()
                 }
             }
+            MenuItem {
+                visible: groupListPage.status == PageStatus.Active
+                text: "Unsubscribe Forum"
+                onClicked: {
+                    pageStack.pop()
+                    appWindow.unSubscribeCurrentForum()
+                }
+            }
+            MenuItem {
+                visible: mainPage.status == PageStatus.Active
+                text: "Subscribe to .."
+                onClicked: {
+                    appWindow.showSubscribeWizard()
+                }
+            }
         }
     }
-
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
     }
@@ -113,5 +137,15 @@ PageStackWindow {
     function showSubscribeGroups() {
         console.log("showSubscribeGroups")
         appWindow.pageStack.push(subscribeGroupsPage)
+    }
+    function askCredentials(sub) {
+        console.log("askCredentials " + sub)
+        credentialsDialogPage.forumname = sub
+        appWindow.pageStack.push(credentialsDialogPage)
+    }
+    function parserDetails(id, supportsLogin) {
+        console.log("parserDetails " + id + " " + supportsLogin)
+        forumCredentialsPage.supportsLogin = supportsLogin
+        forumCredentialsPage.parserDownloaded = true
     }
 }

@@ -9,7 +9,7 @@ Page {
         model: threads
         delegate: Row {
             Button {
-                text: id + ": " + name + " (" + unreadCount + ")"
+                text: name + " (" + unreadCount + ")"
                 width: threadListPage.width
                 onClicked:  {
                     appWindow.threadSelected(id)

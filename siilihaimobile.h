@@ -33,10 +33,14 @@ private slots:
     void listSubscriptions();
     void listParsersFinished(QList <ForumParser*>);
     void subscribeForum(int id, QString name);
+    void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
     void getParserFinished(ForumParser *fp);
     void showSubscribeGroups();
     void setGroupSubscribed(QString id, bool sub);
     void applyGroupSubscriptions();
+    void credentialsEntered(QString u, QString p, bool remember);
+    void unsubscribeCurrentForum();
+    void getParserDetails(int id);
 protected:
     virtual QString getDataFilePath();
     virtual void showLoginWizard();
@@ -44,7 +48,7 @@ protected:
     virtual void closeUi();
     virtual void showMainWindow();
     virtual void showSubscribeGroup(ForumSubscription* forum);
-    virtual void showCredentialsDialog(ForumSubscription *fsub, QAuthenticator * authenticator);
+    virtual void showCredentialsDialog(CredentialsRequest *cr);
 private:
     void displayNextMessage();
     QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;

@@ -19,11 +19,13 @@ Page {
             Button {
                 text: id + ": " + name
                 width: mainPage.width
-                    onClicked:  {
-                        appWindow.subscribeForum(id, name)
-                        appWindow.pageStack.pop()
-                        console.log("sub selected " + id)
-                    }
+                onClicked:  {
+                    console.log("sub selected " + id)
+                    forumCredentialsPage.forumname = name
+                    forumCredentialsPage.forumid = id
+                    appWindow.pageStack.push(forumCredentialsPage)
+                    appWindow.getParserDetails(id)
+                }
             }
         }
     }

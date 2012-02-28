@@ -10,7 +10,7 @@ Page {
         model: groups
         delegate: Row {
             Button {
-                text: id + ": " + name + " (" + unreadCount + ")"
+                text: name + " (" + unreadCount + ")"
                 width: groupListPage.width
                 onClicked:  {
                     appWindow.groupSelected(id)

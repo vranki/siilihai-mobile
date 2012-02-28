@@ -12,7 +12,7 @@ Page {
         }
         delegate: Row {
             Button {
-                text: parser + ": " + alias + " (" + unreadCount + ")"
+                text: alias + " (" + unreadCount + ")"
                 width: mainPage.width
                 onClicked:  {
                     appWindow.subscriptionSelected(parser)

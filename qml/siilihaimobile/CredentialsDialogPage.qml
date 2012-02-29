@@ -4,11 +4,12 @@ import com.nokia.meego 1.0
 Page {
     anchors.fill: parent
     property string forumname: "?"
+    property string credentialtype: "?"
     Column {
         spacing: 15
         anchors.centerIn: parent
         Text {
-            text: "Enter credentials for " + forumname
+            text: "Enter " + credentialtype + " credentials for " + forumname
             wrapMode: Text.Wrap
             width: parent.width
         }
@@ -36,14 +37,21 @@ Page {
         CheckBox {
             id: rememberCreds
             text: "Remember"
+            checked: true
         }
 
         Button {
             text: "Ok"
             onClicked: {
-                appWindow.pageStack.pop(mainPage);
+                appWindow.pageStack.pop(mainPage, true);
                 appWindow.credentialsEntered(forumUsername.text, forumPassword.text, rememberCreds.checked)
             }
         }
+    }
+    function resetForm() {
+        console.log("resetform")
+        forumUsername.text = ""
+        forumPassword.text = ""
+        rememberCreds.checked = true
     }
 }

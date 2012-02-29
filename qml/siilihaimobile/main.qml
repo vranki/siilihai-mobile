@@ -62,7 +62,6 @@ PageStackWindow {
     CredentialsDialogPage {
         id: credentialsDialogPage
     }
-
     ToolBarLayout {
         id: commonTools
         visible: true
@@ -138,10 +137,12 @@ PageStackWindow {
         console.log("showSubscribeGroups")
         appWindow.pageStack.push(subscribeGroupsPage)
     }
-    function askCredentials(sub) {
-        console.log("askCredentials " + sub)
+    function askCredentials(sub, type) {
+        console.log("askCredentials " + sub + " " + type)
         credentialsDialogPage.forumname = sub
-        appWindow.pageStack.push(credentialsDialogPage)
+        credentialsDialogPage.credentialtype = type
+        credentialsDialogPage.resetForm()
+        pageStack.push(credentialsDialogPage)
     }
     function parserDetails(id, supportsLogin) {
         console.log("parserDetails " + id + " " + supportsLogin)

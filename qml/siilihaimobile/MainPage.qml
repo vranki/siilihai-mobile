@@ -8,7 +8,7 @@ Page {
         anchors.fill: parent
         model: subscriptions
         header: Text {
-            text: "Subscriptions";
+            text: "Forums";
         }
         delegate: Row {
             Button {

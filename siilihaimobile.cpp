@@ -95,8 +95,9 @@ void SiilihaiMobile::subscriptionDeleted(QObject* subobj) {
 }
 
 void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
-    qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod(rootObject, "askCredentials", Q_ARG(QVariant, cr->subscription->alias()) );
+    qDebug() << Q_FUNC_INFO << cr->subscription->alias() << 50;
+    QMetaObject::invokeMethod(rootObject, "askCredentials", Q_ARG(QVariant, currentCredentialsRequest->subscription->alias()),
+                              Q_ARG(QVariant, currentCredentialsRequest->credentialType==CredentialsRequest::SH_CREDENTIAL_HTTP?"HTTP":"forum") );
 }
 
 void SiilihaiMobile::subscriptionSelected(int parser) {
@@ -255,7 +256,7 @@ void SiilihaiMobile::applyGroupSubscriptions() {
 }
 
 void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
-    qDebug() << Q_FUNC_INFO << u << p << remember;
+    qDebug() << Q_FUNC_INFO << u << remember;
     Q_ASSERT(currentCredentialsRequest);
     currentCredentialsRequest->authenticator.setUser(u);
     currentCredentialsRequest->authenticator.setPassword(p);

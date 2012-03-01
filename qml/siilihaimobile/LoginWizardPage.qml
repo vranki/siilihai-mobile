@@ -14,12 +14,14 @@ Page {
         anchors.centerIn: parent
         Text {
             text: "Welcome to Siilihai"
+            color: "white"
             wrapMode: Text.Wrap
             width: parent.width
         }
         Column {
             spacing: 4
             Text {
+                color: "white"
                 text: "Username:"
             }
             TextField {
@@ -30,6 +32,7 @@ Page {
         Column {
             spacing: 4
             Text {
+                color: "white"
                 text: "Password:"
             }
             TextField {

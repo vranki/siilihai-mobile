@@ -7,25 +7,17 @@ Page {
     ListView {
         anchors.fill: parent
         model: messages
-        delegate: messageDelegate
-    }
-
-    Component {
-        id: messageDelegate
-        Column {
-            Text {
-                width: messageListPage.width
-                text: displayName + " (" + author + ")"
-                font.pointSize: 12
-                font.bold: true
-                wrapMode: Text.Wrap
+        delegate: Row {
+            MessageDisplay {
+                subject: displayName
+                author: authorCleaned
+                messageBody: body
+                messageRead: isRead
             }
-            Text {
-                width: messageListPage.width
-                text: body
-                font.pointSize: 8
-                wrapMode: Text.Wrap
-            }
+        }
+        footer: Button {
+            text: "Mark thread read"
+            onClicked: appWindow.markThreadRead()
         }
     }
 }

@@ -23,6 +23,12 @@ PageStackWindow {
     signal setGroupSubscribed(string id, bool sub)
     signal applyGroupSubscriptions();
     signal credentialsEntered(string u, string p, bool remember)
+    signal markThreadRead();
+
+    Component.onCompleted: {
+        console.log("Loaded")
+        theme.inverted = true
+    }
 /*
     MessageDisplay {
         id: testMsgDisplay
@@ -31,7 +37,13 @@ PageStackWindow {
         msgAuthor: "author"
         visible: false
     }
+    Rectangle {
+        color: "black"
+        anchors.fill: parent
+        z: -100
+    }
 */
+
     MainPage {
         id: mainPage
     }

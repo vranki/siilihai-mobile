@@ -2,17 +2,26 @@
 #include <QDesktopServices>
 #include <QDebug>
 #include <siilihai/parsermanager.h>
+#include <siilihai/forumgroup.h>
+#include <siilihai/forumthread.h>
+#include <siilihai/forummessage.h>
+#include <siilihai/forumsubscription.h>
+#include <siilihai/forumparser.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
     currentThread(0)
 {
+    if(!rootContext)  {
+        closeUi();
+        return;
+    }
     rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
     rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
     rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
     QObject *appWindow = rootObject;
-
+    Q_ASSERT(appWindow);
     connect(appWindow, SIGNAL(subscriptionSelected(int)), this, SLOT(subscriptionSelected(int)));
     connect(appWindow, SIGNAL(groupSelected(QString)), this, SLOT(groupSelected(QString)));
     connect(appWindow, SIGNAL(threadSelected(QString)), this, SLOT(threadSelected(QString)));
@@ -28,7 +37,9 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(credentialsEntered(QString, QString, bool)), this, SLOT(credentialsEntered(QString,QString,bool)));
     connect(appWindow, SIGNAL(unSubscribeCurrentForum()), this, SLOT(unsubscribeCurrentForum()));
     connect(appWindow, SIGNAL(getParserDetails(int)), this, SLOT(getParserDetails(int)));
+    connect(appWindow, SIGNAL(markThreadRead()), this, SLOT(markThreadRead()));
     messageDisplayed = true;
+    offlineModeSet(true);
 }
 
 QString SiilihaiMobile::getDataFilePath() {
@@ -287,4 +298,12 @@ void SiilihaiMobile::getParserFinished(ForumParser* parser) {
     if(!parser) return;
     disconnect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
     QMetaObject::invokeMethod(rootObject, "parserDetails", Q_ARG(QVariant, parser->id()), Q_ARG(QVariant, parser->supportsLogin()));
+}
+void SiilihaiMobile::markThreadRead() {
+    qDebug() << Q_FUNC_INFO << currentThread;
+    if(!currentThread) return;
+    foreach(ForumMessage *msg, currentThread->values()) {
+        msg->setRead(true);
+        msg->commitChanges();
+    }
 }

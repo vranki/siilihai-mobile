@@ -9,15 +9,15 @@ Page {
         model: subscriptions
         header: Text {
             text: "Forums";
+            color: "white"
         }
         delegate: Row {
-            Button {
-                text: alias + " (" + unreadCount + ")"
-                width: mainPage.width
+            ButtonWithUnreadCount {
+                text: alias
+                unreads: unreadCount
                 onClicked:  {
                     appWindow.subscriptionSelected(parser)
                     appWindow.pageStack.push(groupListPage)
-                    console.log("sub selected " + parser)
                 }
             }
         }

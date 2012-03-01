@@ -8,13 +8,12 @@ Page {
         anchors.fill: parent
         model: threads
         delegate: Row {
-            Button {
-                text: name + " (" + unreadCount + ")"
-                width: threadListPage.width
+            ButtonWithUnreadCount {
+                text: name
+                unreads: unreadCount
                 onClicked:  {
                     appWindow.threadSelected(id)
                     appWindow.pageStack.push(messageListPage)
-                    console.log("thread selected " + id)
                 }
             }
         }

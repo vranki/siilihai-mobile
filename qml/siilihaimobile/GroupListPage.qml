@@ -9,13 +9,12 @@ Page {
         anchors.fill: parent
         model: groups
         delegate: Row {
-            Button {
-                text: name + " (" + unreadCount + ")"
-                width: groupListPage.width
+            ButtonWithUnreadCount {
+                text: name
+                unreads: unreadCount
                 onClicked:  {
                     appWindow.groupSelected(id)
                     appWindow.pageStack.push(threadListPage)
-                    console.log("grp selected " + id)
                 }
             }
         }

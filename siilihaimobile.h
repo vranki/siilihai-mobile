@@ -3,11 +3,6 @@
 
 #include <siilihai/clientlogic.h>
 #include <qdeclarativecontext.h>
-#include <siilihai/forumsubscription.h>
-#include <siilihai/forumgroup.h>
-#include <siilihai/forumthread.h>
-#include <siilihai/forummessage.h>
-#include <siilihai/forumparser.h>
 
 class SiilihaiMobile : public ClientLogic
 {
@@ -41,6 +36,7 @@ private slots:
     void credentialsEntered(QString u, QString p, bool remember);
     void unsubscribeCurrentForum();
     void getParserDetails(int id);
+    void markThreadRead();
 protected:
     virtual QString getDataFilePath();
     virtual void showLoginWizard();

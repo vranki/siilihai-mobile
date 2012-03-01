@@ -25,6 +25,7 @@ Page {
             spacing: 4
             Text {
                 text: "Username:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -36,6 +37,7 @@ Page {
             spacing: 4
             Text {
                 text: "Password:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Password"
@@ -47,7 +49,6 @@ Page {
         Button {
             text: "Ok"
             onClicked: {
-                console.log("havecreds " + haveCredentials.checked)
                 if(haveCredentials.checked) {
                     appWindow.subscribeForumWithCredentials(forumid, forumname, forumUsername.text, forumPassword.text)
                 } else {

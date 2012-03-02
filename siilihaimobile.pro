@@ -1,7 +1,9 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/siilihaimobile
+folder_01.source = qml/siilihai-mobile
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
+
+TARGET=siilihai-mobile
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -39,14 +41,12 @@ QT += network xml
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qtc_packaging/debian_harmattan/rules \
-    qtc_packaging/debian_harmattan/README \
-    qtc_packaging/debian_harmattan/manifest.aegis \
-    qtc_packaging/debian_harmattan/copyright \
-    qtc_packaging/debian_harmattan/control \
-    qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog
+# hack to include libsiilihai in the binary package thanks to Ovi
+# store not supporting dependencies properly
+binarylibs.files = /usr/lib/libsiilihai.so*
+binarylibs.path = /usr/lib
+
+INSTALLS += binarylibs
 
 LIBS += -lsiilihai
 

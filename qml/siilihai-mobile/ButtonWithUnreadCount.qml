@@ -17,6 +17,7 @@ Button {
         color: "white"
         text: button.label
         width: button.width - button.width/5
+        verticalAlignment: Text.AlignVCenter
     }
     Rectangle {
         id: separator

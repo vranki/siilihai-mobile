@@ -11,7 +11,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer->setMainQmlFile(QLatin1String("qml/siilihaimobile/main.qml"));
+    viewer->setMainQmlFile(QLatin1String("qml/siilihai-mobile/main.qml"));
     viewer->showExpanded();
 
     SiilihaiMobile shm(app.data(), viewer->rootContext(), viewer->rootObject());

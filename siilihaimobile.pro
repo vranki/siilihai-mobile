@@ -39,14 +39,12 @@ QT += network xml
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qtc_packaging/debian_harmattan/rules \
-    qtc_packaging/debian_harmattan/README \
-    qtc_packaging/debian_harmattan/manifest.aegis \
-    qtc_packaging/debian_harmattan/copyright \
-    qtc_packaging/debian_harmattan/control \
-    qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog
+# hack to include libsiilihai in the binary package thanks to Ovi
+# store not supporting dependencies properly
+binarylibs.files = /usr/lib/libsiilihai.so*
+binarylibs.path = /usr/lib
+
+INSTALLS += binarylibs
 
 LIBS += -lsiilihai
 

@@ -24,7 +24,7 @@ Button {
         width: 2
         height: button.height * 0.8
         anchors.left: buttonText.right
-        anchors.top: buttonText.top
+        anchors.verticalCenter: button.verticalCenter
         gradient: Gradient {
             GradientStop {
                 position: 0.0

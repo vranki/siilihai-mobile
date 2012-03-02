@@ -12,11 +12,13 @@ Page {
             text: "Enter " + credentialtype + " credentials for " + forumname
             wrapMode: Text.Wrap
             width: parent.width
+            color: "white"
         }
         Column {
             spacing: 4
             Text {
                 text: "Username:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -27,6 +29,7 @@ Page {
             spacing: 4
             Text {
                 text: "Password:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Password"

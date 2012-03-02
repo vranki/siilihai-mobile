@@ -13,7 +13,7 @@ Page {
         }
         delegate: Row {
             ButtonWithUnreadCount {
-                text: alias
+                label: alias
                 unreads: unreadCount
                 onClicked:  {
                     appWindow.subscriptionSelected(parser)

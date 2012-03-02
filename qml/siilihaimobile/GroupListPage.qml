@@ -10,7 +10,7 @@ Page {
         model: groups
         delegate: Row {
             ButtonWithUnreadCount {
-                text: name
+                label: name
                 unreads: unreadCount
                 onClicked:  {
                     appWindow.groupSelected(id)

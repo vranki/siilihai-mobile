@@ -1,36 +1,25 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
+import com.nokia.meego 1.0
 
-Rectangle {
+Button {
     id: button
-    property string text: "?"
+    property string label: "?"
     property int unreads: -1
-    signal clicked
+    text: ""
     width: mainPage.width
-    height: buttonText.height + 15
-    radius: 10
-    smooth: true
-
+    height: buttonText.height + 30
     Text {
+        anchors.verticalCenter: button.verticalCenter
+        anchors.leftMargin: 25
         id: buttonText
         wrapMode: Text.Wrap
         color: "white"
-        text: button.text
+        text: button.label
         width: button.width - button.width/5
     }
-    Text {
-        id: unreadText
-        color: "white"
-        text: button.unreads
-        anchors.left: buttonText.right
-        anchors.top: buttonText.top
-        width: button.width - buttonText.width
-        height: buttonText.height
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-    }
     Rectangle {
-        color: "white"
+        id: separator
         width: 2
         height: button.height * 0.8
         anchors.left: buttonText.right
@@ -54,28 +43,15 @@ Rectangle {
             }
         }
     }
-
-    MouseArea {
-        anchors.fill: button
-        onClicked: button.clicked()
-    }
-
-    gradient: Gradient {
-        GradientStop {
-            position: 0.0
-            color: "#555555"
-        }
-        GradientStop {
-            position: 0.2
-            color: "#000000"
-        }
-        GradientStop {
-            position: 0.8
-            color: "#000000"
-        }
-        GradientStop {
-            position: 1.0
-            color: "#000000"
-        }
+    Text {
+        id: unreadText
+        color: "white"
+        text: button.unreads
+        anchors.left: separator.right
+        anchors.top: buttonText.top
+        width: button.width - buttonText.width
+        height: buttonText.height
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
     }
 }

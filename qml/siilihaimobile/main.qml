@@ -29,6 +29,10 @@ PageStackWindow {
         console.log("Loaded")
         theme.inverted = true
     }
+    Component.onDestruction: {
+        console.log("QML exit")
+        haltSiilihai()
+    }
 /*
     MessageDisplay {
         id: testMsgDisplay

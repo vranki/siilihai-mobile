@@ -9,7 +9,7 @@ Page {
         model: threads
         delegate: Row {
             ButtonWithUnreadCount {
-                text: name
+                label: name
                 unreads: unreadCount
                 onClicked:  {
                     appWindow.threadSelected(id)

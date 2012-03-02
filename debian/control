@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Ville Ranki <cosmo@unknown>
 Build-Depends: debhelper (>= 5), libqt4-dev, libsiilihai (>= 1.1.0), applauncherd-dev
 Standards-Version: 3.7.3
-Homepage: <insert the upstream URL, if relevant>
+Homepage: http://www.siilihai.com/
 
 Package: siilihai-mobile
 XB-Maemo-Display-Name: Siilihai Web Forum Reader
@@ -12,9 +12,9 @@ XSBC-Maemo-Display-Name: Siilihai
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: libsiilihai
+Provides: libsiilihai
 Description: Siilihai web forum reader mobile version
  Graphical web forum reader application. See www.siilihai.com for details.
-
 XB-Maemo-Icon-26:  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAAAXNSR0IArs4c
  6QAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB9kLDBQILsvD5YUAABBS
  SURBVFhHvVlpkFzVdT7n3vder9PLzHTPqtlnNBrtO1qQwSIIIzC7wdjgDSfE
@@ -111,6 +111,8 @@ XB-Maemo-Icon-26:  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAAAXNSR0IArs4c
  NEWzDZ+qyGyGJoeEk9VtZ2A64UeiR36emxzn/htEOU+EBcJ+pjaAj4LZPEBz
  f1xlJAISANDM/cS8ijEXCwvO+tGo5DBLAOd8XjkIZzaE5sbg/wF8JEomuvrr
  XwAAAABJRU5ErkJggg==
+
+
 
 Package: siilihai-mobile-dbg
 XB-Maemo-Display-Name: Debug symbols for siilihai-mobile

@@ -28,7 +28,6 @@ build-stamp: configure-stamp
 
 	# Add here commands to compile the package.
 	$(MAKE) # Uncomment this line for use without Qt Creator
-	#docbook-to-man debian/siilihaimobile.sgml > siilihaimobile.1
 
 	touch $@
 
@@ -49,8 +48,8 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	# Add here commands to install the package into debian/siilihaimobile.
-	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/siilihaimobile install
+	# Add here commands to install the package into debian/siilihai-mobile.
+	$(MAKE) INSTALL_ROOT="$(CURDIR)"/debian/siilihai-mobile install
 
 
 # Build architecture-independent files here.

@@ -7,7 +7,7 @@ Rectangle {
     property int unreads: -1
     signal clicked
     width: mainPage.width
-    height: buttonText.height + 15
+    height: buttonText.height + 30
     radius: 10
     smooth: true
 
@@ -17,6 +17,7 @@ Rectangle {
         color: "white"
         text: button.text
         width: button.width - button.width/5
+        verticalAlignment: Text.AlignVCenter
     }
     Text {
         id: unreadText

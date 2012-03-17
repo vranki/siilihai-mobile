@@ -53,4 +53,12 @@ LIBS += -lsiilihai
 HEADERS += \
     siilihaimobile.h
 
+desktops.files = siilihaimobile_harmattan.desktop
+desktops.path = /usr/share/applications
+
+INSTALLS += desktops
+
+OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
+debian/changelog
+
 

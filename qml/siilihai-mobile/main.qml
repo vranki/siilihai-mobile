@@ -122,6 +122,13 @@ PageStackWindow {
             }
         }
     }
+
+    Timer {
+        id: statusmessagetimer
+        interval: 5000; running: false; repeat: false
+        onTriggered: mainPage.message = ""
+    }
+
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
     }
@@ -164,5 +171,14 @@ PageStackWindow {
         console.log("parserDetails " + id + " " + supportsLogin)
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.parserDownloaded = true
+    }
+    function setBusy(busy) {
+        console.log("setBusy " + busy)
+        mainPage.busy = busy
+    }
+    function showStatusMessage(message) {
+        console.log("showStatusMessage " + message)
+        mainPage.message = message
+        statusmessagetimer.restart()
     }
 }

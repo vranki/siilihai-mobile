@@ -307,3 +307,11 @@ void SiilihaiMobile::markThreadRead() {
         msg->commitChanges();
     }
 }
+void SiilihaiMobile::changeState(siilihai_states newState) {
+    ClientLogic::changeState(newState);
+    QMetaObject::invokeMethod(rootObject, "setBusy", Q_ARG(QVariant, newState != SH_READY));
+}
+
+void SiilihaiMobile::showStatusMessage(QString message) {
+    QMetaObject::invokeMethod(rootObject, "showStatusMessage", Q_ARG(QVariant, message));
+}

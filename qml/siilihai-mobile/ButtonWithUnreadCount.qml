@@ -10,6 +10,7 @@ Button {
     width: mainPage.width
     height: buttonText.height + 30
     Text {
+        font.pointSize: button.font.pointSize
         anchors.verticalCenter: button.verticalCenter
         anchors.leftMargin: 25
         id: buttonText
@@ -47,6 +48,7 @@ Button {
     Text {
         id: unreadText
         color: "white"
+        font.pointSize: button.font.pointSize
         text: button.unreads
         anchors.left: separator.right
         anchors.top: buttonText.top

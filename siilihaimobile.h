@@ -37,14 +37,17 @@ private slots:
     void unsubscribeCurrentForum();
     void getParserDetails(int id);
     void markThreadRead();
+    virtual void showStatusMessage(QString message);
 protected:
     virtual QString getDataFilePath();
+    virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
     virtual void showSubscribeGroup(ForumSubscription* forum);
     virtual void showCredentialsDialog(CredentialsRequest *cr);
+
 private:
     void displayNextMessage();
     QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;

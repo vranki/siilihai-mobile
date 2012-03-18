@@ -24,7 +24,6 @@ Page {
                 text: mainPage.message
                 font.italic: true
                 color: "white"
-                font.pointSize: 10
             }
         }
         delegate: Row {

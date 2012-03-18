@@ -12,11 +12,10 @@ Button {
     Text {
         font.pointSize: button.font.pointSize
         anchors.verticalCenter: button.verticalCenter
-        anchors.leftMargin: 25
         id: buttonText
         wrapMode: Text.Wrap
         color: "white"
-        text: button.label
+        text: "  " + button.label
         width: button.width - button.width/5
         verticalAlignment: Text.AlignVCenter
     }

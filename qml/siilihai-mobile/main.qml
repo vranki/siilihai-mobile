@@ -126,7 +126,7 @@ PageStackWindow {
     Timer {
         id: statusmessagetimer
         interval: 5000; running: false; repeat: false
-        onTriggered: mainPage.message = ""
+        onTriggered: mainPage.message = " "
     }
 
     onSubscriptionSelected: {

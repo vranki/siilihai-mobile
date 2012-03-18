@@ -15,19 +15,20 @@ Rectangle {
         color: "white"
         width: message.width
         wrapMode: Text.WordWrap
+        font.pointSize: 20
     }
     Text {
         id: toolLine
         text: (messageRead?"Read":"Unread") + " by " + message.author
         color: "white"
         width: message.width
-        font.pointSize: 8
+        font.pointSize: 12
         anchors.top: subjectLine.bottom
     }
     Text {
         id: body
         text: message.messageBody
-        font.pointSize: 8
+        font.pointSize: 12
         color: "black"
         width: message.width
         anchors.top: toolLine.bottom

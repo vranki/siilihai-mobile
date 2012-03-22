@@ -2,15 +2,16 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 
 Page {
-    tools: commonTools
     property bool busy: true
     property string message: ""
+
+    tools: commonTools
     ListView {
         anchors.fill: parent
         model: subscriptions
         header: Column {
             width: parent.width
-            Text {
+            Label {
                 text: "Forums";
                 color: "white"
             }
@@ -19,7 +20,7 @@ Page {
                 width: parent.width
                 visible: mainPage.busy
             }
-            Text {
+            Label {
                 id: statusmessage
                 text: mainPage.message
                 font.italic: true
@@ -30,6 +31,7 @@ Page {
             ButtonWithUnreadCount {
                 label: alias
                 unreads: unreadCount
+                busy: beingUpdated || mainPage.busy
                 onClicked:  {
                     appWindow.subscriptionSelected(parser)
                     appWindow.pageStack.push(groupListPage)

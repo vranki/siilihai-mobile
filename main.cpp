@@ -16,5 +16,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     SiilihaiMobile shm(app.data(), viewer->rootContext(), viewer->rootObject());
     shm.launchSiilihai();
-    return app->exec();
+    int ret = app->exec();
+
+    // Ugly hack to make sure Siilihai quits graceously
+    qDebug() << Q_FUNC_INFO << "exec() exited";
+    if(!shm.isHaltRequested()) {
+        qDebug() << Q_FUNC_INFO << "halt NOT requested yet - forcing halt";
+        shm.haltSiilihai();
+        app->exec(); // Re-start Qt main loop
+    } else {
+        qDebug() << Q_FUNC_INFO << "halt ok";
+    }
+    return ret;
 }

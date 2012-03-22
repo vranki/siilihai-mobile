@@ -9,6 +9,7 @@ Rectangle {
     height: subjectLine.height + body.height + 40
     radius: 15
     smooth: true
+    anchors.bottomMargin: 4
     Text {
         id: subjectLine
         text: message.subject + " (" + message.author + ")"

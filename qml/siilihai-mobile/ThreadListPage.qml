@@ -13,6 +13,7 @@ Page {
                 unreads: unreadCount
                 onClicked:  {
                     appWindow.threadSelected(id)
+                    messageListPage.hasMoreMessages = hasMoreMessages
                     appWindow.pageStack.push(messageListPage)
                 }
             }

@@ -6,6 +6,7 @@ PageStackWindow {
     initialPage: mainPage
     //initialPage: testMsgDisplay
 
+    // QML -> C++
     signal subscriptionSelected(int parser)
     signal groupSelected(string id)
     signal threadSelected(string id)
@@ -23,7 +24,9 @@ PageStackWindow {
     signal setGroupSubscribed(string id, bool sub)
     signal applyGroupSubscriptions();
     signal credentialsEntered(string u, string p, bool remember)
-    signal markThreadRead();
+    signal markThreadRead(bool read);
+    signal showMoreMessages();
+    signal updateClicked();
 
     Component.onCompleted: {
         console.log("Loaded")
@@ -78,14 +81,26 @@ PageStackWindow {
     CredentialsDialogPage {
         id: credentialsDialogPage
     }
+    HaltScreen {
+        id: haltScreen
+    }
+
     ToolBarLayout {
         id: commonTools
-        visible: true
+        Row {
         ToolIcon {
             id: backButton
             platformIconId: "toolbar-back"
             onClicked: pageStack.pop()
             visible: appWindow.pageStack.currentPage != mainPage
+        }
+        ToolIcon {
+            platformIconId: "toolbar-refresh"
+            enabled: !mainPage.busy
+            onClicked: appWindow.updateClicked()
+            visible: !backButton.visible
+//            anchors.left: backButton.right
+        }
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
@@ -180,5 +195,10 @@ PageStackWindow {
         console.log("showStatusMessage " + message)
         mainPage.message = message
         statusmessagetimer.restart()
+    }
+    function showHaltScreen() {
+        console.log("showHaltScreen")
+        pageStack.clear()
+        pageStack.push(haltScreen, null, true)
     }
 }

@@ -10,7 +10,7 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
-    currentThread(0)
+    currentThread(0), haltRequested(false)
 {
     if(!rootContext)  {
         closeUi();
@@ -37,7 +37,9 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(credentialsEntered(QString, QString, bool)), this, SLOT(credentialsEntered(QString,QString,bool)));
     connect(appWindow, SIGNAL(unSubscribeCurrentForum()), this, SLOT(unsubscribeCurrentForum()));
     connect(appWindow, SIGNAL(getParserDetails(int)), this, SLOT(getParserDetails(int)));
-    connect(appWindow, SIGNAL(markThreadRead()), this, SLOT(markThreadRead()));
+    connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
+    connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
+    connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
     messageDisplayed = true;
     offlineModeSet(true);
 }
@@ -128,6 +130,8 @@ void SiilihaiMobile::subscriptionSelected(int parser) {
 
 void SiilihaiMobile::groupSelected(QString id) {
     qDebug() << Q_FUNC_INFO << id;
+    if(currentThread)
+        disconnect(currentThread, 0, this, 0);
     threadList.clear();
     if(!id.isEmpty()) {
         currentGroup = currentSub->value(id);
@@ -141,9 +145,19 @@ void SiilihaiMobile::groupSelected(QString id) {
 
 void SiilihaiMobile::threadSelected(QString id) {
     qDebug() << Q_FUNC_INFO << id;
-    messageList.clear();
+    if(currentThread)
+        disconnect(currentThread, 0, this, 0);
     if(!id.isEmpty()) {
         currentThread = currentGroup->value(id);
+        connect(currentThread, SIGNAL(messageAdded(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
+        connect(currentThread, SIGNAL(messageRemoved(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
+        updateCurrentMessageModel();
+    }
+}
+
+void SiilihaiMobile::updateCurrentMessageModel() {
+    messageList.clear();
+    if(currentThread) {
         foreach(ForumMessage *fm, currentThread->values()) {
             messageList.append(fm);
         }
@@ -299,11 +313,11 @@ void SiilihaiMobile::getParserFinished(ForumParser* parser) {
     disconnect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
     QMetaObject::invokeMethod(rootObject, "parserDetails", Q_ARG(QVariant, parser->id()), Q_ARG(QVariant, parser->supportsLogin()));
 }
-void SiilihaiMobile::markThreadRead() {
+void SiilihaiMobile::markThreadRead(bool read) {
     qDebug() << Q_FUNC_INFO << currentThread;
     if(!currentThread) return;
     foreach(ForumMessage *msg, currentThread->values()) {
-        msg->setRead(true);
+        msg->setRead(read);
         msg->commitChanges();
     }
 }
@@ -314,4 +328,20 @@ void SiilihaiMobile::changeState(siilihai_states newState) {
 
 void SiilihaiMobile::showStatusMessage(QString message) {
     QMetaObject::invokeMethod(rootObject, "showStatusMessage", Q_ARG(QVariant, message));
+}
+
+void SiilihaiMobile::showMoreMessages() {
+    qDebug() << Q_FUNC_INFO << currentThread;
+    if(!currentThread) return;
+    moreMessagesRequested(currentThread);
+}
+
+void SiilihaiMobile::haltSiilihai() {
+    haltRequested = true;
+    QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+    ClientLogic::haltSiilihai();
+}
+
+bool SiilihaiMobile::isHaltRequested() {
+    return haltRequested;
 }

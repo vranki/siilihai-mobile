@@ -10,7 +10,7 @@ Package: siilihai-mobile
 XB-Maemo-Display-Name: Siilihai Web Forum Reader
 XSBC-Maemo-Display-Name: Siilihai
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqtwebkit-qmlwebkitplugin
 Conflicts: libsiilihai1
 Provides: libsiilihai1
 Description: Siilihai web forum reader mobile version

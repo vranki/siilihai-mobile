@@ -41,6 +41,7 @@ private slots:
     virtual void showStatusMessage(QString message);
     void showMoreMessages();
     void updateCurrentMessageModel();
+    void openInBrowser(QString messageId);
 protected:
     virtual QString getDataFilePath();
     virtual void changeState(siilihai_states newState);

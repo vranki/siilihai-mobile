@@ -3,6 +3,7 @@ import com.nokia.meego 1.0
 
 Page {
     property bool hasMoreMessages: false
+    property string threadname: "?"
 
     tools: ToolBarLayout {
         visible: true
@@ -61,12 +62,20 @@ Page {
         anchors.fill: parent
         model: messages
         boundsBehavior: Flickable.StopAtBounds
+
+        header: Label {
+            text: "Messages in " + threadname;
+            color: "white"
+            wrapMode: Text.Wrap
+        }
+
         delegate: Row {
             MessageDisplay {
                 subject: displayName
                 author: authorCleaned
                 messageBody: body
                 messageRead: isRead
+                messageId: id
             }
         }
         footer: Column {

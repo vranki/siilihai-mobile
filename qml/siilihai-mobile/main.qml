@@ -27,6 +27,7 @@ PageStackWindow {
     signal markThreadRead(bool read);
     signal showMoreMessages();
     signal updateClicked();
+    signal openInBrowser(string id);
 
     Component.onCompleted: {
         console.log("Loaded")

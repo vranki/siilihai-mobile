@@ -35,7 +35,7 @@ CONFIG += qdeclarative-boostable
 SOURCES += main.cpp \
     siilihaimobile.cpp
 
-QT += network xml
+QT += network xml webkit
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

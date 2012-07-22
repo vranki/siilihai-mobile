@@ -40,6 +40,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
+    connect(appWindow, SIGNAL(openInBrowser(QString)), this, SLOT(openInBrowser(QString)));
     messageDisplayed = true;
     offlineModeSet(true);
 }
@@ -344,4 +345,10 @@ void SiilihaiMobile::haltSiilihai() {
 
 bool SiilihaiMobile::isHaltRequested() {
     return haltRequested;
+}
+
+void SiilihaiMobile::openInBrowser(QString messageId) {
+    if(!currentThread) return;
+    ForumMessage *m = currentThread->value(messageId);
+    if(m) QDesktopServices::openUrl(QUrl(m->url()));
 }

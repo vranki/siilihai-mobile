@@ -53,7 +53,7 @@ Page {
             }
         }
         Button {
-            text: "Ok"
+            text: "Continue"
             onClicked: {
                 if(haveCredentials.checked) {
                     appWindow.subscribeForumWithCredentials(forumid, forumname, forumUsername.text, forumPassword.text)

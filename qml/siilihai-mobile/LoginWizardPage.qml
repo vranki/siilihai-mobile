@@ -27,6 +27,7 @@ Page {
             TextField {
                 placeholderText: "Username"
                 id: loginUsername
+                font.capitalization: Font.MixedCase
             }
         }
         Column {

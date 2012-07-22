@@ -10,14 +10,15 @@ Page {
         anchors.fill: parent
 
         header: Text {
-            id: text
-            text: "Subscribe to forum"
+            text: "Subscribe to a forum"
             wrapMode: Text.Wrap
+            width: parent.width
+            color: "white"
         }
 
         delegate: Row {
             Button {
-                text: id + ": " + name
+                text: name
                 width: mainPage.width
                 onClicked:  {
                     console.log("sub selected " + id)

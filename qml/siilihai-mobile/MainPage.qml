@@ -12,8 +12,9 @@ Page {
         header: Column {
             width: parent.width
             Label {
-                text: "Forums";
+                text: "Subscribed Forums";
                 color: "white"
+                wrapMode: Text.Wrap
             }
             ProgressBar {
                 indeterminate: true
@@ -33,6 +34,7 @@ Page {
                 unreads: unreadCount
                 busy: beingUpdated || mainPage.busy
                 onClicked:  {
+                    groupListPage.forumname = alias
                     appWindow.subscriptionSelected(parser)
                     appWindow.pageStack.push(groupListPage)
                 }

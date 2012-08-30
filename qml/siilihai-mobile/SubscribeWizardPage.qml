@@ -9,13 +9,11 @@ Page {
         model: parserList
         anchors.fill: parent
 
-        header: Text {
+        header: Label {
             text: "Subscribe to a forum"
             wrapMode: Text.Wrap
             width: parent.width
-            color: "white"
         }
-
         delegate: Row {
             Button {
                 text: name

@@ -9,11 +9,10 @@ Page {
         model: subscribeGroupList
         anchors.fill: parent
 
-        header: Text {
+        header: Label {
             id: text
             text: "Subscribe to groups"
             wrapMode: Text.Wrap
-            color: "white"
         }
 
         delegate: Row {

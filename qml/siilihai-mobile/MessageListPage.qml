@@ -65,7 +65,6 @@ Page {
 
         header: Label {
             text: "Messages in " + threadname;
-            color: "white"
             wrapMode: Text.Wrap
         }
 

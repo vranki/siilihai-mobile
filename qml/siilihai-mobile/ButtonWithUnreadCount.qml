@@ -19,13 +19,12 @@ Button {
         anchors.rightMargin: 3
         visible: running
     }
-    Text {
+    Label {
         font.pointSize: button.font.pointSize
         anchors.verticalCenter: button.verticalCenter
         anchors.left: busyindicator.right
         id: buttonText
         wrapMode: Text.Wrap
-        color: "white"
         text: button.label
         width: button.width - busyindicator.width - separator.width - unreadText.width
         verticalAlignment: Text.AlignVCenter
@@ -41,25 +40,24 @@ Button {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: "#000000"
+                color: "#FFFFFF"
             }
             GradientStop {
                 position: 0.2
-                color: "#FFFFFF"
+                color: "#000000"
             }
             GradientStop {
                 position: 0.8
-                color: "#FFFFFF"
+                color: "#000000"
             }
             GradientStop {
                 position: 1.0
-                color: "#000000"
+                color: "#FFFFFF"
             }
         }
     }
-    Text {
+    Label {
         id: unreadText
-        color: "white"
         font.pointSize: button.font.pointSize
         text: button.unreads
         anchors.right: button.right

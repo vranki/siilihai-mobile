@@ -31,6 +31,20 @@ CONFIG += qdeclarative-boostable
 # Add dependency to Symbian components
 # CONFIG += qt-components
 
+# Always on Harmattan
+CONFIG += with_lib
+
+# Use this config flag to build libsiilihai into the binary
+CONFIG(with_lib) {
+    message(Building WITH lib included in binary!)
+    LIB_PATH = ../libsiilihai
+    SOURCES += $$LIB_PATH/src/siilihai/*.cpp
+    HEADERS += $$LIB_PATH/src/siilihai/*.h
+    INCLUDEPATH += $$LIB_PATH/src/
+} else {
+    LIBS += -lsiilihai
+}
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     siilihaimobile.cpp
@@ -41,14 +55,7 @@ QT += network xml webkit
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-# hack to include libsiilihai in the binary package thanks to Ovi
-# store not supporting dependencies properly
-binarylibs.files = /usr/lib/libsiilihai.so*
-binarylibs.path = /usr/lib
-
 INSTALLS += binarylibs
-
-LIBS += -lsiilihai
 
 HEADERS += \
     siilihaimobile.h
@@ -60,5 +67,3 @@ INSTALLS += desktops
 
 OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
 debian/changelog
-
-

@@ -15,13 +15,13 @@ Rectangle {
     smooth: true
     anchors.bottomMargin: 4
 
-    Text {
+    Label {
         id: subjectLine
         text: message.subject + " (" + message.author + ")"
-        color: "white"
         width: message.width - openButton.width
         wrapMode: Text.WordWrap
         font.pointSize: 20
+        color: "white"
     }
 
     Button {
@@ -34,10 +34,9 @@ Rectangle {
         }
     }
 
-    Text {
+    Label {
         id: toolLine
         text: (messageRead?"Read":"Unread") + " by " + message.author
-        color: "white"
         width: message.width
         font.pointSize: 12
         anchors.top: subjectLine.bottom
@@ -51,7 +50,7 @@ Rectangle {
     }
     */
 
-    Text {
+    Label {
         id: body
         text: message.messageBody
         font.pointSize: 12
@@ -74,19 +73,19 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: "#555555"
+            color: "#888888"
         }
         GradientStop {
-            position: 0.2
-            color: "#333333"
+            position: 0.1
+            color: "#AAAAAA"
         }
         GradientStop {
             position: 0.8
-            color: "#000000"
+            color: "#CCCCCC"
         }
         GradientStop {
             position: 1.0
-            color: "#333333"
+            color: "#CCCCFF"
         }
     }
 }

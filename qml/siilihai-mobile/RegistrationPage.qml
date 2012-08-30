@@ -6,7 +6,7 @@ Page {
     anchors.fill: parent
     property bool registering: false
     enabled: !registering
-    Text {
+    Label {
         text: "Registration"
         width: parent.width
     }
@@ -16,7 +16,7 @@ Page {
 
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Username:"
             }
             TextField {
@@ -27,7 +27,7 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "E-mail address:"
             }
             TextField {
@@ -37,7 +37,7 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Password:"
             }
             TextField {

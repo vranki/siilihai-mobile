@@ -5,7 +5,7 @@ Page {
     tools: commonTools
     anchors.fill: parent
     property string text
-    Text {
+    Label {
         text: messagePage.text
         wrapMode: Text.Wrap
         anchors.fill: parent

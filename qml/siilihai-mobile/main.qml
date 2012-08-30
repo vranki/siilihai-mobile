@@ -28,10 +28,10 @@ PageStackWindow {
     signal showMoreMessages();
     signal updateClicked();
     signal openInBrowser(string id);
+    signal displayNextMessage();
 
     Component.onCompleted: {
         console.log("Loaded")
-        theme.inverted = true
     }
     Component.onDestruction: {
         console.log("QML exit")
@@ -92,7 +92,14 @@ PageStackWindow {
         ToolIcon {
             id: backButton
             platformIconId: "toolbar-back"
-            onClicked: pageStack.pop()
+            onClicked: {
+                if(pageStack.currentPage==messagePage) {
+                    pageStack.pop()
+                    displayNextMessage();
+                } else {
+                    pageStack.pop()
+                }
+            }
             visible: appWindow.pageStack.currentPage != mainPage
         }
         ToolIcon {
@@ -158,7 +165,6 @@ PageStackWindow {
         console.log("showLoginWizard")
         appWindow.pageStack.push(loginWizardPage)
     }
-
     function registrationFinished(success, motd) {
         console.log("registrationFinished")
         appWindow.closeRegistration(success, motd)
@@ -168,7 +174,7 @@ PageStackWindow {
         appWindow.closeLogin(success, motd)
     }
     function showSubscribeWizard() {
-        console.log("showSubscribeWizard ")
+        console.log("showSubscribeWizard cp=" + pageStack.currentPage + " busy=" + pageStack.busy)
         appWindow.pageStack.push(subscribeWizardPage)
         appWindow.listSubscriptions()
     }

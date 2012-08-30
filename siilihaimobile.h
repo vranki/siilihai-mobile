@@ -42,6 +42,7 @@ private slots:
     void showMoreMessages();
     void updateCurrentMessageModel();
     void openInBrowser(QString messageId);
+    void displayNextMessage(bool requestedByUI=true);
 protected:
     virtual QString getDataFilePath();
     virtual void changeState(siilihai_states newState);
@@ -53,7 +54,6 @@ protected:
     virtual void showCredentialsDialog(CredentialsRequest *cr);
 
 private:
-    void displayNextMessage();
     QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;

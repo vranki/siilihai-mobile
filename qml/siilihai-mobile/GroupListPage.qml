@@ -12,7 +12,6 @@ Page {
 
         header: Label {
             text: "Groups in " + forumname;
-            color: "white"
             wrapMode: Text.Wrap
         }
 

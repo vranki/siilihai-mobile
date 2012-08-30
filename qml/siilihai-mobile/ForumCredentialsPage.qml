@@ -29,9 +29,8 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Username:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -41,9 +40,8 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Password:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Password"

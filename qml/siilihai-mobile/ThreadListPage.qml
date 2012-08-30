@@ -11,13 +11,12 @@ Page {
 
         header: Label {
             text: "Threads in group " + groupname;
-            color: "white"
             wrapMode: Text.Wrap
         }
 
         delegate: Row {
             ButtonWithUnreadCount {
-                label: name
+                label: displayName
                 unreads: unreadCount
                 onClicked:  {
                     appWindow.threadSelected(id)

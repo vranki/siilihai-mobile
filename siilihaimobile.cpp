@@ -20,6 +20,8 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
     rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
+    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
+
     QObject *appWindow = rootObject;
     Q_ASSERT(appWindow);
     connect(appWindow, SIGNAL(subscriptionSelected(int)), this, SLOT(subscriptionSelected(int)));
@@ -41,6 +43,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
     connect(appWindow, SIGNAL(openInBrowser(QString)), this, SLOT(openInBrowser(QString)));
+    connect(appWindow, SIGNAL(displayNextMessage()), this, SLOT(displayNextMessage()));
     messageDisplayed = true;
     offlineModeSet(true);
 }
@@ -52,7 +55,8 @@ QString SiilihaiMobile::getDataFilePath() {
 
 void SiilihaiMobile::subscribeForum() {
     qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod(rootObject, "showSubscribeWizard");
+    // Hangs QML for some reason!
+    // QMetaObject::invokeMethod(rootObject, "showSubscribeWizard");
 }
 
 void SiilihaiMobile::showLoginWizard() {
@@ -61,17 +65,19 @@ void SiilihaiMobile::showLoginWizard() {
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
-    qDebug() << Q_FUNC_INFO << message;
+    qDebug() << Q_FUNC_INFO << message << " queue " << messageQueue.size();
     messageQueue.append(message);
-    displayNextMessage();
+    displayNextMessage(false);
 }
 
-void SiilihaiMobile::displayNextMessage() {
-    qDebug() << Q_FUNC_INFO;
-    if(messageDisplayed) return;
+void SiilihaiMobile::displayNextMessage(bool requestedByUI) {
+    qDebug() << Q_FUNC_INFO << "queue: " << messageQueue.size() << " by UI:" << requestedByUI;
+    if(!requestedByUI && messageDisplayed) return;
+    messageDisplayed = false;
     if(messageQueue.isEmpty()) return;
     QVariant msg = messageQueue.takeFirst();
     QMetaObject::invokeMethod(rootObject, "showMessage", Q_ARG(QVariant, msg));
+    messageDisplayed = true;
 }
 
 void SiilihaiMobile::closeUi() {
@@ -168,6 +174,12 @@ void SiilihaiMobile::updateCurrentMessageModel() {
 
 void SiilihaiMobile::registerUser(QString user, QString password, QString email, bool sync) {
     qDebug() << Q_FUNC_INFO << user << email << password;
+    if(user.isEmpty() && password.isEmpty()) {
+        // Use without account
+        settings->setValue("account/noaccount", true);
+        QMetaObject::invokeMethod(rootObject, "registrationFinished", Q_ARG(QVariant, true), Q_ARG(QVariant, ""));
+        return;
+    }
     regOrLoginUser = user.trimmed();
     regOrLoginPass = password.trimmed();
     connect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
@@ -324,7 +336,8 @@ void SiilihaiMobile::markThreadRead(bool read) {
 }
 void SiilihaiMobile::changeState(siilihai_states newState) {
     ClientLogic::changeState(newState);
-    QMetaObject::invokeMethod(rootObject, "setBusy", Q_ARG(QVariant, newState != SH_READY));
+    QMetaObject::invokeMethod(rootObject, "setBusy", Q_ARG(QVariant,
+                                                           newState != SH_READY && newState != SH_OFFLINE));
 }
 
 void SiilihaiMobile::showStatusMessage(QString message) {

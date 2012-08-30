@@ -13,7 +13,6 @@ Page {
             width: parent.width
             Label {
                 text: "Subscribed Forums";
-                color: "white"
                 wrapMode: Text.Wrap
             }
             ProgressBar {
@@ -25,7 +24,6 @@ Page {
                 id: statusmessage
                 text: mainPage.message
                 font.italic: true
-                color: "white"
             }
         }
         delegate: Row {

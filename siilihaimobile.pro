@@ -53,4 +53,7 @@ LIBS += -lsiilihai
 HEADERS += \
     siilihaimobile.h
 
+OTHER_FILES += debian/rules \
+               debian/control\
+               *.desktop
 

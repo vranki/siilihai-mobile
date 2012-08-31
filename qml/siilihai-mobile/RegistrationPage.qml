@@ -9,6 +9,7 @@ Page {
     Text {
         text: "Registration"
         width: parent.width
+        color: "white"
     }
     Column {
         spacing: 15
@@ -18,6 +19,7 @@ Page {
             spacing: 4
             Text {
                 text: "Username:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -29,6 +31,7 @@ Page {
             spacing: 4
             Text {
                 text: "E-mail address:"
+                color: "white"
             }
             TextField {
                 placeholderText: "E-mail address"
@@ -39,6 +42,7 @@ Page {
             spacing: 4
             Text {
                 text: "Password:"
+                color: "white"
             }
             TextField {
                 placeholderText: "Password"

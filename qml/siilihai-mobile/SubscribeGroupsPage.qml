@@ -13,6 +13,7 @@ Page {
             id: text
             text: "Subscribe to groups"
             wrapMode: Text.Wrap
+            color: "white"
         }
 
         delegate: Row {

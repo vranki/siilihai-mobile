@@ -9,5 +9,6 @@ Page {
         text: messagePage.text
         wrapMode: Text.Wrap
         anchors.fill: parent
+        color: "white"
     }
 }

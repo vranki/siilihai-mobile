@@ -4,7 +4,7 @@ import com.nokia.meego 1.0
 
 Page {
     anchors.fill: parent
-    property string forumname: "?"
+    property string forumname: ""
     property int forumid: -1
     property bool supportsLogin: false
     property bool parserDownloaded: false
@@ -20,12 +20,17 @@ Page {
             id: haveCredentials
             text: "I have user account on this forum"
             enabled: supportsLogin
+            visible: supportsLogin
+        }
+        Label {
+            text: "This forum does not support authentication"
+            wrapMode: Text.Wrap
+            visible: !supportsLogin
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Username:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -35,9 +40,8 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Password:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Password"
@@ -47,7 +51,7 @@ Page {
             }
         }
         Button {
-            text: "Ok"
+            text: "Continue"
             onClicked: {
                 if(haveCredentials.checked) {
                     appWindow.subscribeForumWithCredentials(forumid, forumname, forumUsername.text, forumPassword.text)

@@ -8,31 +8,32 @@ Page {
     RegistrationPage {
         id: registrationPage
     }
+    AccountlessRegistration {
+        id: accountlessRegistration
+    }
     anchors.fill: parent
     Column {
         spacing: 15
         anchors.centerIn: parent
-        Text {
+        Label {
             text: "Welcome to Siilihai"
-            color: "white"
             wrapMode: Text.Wrap
             width: parent.width
         }
         Column {
             spacing: 4
-            Text {
-                color: "white"
+            Label {
                 text: "Username:"
             }
             TextField {
                 placeholderText: "Username"
                 id: loginUsername
+                font.capitalization: Font.MixedCase
             }
         }
         Column {
             spacing: 4
-            Text {
-                color: "white"
+            Label {
                 text: "Password:"
             }
             TextField {
@@ -56,6 +57,14 @@ Page {
                 appWindow.pageStack.push(registrationPage)
             }
         }
+        Button {
+            anchors.topMargin: 15
+            text: "Use without account"
+
+            onClicked: {
+                appWindow.pageStack.push(accountlessRegistration)
+            }
+        }
         ProgressBar {
             indeterminate: true
             width: parent.width
@@ -75,7 +84,7 @@ Page {
             if(motd.length > 0) {
                 appWindow.showMessage(motd);
             } else {
-                appWindow.showMessage("Registration failed. Check your Internet connection etc.");
+                appWindow.showMessage("Login failed. Check your Internet connection etc.");
             }
         }
     }

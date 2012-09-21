@@ -9,10 +9,11 @@ class SiilihaiMobile : public ClientLogic
     Q_OBJECT
 public:
     explicit SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj);
-
+    bool isHaltRequested();
 signals:
 
 public slots:
+    virtual void haltSiilihai();
 private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
@@ -36,17 +37,23 @@ private slots:
     void credentialsEntered(QString u, QString p, bool remember);
     void unsubscribeCurrentForum();
     void getParserDetails(int id);
-    void markThreadRead();
+    void markThreadRead(bool read);
+    virtual void showStatusMessage(QString message);
+    void showMoreMessages();
+    void updateCurrentMessageModel();
+    void openInBrowser(QString messageId);
+    void displayNextMessage(bool requestedByUI=true);
 protected:
     virtual QString getDataFilePath();
+    virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
     virtual void showSubscribeGroup(ForumSubscription* forum);
     virtual void showCredentialsDialog(CredentialsRequest *cr);
+
 private:
-    void displayNextMessage();
     QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
@@ -56,6 +63,7 @@ private:
     QString regOrLoginUser, regOrLoginPass;
     QStringList messageQueue;
     bool messageDisplayed;
+    bool haltRequested;
 };
 
 #endif // SIILIHAIMOBILE_H

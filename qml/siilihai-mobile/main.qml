@@ -6,6 +6,7 @@ PageStackWindow {
     initialPage: mainPage
     //initialPage: testMsgDisplay
 
+    // QML -> C++
     signal subscriptionSelected(int parser)
     signal groupSelected(string id)
     signal threadSelected(string id)
@@ -23,11 +24,14 @@ PageStackWindow {
     signal setGroupSubscribed(string id, bool sub)
     signal applyGroupSubscriptions();
     signal credentialsEntered(string u, string p, bool remember)
-    signal markThreadRead();
+    signal markThreadRead(bool read);
+    signal showMoreMessages();
+    signal updateClicked();
+    signal openInBrowser(string id);
+    signal displayNextMessage();
 
     Component.onCompleted: {
         console.log("Loaded")
-        theme.inverted = true
     }
     Component.onDestruction: {
         console.log("QML exit")
@@ -78,14 +82,33 @@ PageStackWindow {
     CredentialsDialogPage {
         id: credentialsDialogPage
     }
+    HaltScreen {
+        id: haltScreen
+    }
+
     ToolBarLayout {
         id: commonTools
-        visible: true
+        Row {
         ToolIcon {
             id: backButton
             platformIconId: "toolbar-back"
-            onClicked: pageStack.pop()
+            onClicked: {
+                if(pageStack.currentPage==messagePage) {
+                    pageStack.pop()
+                    displayNextMessage();
+                } else {
+                    pageStack.pop()
+                }
+            }
             visible: appWindow.pageStack.currentPage != mainPage
+        }
+        ToolIcon {
+            platformIconId: "toolbar-refresh"
+            enabled: !mainPage.busy
+            onClicked: appWindow.updateClicked()
+            visible: !backButton.visible
+//            anchors.left: backButton.right
+        }
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
@@ -122,6 +145,13 @@ PageStackWindow {
             }
         }
     }
+
+    Timer {
+        id: statusmessagetimer
+        interval: 5000; running: false; repeat: false
+        onTriggered: mainPage.message = " "
+    }
+
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
     }
@@ -135,7 +165,6 @@ PageStackWindow {
         console.log("showLoginWizard")
         appWindow.pageStack.push(loginWizardPage)
     }
-
     function registrationFinished(success, motd) {
         console.log("registrationFinished")
         appWindow.closeRegistration(success, motd)
@@ -145,7 +174,7 @@ PageStackWindow {
         appWindow.closeLogin(success, motd)
     }
     function showSubscribeWizard() {
-        console.log("showSubscribeWizard ")
+        console.log("showSubscribeWizard cp=" + pageStack.currentPage + " busy=" + pageStack.busy)
         appWindow.pageStack.push(subscribeWizardPage)
         appWindow.listSubscriptions()
     }
@@ -164,5 +193,19 @@ PageStackWindow {
         console.log("parserDetails " + id + " " + supportsLogin)
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.parserDownloaded = true
+    }
+    function setBusy(busy) {
+        console.log("setBusy " + busy)
+        mainPage.busy = busy
+    }
+    function showStatusMessage(message) {
+        console.log("showStatusMessage " + message)
+        mainPage.message = message
+        statusmessagetimer.restart()
+    }
+    function showHaltScreen() {
+        console.log("showHaltScreen")
+        pageStack.clear()
+        pageStack.push(haltScreen, null, true)
     }
 }

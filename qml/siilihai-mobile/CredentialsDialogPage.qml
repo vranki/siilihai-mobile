@@ -8,17 +8,15 @@ Page {
     Column {
         spacing: 15
         anchors.centerIn: parent
-        Text {
+        Label {
             text: "Enter " + credentialtype + " credentials for " + forumname
             wrapMode: Text.Wrap
             width: parent.width
-            color: "white"
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Username:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Username"
@@ -27,9 +25,8 @@ Page {
         }
         Column {
             spacing: 4
-            Text {
+            Label {
                 text: "Password:"
-                color: "white"
             }
             TextField {
                 placeholderText: "Password"

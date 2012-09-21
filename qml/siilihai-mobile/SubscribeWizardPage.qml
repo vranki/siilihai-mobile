@@ -9,16 +9,14 @@ Page {
         model: parserList
         anchors.fill: parent
 
-        header: Text {
-            id: text
-            text: "Subscribe to forum"
+        header: Label {
+            text: "Subscribe to a forum"
             wrapMode: Text.Wrap
-            color: "white"
+            width: parent.width
         }
-
         delegate: Row {
             Button {
-                text: id + ": " + name
+                text: name
                 width: mainPage.width
                 onClicked:  {
                     console.log("sub selected " + id)

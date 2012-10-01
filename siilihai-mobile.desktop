@@ -5,7 +5,6 @@ Type=Application
 Terminal=false
 Name=Siilihai
 Exec=/usr/bin/invoker --type=d -s /opt/siilihai-mobile/bin/siilihai-mobile
-Icon=/usr/share/icons/hicolor/80x80/apps/siilihai-mobile80.png
-X-Window-Icon=
+Icon=/usr/share/icons/hicolor/scalable/apps/siilihai-mobile.svg
 X-HildonDesk-ShowInToolbar=true
 X-Osso-Type=application/x-executable

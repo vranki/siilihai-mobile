@@ -1,8 +1,8 @@
 Source: siilihai-mobile
 Section: user/other
 Priority: optional
-Maintainer: Ville Ranki <cosmo@unknown>
-Build-Depends: debhelper (>= 5), libqt4-dev, applauncherd-dev
+Maintainer: Ville Ranki <ville.ranki@iki.fi>
+Build-Depends: debhelper (>= 5), libqt4-dev, applauncherd-dev, libmeegotouch-dev, pkgconfig
 Standards-Version: 3.7.3
 Homepage: http://www.siilihai.com/
 
@@ -10,7 +10,7 @@ Package: siilihai-mobile
 XB-Maemo-Display-Name: Siilihai Web Forum Reader
 XSBC-Maemo-Display-Name: Siilihai
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqtwebkit-qmlwebkitplugin
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqtwebkit-qmlwebkitplugin, libqt4-webkit, applauncherd
 Conflicts: libsiilihai1
 Provides: libsiilihai1
 Description: Siilihai web forum reader mobile version

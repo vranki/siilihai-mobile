@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/siilihai-mobile/AccountlessRegistration.qml</file>
+        <file>qml/siilihai-mobile/ButtonWithUnreadCount.qml</file>
+        <file>qml/siilihai-mobile/ConfirmUnsubscribe.qml</file>
+        <file>qml/siilihai-mobile/CredentialsDialogPage.qml</file>
+        <file>qml/siilihai-mobile/emblem-web.png</file>
+        <file>qml/siilihai-mobile/ForumCredentialsPage.qml</file>
+        <file>qml/siilihai-mobile/GroupListPage.qml</file>
+        <file>qml/siilihai-mobile/HaltScreen.qml</file>
+        <file>qml/siilihai-mobile/LoginWizardPage.qml</file>
+        <file>qml/siilihai-mobile/main.qml</file>
+        <file>qml/siilihai-mobile/MainPage.qml</file>
+        <file>qml/siilihai-mobile/MessageDisplay.qml</file>
+        <file>qml/siilihai-mobile/MessageListPage.qml</file>
+        <file>qml/siilihai-mobile/MessagePage.qml</file>
+        <file>qml/siilihai-mobile/RegistrationPage.qml</file>
+        <file>qml/siilihai-mobile/SubscribeGroupsPage.qml</file>
+        <file>qml/siilihai-mobile/SubscribeWizardPage.qml</file>
+        <file>qml/siilihai-mobile/ThreadListPage.qml</file>
+    </qresource>
+</RCC>

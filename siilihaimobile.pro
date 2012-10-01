@@ -26,7 +26,15 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # MOBILITY +=
 
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-CONFIG += qdeclarative-boostable
+
+#CONFIG += link_pkgconfig
+CONFIG += qt-boostable qdeclarative-boostable
+LIBS += -lmdeclarativecache
+INCLUDEPATH += /usr/include/applauncherd
+#PKGCONFIG += qdeclarative-boostable
+
+QMAKE_CXXFLAGS += `pkg-config --cflags qdeclarative-boostable`
+QMAKE_LFLAGS += `pkg-config --libs qdeclarative-boostable`
 
 # Add dependency to Symbian components
 # CONFIG += qt-components
@@ -37,7 +45,7 @@ CONFIG += with_lib
 # Use this config flag to build libsiilihai into the binary
 CONFIG(with_lib) {
     message(Building WITH lib included in binary!)
-    LIB_PATH = ../libsiilihai
+    LIB_PATH = libsiilihai
     SOURCES += $$LIB_PATH/src/siilihai/*.cpp
     HEADERS += $$LIB_PATH/src/siilihai/*.h
     INCLUDEPATH += $$LIB_PATH/src/
@@ -54,7 +62,7 @@ QT += network xml webkit
 
 QML_FILES.source = qml
 QML_FILES.target = .
-DEPLOYMENTFOLDERS += QML_FILES
+#DEPLOYMENTFOLDERS += QML_FILES
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -102,13 +110,22 @@ OTHER_FILES += debian/rules \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/version.xml
 
-desktops.files = siilihaimobile_harmattan.desktop
+desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications
 
-INSTALLS += desktops
+icons.files = siilihai-mobile.svg
+icons.path = /usr/share/icons/hicolor/scalable/apps
 
+INSTALLS += desktops icons
 
 OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
 debian/changelog
 
+OTHER_FILES += rpm/*.spec rpm/*.changes rpm/prepare_sources.sh
+
+OTHER_FILES += desktops.files
+
 QMAKE_CLEAN += *.o
+
+RESOURCES += \
+    siilihai-mobile.qrc

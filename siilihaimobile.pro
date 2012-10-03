@@ -45,9 +45,19 @@ CONFIG += with_lib
 # Use this config flag to build libsiilihai into the binary
 CONFIG(with_lib) {
     message(Building WITH lib included in binary!)
-    LIB_PATH = libsiilihai
+    exists("../libsiilihai/src") {
+       LIB_PATH = ../libsiilihai
+    } else {
+       LIB_PATH = libsiilihai
+    }
     SOURCES += $$LIB_PATH/src/siilihai/*.cpp
+    SOURCES += $$LIB_PATH/src/siilihai/parser/*.cpp
+    SOURCES += $$LIB_PATH/src/siilihai/forumdata/*.cpp
+    SOURCES += $$LIB_PATH/src/siilihai/forumdatabase/*.cpp
     HEADERS += $$LIB_PATH/src/siilihai/*.h
+    SOURCES += $$LIB_PATH/src/siilihai/parser/*.h
+    SOURCES += $$LIB_PATH/src/siilihai/forumdata/*.h
+    SOURCES += $$LIB_PATH/src/siilihai/forumdatabase/*.h
     INCLUDEPATH += $$LIB_PATH/src/
 } else {
     LIBS += -lsiilihai

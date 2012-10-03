@@ -1,12 +1,12 @@
 #include "siilihaimobile.h"
 #include <QDesktopServices>
 #include <QDebug>
-#include <siilihai/parsermanager.h>
-#include <siilihai/forumgroup.h>
-#include <siilihai/forumthread.h>
-#include <siilihai/forummessage.h>
-#include <siilihai/forumsubscription.h>
-#include <siilihai/forumparser.h>
+#include <siilihai/forumdata/forumgroup.h>
+#include <siilihai/forumdata/forumthread.h>
+#include <siilihai/forumdata/forummessage.h>
+#include <siilihai/forumdata/forumsubscription.h>
+#include <siilihai/parser/parsermanager.h>
+#include <siilihai/parser/forumparser.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),

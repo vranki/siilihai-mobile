@@ -1,7 +1,7 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/siilihai-mobile
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
+#folder_01.source = qml/siilihai-mobile
+#folder_01.target = qml
+#DEPLOYMENTFOLDERS = folder_01
 
 TARGET=siilihai-mobile
 
@@ -28,23 +28,27 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 
 #CONFIG += link_pkgconfig
-CONFIG += qt-boostable qdeclarative-boostable
-LIBS += -lmdeclarativecache
-INCLUDEPATH += /usr/include/applauncherd
+
+#LIBS += -lmdeclarativecache
+#INCLUDEPATH += /usr/include/applauncherd
 #PKGCONFIG += qdeclarative-boostable
 
-QMAKE_CXXFLAGS += `pkg-config --cflags qdeclarative-boostable`
-QMAKE_LFLAGS += `pkg-config --libs qdeclarative-boostable`
+# enable booster
+CONFIG += qdeclarative-boostable
+QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
+QMAKE_LFLAGS += -pie -rdynamic
+
+#QMAKE_CXXFLAGS += `pkg-config --cflags qdeclarative-boostable`
+#QMAKE_LFLAGS += `pkg-config --libs qdeclarative-boostable`
 
 # Add dependency to Symbian components
 # CONFIG += qt-components
 
-# Always on Harmattan
+# Always on
 CONFIG += with_lib
 
 # Use this config flag to build libsiilihai into the binary
 CONFIG(with_lib) {
-    message(Building WITH lib included in binary!)
     exists("../libsiilihai/src") {
        LIB_PATH = ../libsiilihai
     } else {
@@ -55,10 +59,11 @@ CONFIG(with_lib) {
     SOURCES += $$LIB_PATH/src/siilihai/forumdata/*.cpp
     SOURCES += $$LIB_PATH/src/siilihai/forumdatabase/*.cpp
     HEADERS += $$LIB_PATH/src/siilihai/*.h
-    SOURCES += $$LIB_PATH/src/siilihai/parser/*.h
-    SOURCES += $$LIB_PATH/src/siilihai/forumdata/*.h
-    SOURCES += $$LIB_PATH/src/siilihai/forumdatabase/*.h
+    HEADERS += $$LIB_PATH/src/siilihai/parser/*.h
+    HEADERS += $$LIB_PATH/src/siilihai/forumdata/*.h
+    HEADERS += $$LIB_PATH/src/siilihai/forumdatabase/*.h
     INCLUDEPATH += $$LIB_PATH/src/
+    message(Building WITH lib included in binary! Lib source in $$LIB_PATH)
 } else {
     LIBS += -lsiilihai
 }
@@ -67,8 +72,7 @@ CONFIG(with_lib) {
 SOURCES += main.cpp \
     siilihaimobile.cpp
 
-QT += network xml webkit
-
+QT += network xml
 
 QML_FILES.source = qml
 QML_FILES.target = .
@@ -77,8 +81,6 @@ QML_FILES.target = .
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
-
-INSTALLS += binarylibs
 
 HEADERS += \
     siilihaimobile.h
@@ -128,6 +130,8 @@ icons.path = /usr/share/icons/hicolor/scalable/apps
 
 INSTALLS += desktops icons
 
+OTHER_FILES += qml/siilihai-mobile/*
+
 OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
 debian/changelog
 
@@ -137,5 +141,4 @@ OTHER_FILES += desktops.files
 
 QMAKE_CLEAN += *.o
 
-RESOURCES += \
-    siilihai-mobile.qrc
+RESOURCES += siilihai-mobile.qrc

@@ -6,13 +6,10 @@ License: GPL
 Group: Productivity/Networking/Web/Utilities
 Url: http://siilihai.com/
 Source: %{name}-%{version}.tar.gz
-Requires: qt-components libqtwebkit meegotouch-applauncherd
-BuildRequires:  pkgconfig
-BuildRequires:  pkgconfig(QtCore) >= 4.7.0
-BuildRequires:  pkgconfig(QtGui)
-BuildRequires:  pkgconfig(QtWebKit)
-BuildRequires:  desktop-file-utils
-BuildRequires: applauncherd-devel
+Requires: qt-components meegotouch-applauncherd
+BuildRequires: qt-devel
+BuildRequires: qt-mobility-devel
+
 
 %description
 Siilihai web forum reader mobile version
@@ -33,4 +30,3 @@ make %{?jobs:-j%jobs}
 /opt/%{name}/bin/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-

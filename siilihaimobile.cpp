@@ -126,6 +126,7 @@ void SiilihaiMobile::subscriptionSelected(int parser) {
     currentSub = forumDatabase.value(parser);
     currentGroup = 0;
     currentThread = 0;
+    subscribeGroupList.clear();
     if(currentSub) {
         foreach(ForumGroup *fg, currentSub->values()) {
             if(fg->isSubscribed())
@@ -260,6 +261,7 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
 }
 
 void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
+    qDebug() << Q_FUNC_INFO << forum->toString();
     subscriptionSelected(forum->parser());
     foreach(ForumGroup *fg, currentSub->values()) {
         subscribeGroupList.append(fg);

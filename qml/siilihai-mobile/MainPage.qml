@@ -30,7 +30,7 @@ Page {
             ButtonWithUnreadCount {
                 label: alias
                 unreads: unreadCount
-                busy: beingUpdated || mainPage.busy
+                busy: beingUpdated || beingSynced
                 onClicked:  {
                     groupListPage.forumname = alias
                     appWindow.subscriptionSelected(parser)

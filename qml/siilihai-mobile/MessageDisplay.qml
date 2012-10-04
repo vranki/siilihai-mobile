@@ -1,6 +1,6 @@
 import QtQuick 1.0
 import com.nokia.meego 1.0
-//import QtWebkit 1.0
+import QtWebKit 1.0
 
 Rectangle {
     id: message
@@ -41,15 +41,14 @@ Rectangle {
         font.pointSize: 12
         anchors.top: subjectLine.bottom
     }
-    /*
     WebView {
         id: body
         html: message.messageBody
         width: message.width
         anchors.top: toolLine.bottom
+        z: 10
     }
-    */
-
+/*
     Label {
         id: body
         text: message.messageBody
@@ -60,7 +59,7 @@ Rectangle {
         wrapMode: Text.WordWrap
         z: 10
     }
-
+*/
     Rectangle {
         radius: 5
         smooth: true

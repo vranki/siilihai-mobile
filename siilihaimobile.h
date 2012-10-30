@@ -3,6 +3,7 @@
 
 #include <siilihai/clientlogic.h>
 #include <qdeclarativecontext.h>
+#include <QStringList>
 
 class SiilihaiMobile : public ClientLogic
 {

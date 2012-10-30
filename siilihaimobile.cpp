@@ -7,6 +7,8 @@
 #include <siilihai/forumdata/forumsubscription.h>
 #include <siilihai/parser/parsermanager.h>
 #include <siilihai/parser/forumparser.h>
+#include <siilihai/parser/forumsubscriptionparsed.h>
+#include <siilihai/tapatalk/forumsubscriptiontapatalk.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
@@ -246,7 +248,7 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
     qDebug() << Q_FUNC_INFO << id << name << username << password;
     ForumParser *fp = parserManager->getParser(id);
     Q_ASSERT(fp);
-    ForumSubscription fs(this);
+    ForumSubscriptionParsed fs(this); // @todo continue here
     fs.setParser(fp->id());
     fs.setAlias(fp->name());
     if(!username.isEmpty()) {
@@ -262,7 +264,7 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
 
 void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
     qDebug() << Q_FUNC_INFO << forum->toString();
-    subscriptionSelected(forum->parser());
+    subscriptionSelected(forum->forumId());
     foreach(ForumGroup *fg, currentSub->values()) {
         subscribeGroupList.append(fg);
     }
@@ -291,7 +293,7 @@ void SiilihaiMobile::applyGroupSubscriptions() {
         group->setHasChanged(true);
         group->commitChanges();
     }
-    subscriptionSelected(currentSub->parser());
+    subscriptionSelected(currentSub->forumId());
     ClientLogic::updateGroupSubscriptions(currentSub);
 }
 

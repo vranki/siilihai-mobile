@@ -44,22 +44,10 @@ Rectangle {
     WebView {
         id: body
         html: message.messageBody
-        width: message.width
+        width: parent.width
         anchors.top: toolLine.bottom
         z: 10
     }
-/*
-    Label {
-        id: body
-        text: message.messageBody
-        font.pointSize: 12
-        color: "black"
-        width: message.width
-        anchors.top: toolLine.bottom
-        wrapMode: Text.WordWrap
-        z: 10
-    }
-*/
     Rectangle {
         radius: 5
         smooth: true

@@ -60,6 +60,7 @@ CONFIG(with_lib) {
     SOURCES += $$LIB_PATH/src/siilihai/forumdatabase/*.cpp
     HEADERS += $$LIB_PATH/src/siilihai/*.h
     HEADERS += $$LIB_PATH/src/siilihai/parser/*.h
+    HEADERS += $$LIB_PATH/src/siilihai/tapatalk/*.h
     HEADERS += $$LIB_PATH/src/siilihai/forumdata/*.h
     HEADERS += $$LIB_PATH/src/siilihai/forumdatabase/*.h
     INCLUDEPATH += $$LIB_PATH/src/

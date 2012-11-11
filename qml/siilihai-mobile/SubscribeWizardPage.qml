@@ -6,7 +6,7 @@ Page {
     anchors.fill: parent
 
     ListView {
-        model: parserList
+        model: forumList
         anchors.fill: parent
 
         header: Label {
@@ -20,7 +20,7 @@ Page {
                 width: mainPage.width
                 onClicked:  {
                     console.log("sub selected " + id)
-                    forumCredentialsPage.forumname = name
+                    forumCredentialsPage.forumname = alias
                     forumCredentialsPage.forumid = id
                     appWindow.pageStack.push(forumCredentialsPage)
                     appWindow.getParserDetails(id)

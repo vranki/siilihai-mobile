@@ -228,16 +228,16 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
 }
 
 void SiilihaiMobile::listSubscriptions() {
-    connect(&protocol, SIGNAL(listParsersFinished(QList <ForumParser*>)), this, SLOT(listParsersFinished(QList <ForumParser*>)));
-    protocol.listParsers();
+    connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
+    protocol.listForums();
 }
 
-void SiilihaiMobile::listParsersFinished(QList <ForumParser*> parsers) {
-    qDebug() << Q_FUNC_INFO << parsers.size();
-    foreach(ForumParser *p, parsers) {
-        parserList.append(p);
+void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
+    qDebug() << Q_FUNC_INFO << forums.size();
+    foreach(ForumSubscription *p, forums) {
+        forumList.append(p);
     }
-    rootContext->setContextProperty("parserList", QVariant::fromValue(parserList));
+    rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
 
 void SiilihaiMobile::subscribeForum(int id, QString name) {

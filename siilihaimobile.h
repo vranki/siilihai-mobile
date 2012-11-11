@@ -28,7 +28,7 @@ private slots:
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
     void listSubscriptions();
-    void listParsersFinished(QList <ForumParser*>);
+    void listForumsFinished(QList <ForumSubscription*>);
     void subscribeForum(int id, QString name);
     void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
     void getParserFinished(ForumParser *fp);
@@ -55,7 +55,7 @@ protected:
     virtual void showCredentialsDialog(CredentialsRequest *cr);
 
 private:
-    QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;
+    QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
     ForumSubscription *currentSub;

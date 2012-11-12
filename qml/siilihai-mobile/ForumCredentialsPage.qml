@@ -62,5 +62,11 @@ Page {
                 appWindow.pageStack.pop(mainPage)
             }
         }
+        Button {
+            text: "Cancel"
+            onClicked: {
+                appWindow.pageStack.pop(mainPage)
+            }
+        }
     }
 }

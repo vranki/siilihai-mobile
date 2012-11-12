@@ -16,7 +16,7 @@ PageStackWindow {
     signal loginUser(string username, string password)
     signal closeLogin(bool success, string motd)
     signal listSubscriptions()
-    signal getParserDetails(int id)
+    signal getForumDetails(int id)
     signal subscribeForum(int id, string name)
     signal subscribeForumWithCredentials(int id, string name, string user, string pass)
     signal unSubscribeCurrentForum()
@@ -189,8 +189,8 @@ PageStackWindow {
         credentialsDialogPage.resetForm()
         pageStack.push(credentialsDialogPage)
     }
-    function parserDetails(id, supportsLogin) {
-        console.log("parserDetails " + id + " " + supportsLogin)
+    function forumDetails(id, supportsLogin) {
+        console.log("forumDetails " + id + " " + supportsLogin)
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.parserDownloaded = true
     }

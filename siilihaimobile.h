@@ -2,6 +2,7 @@
 #define SIILIHAIMOBILE_H
 
 #include <siilihai/clientlogic.h>
+#include <siilihai/forumdata/forumsubscription.h>
 #include <qdeclarativecontext.h>
 #include <QStringList>
 
@@ -28,7 +29,7 @@ private slots:
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
     void listSubscriptions();
-    void listParsersFinished(QList <ForumParser*>);
+    void listForumsFinished(QList <ForumSubscription*>);
     void subscribeForum(int id, QString name);
     void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
     void getParserFinished(ForumParser *fp);
@@ -37,13 +38,14 @@ private slots:
     void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
     void unsubscribeCurrentForum();
-    void getParserDetails(int id);
+    void getForumDetails(int id);
     void markThreadRead(bool read);
     virtual void showStatusMessage(QString message);
     void showMoreMessages();
     void updateCurrentMessageModel();
     void openInBrowser(QString messageId);
     void displayNextMessage(bool requestedByUI=true);
+    void forumGot(ForumSubscription* sub);
 protected:
     virtual QString getDataFilePath();
     virtual void changeState(siilihai_states newState);
@@ -55,7 +57,7 @@ protected:
     virtual void showCredentialsDialog(CredentialsRequest *cr);
 
 private:
-    QList<QObject*> subscriptionList, groupList, threadList, messageList, parserList, subscribeGroupList;
+    QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
     ForumSubscription *currentSub;
@@ -65,6 +67,7 @@ private:
     QStringList messageQueue;
     bool messageDisplayed;
     bool haltRequested;
+    ForumSubscription newForum; // the one being subscribed
 };
 
 #endif // SIILIHAIMOBILE_H

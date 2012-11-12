@@ -4,26 +4,44 @@ import com.nokia.meego 1.0
 Page {
     tools: commonTools
     anchors.fill: parent
+    property int selectionMode: 0 // 0=nothing 1=url 2=list
 
     ListView {
-        model: parserList
+        model: forumList
         anchors.fill: parent
-
-        header: Label {
-            text: "Subscribe to a forum"
-            wrapMode: Text.Wrap
-            width: parent.width
-        }
-        delegate: Row {
+        id: forumListView
+        header: Column {
+            Label {
+                text: "Subscribe to a forum"
+                wrapMode: Text.Wrap
+                width: subscribeWizardPage.width
+            }
             Button {
-                text: name
-                width: mainPage.width
+                text: "Enter URL"
+                visible: selectionMode == 0
+                onClicked: selectionMode = 1
+            }
+            Button {
+                text: "Select from list"
+                visible: selectionMode == 0
+                onClicked: selectionMode = 2
+            }
+            TextInput {
+                visible: selectionMode == 1
+                text: "http://"
+                inputMask: "\http://XXX"
+            }
+        }
+        delegate: Column {
+            visible: selectionMode == 2
+            Button {
+                text: alias
+                width: subscribeWizardPage.width
                 onClicked:  {
-                    console.log("sub selected " + id)
-                    forumCredentialsPage.forumname = name
-                    forumCredentialsPage.forumid = id
+                    forumCredentialsPage.forumname = alias
+                    forumCredentialsPage.forumid = forumId
                     appWindow.pageStack.push(forumCredentialsPage)
-                    appWindow.getParserDetails(id)
+                    appWindow.getForumDetails(forumId)
                 }
             }
         }

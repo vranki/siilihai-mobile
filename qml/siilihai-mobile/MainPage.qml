@@ -33,7 +33,7 @@ Page {
                 busy: beingUpdated || beingSynced || scheduledForUpdate
                 onClicked:  {
                     groupListPage.forumname = alias
-                    appWindow.subscriptionSelected(parser)
+                    appWindow.subscriptionSelected(forumId)
                     appWindow.pageStack.push(groupListPage)
                 }
             }

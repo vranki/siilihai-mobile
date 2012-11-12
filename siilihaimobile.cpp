@@ -12,7 +12,7 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
-    currentThread(0), haltRequested(false)
+    currentThread(0), haltRequested(false), newForum(0, true, ForumSubscription::FP_NONE)
 {
     if(!rootContext)  {
         closeUi();
@@ -40,7 +40,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(applyGroupSubscriptions()), this, SLOT(applyGroupSubscriptions()));
     connect(appWindow, SIGNAL(credentialsEntered(QString, QString, bool)), this, SLOT(credentialsEntered(QString,QString,bool)));
     connect(appWindow, SIGNAL(unSubscribeCurrentForum()), this, SLOT(unsubscribeCurrentForum()));
-    connect(appWindow, SIGNAL(getParserDetails(int)), this, SLOT(getParserDetails(int)));
+    connect(appWindow, SIGNAL(getForumDetails(int)), this, SLOT(getForumDetails(int)));
     connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
@@ -72,15 +72,19 @@ void SiilihaiMobile::errorDialog(QString message) {
     displayNextMessage(false);
 }
 
+// requestedByUI means user has dismissed previous message
 void SiilihaiMobile::displayNextMessage(bool requestedByUI) {
     qDebug() << Q_FUNC_INFO << "queue: " << messageQueue.size() << " by UI:" << requestedByUI;
-    if(!requestedByUI && messageDisplayed) return;
-    messageDisplayed = false;
-    if(messageQueue.isEmpty()) return;
+    if(!requestedByUI && messageDisplayed) return; // NOP, wait until user acks current msg
+    if(messageQueue.isEmpty()) {
+        messageDisplayed = false;
+        return;
+    }
     QVariant msg = messageQueue.takeFirst();
     QMetaObject::invokeMethod(rootObject, "showMessage", Q_ARG(QVariant, msg));
     messageDisplayed = true;
 }
+
 
 void SiilihaiMobile::closeUi() {
     qDebug() << Q_FUNC_INFO;
@@ -228,16 +232,16 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
 }
 
 void SiilihaiMobile::listSubscriptions() {
-    connect(&protocol, SIGNAL(listParsersFinished(QList <ForumParser*>)), this, SLOT(listParsersFinished(QList <ForumParser*>)));
-    protocol.listParsers();
+    connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
+    protocol.listForums();
 }
 
-void SiilihaiMobile::listParsersFinished(QList <ForumParser*> parsers) {
-    qDebug() << Q_FUNC_INFO << parsers.size();
-    foreach(ForumParser *p, parsers) {
-        parserList.append(p);
+void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
+    qDebug() << Q_FUNC_INFO << forums.size();
+    foreach(ForumSubscription *p, forums) {
+        forumList.append(p);
     }
-    rootContext->setContextProperty("parserList", QVariant::fromValue(parserList));
+    rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
 
 void SiilihaiMobile::subscribeForum(int id, QString name) {
@@ -246,20 +250,19 @@ void SiilihaiMobile::subscribeForum(int id, QString name) {
 
 void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString username, QString password) {
     qDebug() << Q_FUNC_INFO << id << name << username << password;
-    ForumParser *fp = parserManager->getParser(id);
-    Q_ASSERT(fp);
-    ForumSubscriptionParsed fs(this); // @todo continue here
-    fs.setParser(fp->id());
-    fs.setAlias(fp->name());
-    if(!username.isEmpty()) {
-        fs.setUsername(username);
-        fs.setPassword(password);
-    }
-    fs.setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
-    fs.setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
 
-    Q_ASSERT(fp->isSane());
-    forumAdded(&fs);
+    Q_ASSERT(newForum.forumId());
+    Q_ASSERT(newForum.forumId() == id);
+
+    if(!username.isEmpty()) {
+        newForum.setUsername(username);
+        newForum.setPassword(password);
+    }
+    newForum.setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
+    newForum.setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
+
+    forumAdded(&newForum);
+    newForum.setForumId(0);
 }
 
 void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
@@ -317,13 +320,24 @@ void SiilihaiMobile::unsubscribeCurrentForum() {
     unsubscribeForum(cs);
 }
 
-void SiilihaiMobile::getParserDetails(int id) {
+void SiilihaiMobile::getForumDetails(int id) {
     qDebug() << Q_FUNC_INFO << id;
     Q_ASSERT(id);
-    connect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
-    protocol.getParser(id);
+    newForum.setForumId(0);
+    connect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(forumGot(ForumSubscription*)));
+    protocol.getForum(id);
 }
 
+void SiilihaiMobile::forumGot(ForumSubscription *sub) {
+    qDebug() << Q_FUNC_INFO << sub->toString();
+    newForum.copyFrom(sub);
+    newForum.setProvider(sub->provider());
+    Q_ASSERT(newForum.provider() != ForumSubscription::FP_NONE);
+    disconnect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(forumGot(ForumSubscription*)));
+    QMetaObject::invokeMethod(rootObject, "forumDetails", Q_ARG(QVariant, sub->alias()), Q_ARG(QVariant, sub->supportsLogin()));
+}
+
+// Not used anymore:
 void SiilihaiMobile::getParserFinished(ForumParser* parser) {
     qDebug() << Q_FUNC_INFO << parser;
     if(!parser) return;

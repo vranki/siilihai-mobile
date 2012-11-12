@@ -12,7 +12,7 @@ XSBC-Maemo-Display-Name: Siilihai
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libqtwebkit-qmlwebkitplugin, applauncherd
 Conflicts: libsiilihai1
-Provides: libsiilihai1
+Provides: libsiilihai1, libsiilihai2
 Description: Siilihai web forum reader mobile version
  Graphical web forum reader application. See www.siilihai.com for details.
 XB-Maemo-Icon-26:  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAAAXNSR0IArs4c

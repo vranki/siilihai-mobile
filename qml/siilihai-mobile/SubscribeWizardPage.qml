@@ -26,10 +26,23 @@ Page {
                 visible: selectionMode == 0
                 onClicked: selectionMode = 2
             }
-            TextInput {
+            TextEdit {
+                id: urlInput
                 visible: selectionMode == 1
+                width: parent.width
+                wrapMode: TextEdit.WrapAnywhere
                 text: "http://"
-                inputMask: "\http://XXX"
+//                inputMask: "\http://XXX"
+            }
+            Button {
+                text: "Continue"
+                visible: selectionMode == 1
+                onClicked: {
+                    forumCredentialsPage.forumname = "Getting forum.."
+                    forumCredentialsPage.forumid = 0
+                    appWindow.pageStack.push(forumCredentialsPage)
+                    appWindow.getForumUrlDetails(urlInput.text);
+                }
             }
         }
         delegate: Column {

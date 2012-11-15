@@ -7,14 +7,14 @@ Page {
     property string forumname: ""
     property int forumid: -1
     property bool supportsLogin: false
-    property bool parserDownloaded: false
+    property bool forumDownloaded: false
     Column {
         spacing: 15
         anchors.centerIn: parent
         ProgressBar {
             indeterminate: true
             width: parent.width
-            visible: !parserDownloaded
+            visible: !forumDownloaded
         }
         CheckBox {
             id: haveCredentials
@@ -58,13 +58,14 @@ Page {
                 } else {
                     appWindow.subscribeForum(forumid, forumname)
                 }
-
+                subscribeWizardPage.selectionMode = 0;
                 appWindow.pageStack.pop(mainPage)
             }
         }
         Button {
             text: "Cancel"
             onClicked: {
+                subscribeWizardPage.selectionMode = 0;
                 appWindow.pageStack.pop(mainPage)
             }
         }

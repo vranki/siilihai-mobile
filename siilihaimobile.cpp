@@ -12,7 +12,7 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
-    currentThread(0), haltRequested(false), newForum(0, true, ForumSubscription::FP_NONE)
+    currentThread(0), haltRequested(false), newForum(0), probe(0, protocol)
 {
     if(!rootContext)  {
         closeUi();
@@ -41,6 +41,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(credentialsEntered(QString, QString, bool)), this, SLOT(credentialsEntered(QString,QString,bool)));
     connect(appWindow, SIGNAL(unSubscribeCurrentForum()), this, SLOT(unsubscribeCurrentForum()));
     connect(appWindow, SIGNAL(getForumDetails(int)), this, SLOT(getForumDetails(int)));
+    connect(appWindow, SIGNAL(getForumUrlDetails(QString)), this, SLOT(getForumUrlDetails(QString)));
     connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
@@ -124,6 +125,11 @@ void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
     qDebug() << Q_FUNC_INFO << cr->subscription->alias() << 50;
     QMetaObject::invokeMethod(rootObject, "askCredentials", Q_ARG(QVariant, currentCredentialsRequest->subscription->alias()),
                               Q_ARG(QVariant, currentCredentialsRequest->credentialType==CredentialsRequest::SH_CREDENTIAL_HTTP?"HTTP":"forum") );
+}
+
+void SiilihaiMobile::subscribeFailed(QString reason) {
+    QMetaObject::invokeMethod(rootObject, "subscribeFailed");
+    errorDialog(reason);
 }
 
 void SiilihaiMobile::subscriptionSelected(int parser) {
@@ -238,6 +244,8 @@ void SiilihaiMobile::listSubscriptions() {
 
 void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
     qDebug() << Q_FUNC_INFO << forums.size();
+    qDeleteAll(forumList);
+    forumList.clear();
     foreach(ForumSubscription *p, forums) {
         forumList.append(p);
     }
@@ -249,20 +257,22 @@ void SiilihaiMobile::subscribeForum(int id, QString name) {
 }
 
 void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString username, QString password) {
-    qDebug() << Q_FUNC_INFO << id << name << username << password;
+    qDebug() << Q_FUNC_INFO << id << name;
 
-    Q_ASSERT(newForum.forumId());
-    Q_ASSERT(newForum.forumId() == id);
+    Q_ASSERT(newForum->forumId());
+    Q_ASSERT(newForum->forumId() == id);
 
     if(!username.isEmpty()) {
-        newForum.setUsername(username);
-        newForum.setPassword(password);
+        newForum->setUsername(username);
+        newForum->setPassword(password);
     }
-    newForum.setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
-    newForum.setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
+    newForum->setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
+    newForum->setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
 
-    forumAdded(&newForum);
-    newForum.setForumId(0);
+    forumAdded(newForum);
+    newForum->setForumId(0);
+    newForum->deleteLater();
+    newForum = 0;
 }
 
 void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
@@ -323,27 +333,61 @@ void SiilihaiMobile::unsubscribeCurrentForum() {
 void SiilihaiMobile::getForumDetails(int id) {
     qDebug() << Q_FUNC_INFO << id;
     Q_ASSERT(id);
-    newForum.setForumId(0);
-    connect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(forumGot(ForumSubscription*)));
-    protocol.getForum(id);
+    if(newForum) {
+        newForum->deleteLater();
+        newForum = 0;
+    }
+    connect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
+    probe.probeUrl(id);
 }
 
-void SiilihaiMobile::forumGot(ForumSubscription *sub) {
-    qDebug() << Q_FUNC_INFO << sub->toString();
-    newForum.copyFrom(sub);
-    newForum.setProvider(sub->provider());
-    Q_ASSERT(newForum.provider() != ForumSubscription::FP_NONE);
-    disconnect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(forumGot(ForumSubscription*)));
-    QMetaObject::invokeMethod(rootObject, "forumDetails", Q_ARG(QVariant, sub->alias()), Q_ARG(QVariant, sub->supportsLogin()));
+// Get by URL - need to probe
+void SiilihaiMobile::getForumUrlDetails(QString urlString)
+{
+    qDebug() << Q_FUNC_INFO << urlString;
+    QUrl url(urlString);
+    if(!url.isValid()) {
+        subscribeFailed("Invalid URL");
+        return;
+    }
+    if(newForum)
+        newForum->deleteLater();
+    newForum = 0;
+
+    connect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
+    probe.probeUrl(url);
 }
 
-// Not used anymore:
-void SiilihaiMobile::getParserFinished(ForumParser* parser) {
-    qDebug() << Q_FUNC_INFO << parser;
-    if(!parser) return;
-    disconnect(&protocol, SIGNAL(getParserFinished(ForumParser*)), this, SLOT(getParserFinished(ForumParser*)));
-    QMetaObject::invokeMethod(rootObject, "parserDetails", Q_ARG(QVariant, parser->id()), Q_ARG(QVariant, parser->supportsLogin()));
+void SiilihaiMobile::probeResults(ForumSubscription *probedSub) {
+    disconnect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
+    if(!probedSub) {
+        subscribeFailed("Unsupported forum");
+        return;
+    } else {
+        newForum = ForumSubscription::newForProvider(probedSub->provider(), 0, true);
+        newForum->copyFrom(probedSub);
+        if(newForum->forumId()) {
+            // Found
+            QMetaObject::invokeMethod(rootObject, "forumDetails", Q_ARG(QVariant, newForum->forumId()), Q_ARG(QVariant, newForum->alias()), Q_ARG(QVariant, newForum->supportsLogin()));
+        } else {
+            // Not found, adding
+            connect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
+            protocol.addForum(newForum);
+        }
+    }
 }
+
+void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
+    disconnect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
+    if(sub) {
+        Q_ASSERT(sub->forumId());
+        newForum->copyFrom(sub);
+        QMetaObject::invokeMethod(rootObject, "forumDetails", Q_ARG(QVariant, newForum->forumId()), Q_ARG(QVariant, newForum->alias()), Q_ARG(QVariant, newForum->supportsLogin()));
+    } else {
+        subscribeFailed("Adding forum failed, check log");
+    }
+}
+
 void SiilihaiMobile::markThreadRead(bool read) {
     qDebug() << Q_FUNC_INFO << currentThread;
     if(!currentThread) return;
@@ -352,6 +396,7 @@ void SiilihaiMobile::markThreadRead(bool read) {
         msg->commitChanges();
     }
 }
+
 void SiilihaiMobile::changeState(siilihai_states newState) {
     ClientLogic::changeState(newState);
     QMetaObject::invokeMethod(rootObject, "setBusy", Q_ARG(QVariant,

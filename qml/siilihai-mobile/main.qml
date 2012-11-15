@@ -17,6 +17,7 @@ PageStackWindow {
     signal closeLogin(bool success, string motd)
     signal listSubscriptions()
     signal getForumDetails(int id)
+    signal getForumUrlDetails(string url)
     signal subscribeForum(int id, string name)
     signal subscribeForumWithCredentials(int id, string name, string user, string pass)
     signal unSubscribeCurrentForum()
@@ -189,10 +190,17 @@ PageStackWindow {
         credentialsDialogPage.resetForm()
         pageStack.push(credentialsDialogPage)
     }
-    function forumDetails(id, supportsLogin) {
-        console.log("forumDetails " + id + " " + supportsLogin)
+    function forumDetails(id, name, supportsLogin) {
+        console.log("forumDetails " + id + " " + name + " "+ supportsLogin)
+        forumCredentialsPage.forumid = id
+        forumCredentialsPage.forumname = name
         forumCredentialsPage.supportsLogin = supportsLogin
-        forumCredentialsPage.parserDownloaded = true
+        forumCredentialsPage.forumDownloaded = true
+    }
+    function subscribeFailed() {
+        subscribeWizardPage.selectionMode = 0;
+        forumCredentialsPage.forumid = 0
+        appWindow.pageStack.pop(mainPage);
     }
     function setBusy(busy) {
         console.log("setBusy " + busy)

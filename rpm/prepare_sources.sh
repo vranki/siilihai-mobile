@@ -1,5 +1,5 @@
 #/bin/bash
-version=0.9.3
+version=0.9.4
 target=siilihai-mobile
 
 rm -rf /tmp/$target-*
@@ -33,6 +33,7 @@ tar cvfz $target-$version.tar.gz $target-$version
 popd
 
 mv /tmp/$target-$version.tar.gz .
+
 pushd ..
-debuild -S -us -uc
+debuild -S -us -uc -i$target-$version.tar.gz -i.git
 popd

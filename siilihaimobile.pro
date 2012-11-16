@@ -137,7 +137,7 @@ OTHER_FILES += qml/siilihai-mobile/*
 OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
 debian/changelog
 
-OTHER_FILES += rpm/*.spec rpm/*.changes rpm/prepare_sources.sh
+OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
 
 OTHER_FILES += desktops.files
 

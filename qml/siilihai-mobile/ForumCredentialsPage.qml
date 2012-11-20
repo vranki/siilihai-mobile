@@ -5,16 +5,18 @@ import com.nokia.meego 1.0
 Page {
     anchors.fill: parent
     property string forumname: ""
+    property string subscribeError: ""
     property int forumid: -1
     property bool supportsLogin: false
     property bool forumDownloaded: false
     Column {
+        visible: subscribeError.length == 0
         spacing: 15
         anchors.centerIn: parent
         ProgressBar {
             indeterminate: true
             width: parent.width
-            visible: !forumDownloaded
+            visible: !forumDownloaded && subscribeError.length == 0
         }
         CheckBox {
             id: haveCredentials
@@ -52,6 +54,7 @@ Page {
         }
         Button {
             text: "Continue"
+            enabled: forumDownloaded
             onClicked: {
                 if(haveCredentials.checked) {
                     appWindow.subscribeForumWithCredentials(forumid, forumname, forumUsername.text, forumPassword.text)
@@ -62,11 +65,19 @@ Page {
                 appWindow.pageStack.pop(mainPage)
             }
         }
+    }
+    Column {
+        Label {
+            text: subscribeError
+            visible: subscribeError.length > 0
+            wrapMode: Text.Wrap
+            width: forumCredentialsPage.width
+        }
         Button {
-            text: "Cancel"
+            text: "Back"
             onClicked: {
                 subscribeWizardPage.selectionMode = 0;
-                appWindow.pageStack.pop(mainPage)
+                appWindow.pageStack.pop()
             }
         }
     }

@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import com.nokia.meego 1.1
 
 PageStackWindow {
     id: appWindow
@@ -153,15 +153,42 @@ PageStackWindow {
         onTriggered: mainPage.message = " "
     }
 
+    Dialog {
+        id: errorDialog
+        property string errorText: ""
+        content: [
+        Label {
+                text: errorDialog.errorText
+                width: parent.width
+                wrapMode: Text.Wrap
+                color: "white"
+            }
+        ]
+
+        buttons: [
+            Button {
+                text: "Ok"
+                onClicked: {
+                    errorDialog.close()
+                    displayNextMessage()
+                    color: "black"
+                }
+            }
+
+        ]
+    }
+
+
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
     }
 
     function showMessage(msg) {
         console.log("showMessage " + msg)
-        messagePage.text = msg
-        appWindow.pageStack.push(messagePage)
+        errorDialog.errorText = msg;
+        errorDialog.open()
     }
+
     function showLoginWizard() {
         console.log("showLoginWizard")
         appWindow.pageStack.push(loginWizardPage)
@@ -197,10 +224,10 @@ PageStackWindow {
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.forumDownloaded = true
     }
-    function subscribeFailed() {
+    function subscribeFailed(msg) {
         subscribeWizardPage.selectionMode = 0;
         forumCredentialsPage.forumid = 0
-        appWindow.pageStack.pop(mainPage);
+        forumCredentialsPage.subscribeError = msg
     }
     function setBusy(busy) {
         console.log("setBusy " + busy)

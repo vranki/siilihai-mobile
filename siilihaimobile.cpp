@@ -128,8 +128,7 @@ void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
 }
 
 void SiilihaiMobile::subscribeFailed(QString reason) {
-    QMetaObject::invokeMethod(rootObject, "subscribeFailed");
-    errorDialog(reason);
+    QMetaObject::invokeMethod(rootObject, "subscribeFailed", Q_ARG(QVariant, reason));
 }
 
 void SiilihaiMobile::subscriptionSelected(int parser) {
@@ -244,11 +243,14 @@ void SiilihaiMobile::listSubscriptions() {
 
 void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
     qDebug() << Q_FUNC_INFO << forums.size();
+    QList<QObject*> emptyList;
+    rootContext->setContextProperty("forumList", QVariant::fromValue(emptyList));
     qDeleteAll(forumList);
     forumList.clear();
     foreach(ForumSubscription *p, forums) {
         forumList.append(p);
     }
+    // WTF this crashes sometimes
     rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
 

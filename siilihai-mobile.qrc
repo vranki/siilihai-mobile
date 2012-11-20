@@ -18,5 +18,7 @@
         <file>qml/siilihai-mobile/SubscribeGroupsPage.qml</file>
         <file>qml/siilihai-mobile/SubscribeWizardPage.qml</file>
         <file>qml/siilihai-mobile/ThreadListPage.qml</file>
+        <file>qml/siilihai-mobile/folder.png</file>
+        <file>qml/siilihai-mobile/folder-new.png</file>
     </qresource>
 </RCC>

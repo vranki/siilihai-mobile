@@ -1,5 +1,5 @@
 #/bin/bash
-version=0.9.4
+version=0.9.5
 target=siilihai-mobile
 
 rm -rf /tmp/$target-*

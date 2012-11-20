@@ -44,9 +44,13 @@ Rectangle {
     WebView {
         id: body
         html: message.messageBody
-        width: parent.width
+        width: mainPage.width/2
+        preferredWidth: width
         anchors.top: toolLine.bottom
         z: 10
+        settings.pluginsEnabled: true
+        settings.javascriptEnabled: true
+        settings.javascriptCanOpenWindows: false
     }
     Rectangle {
         radius: 5

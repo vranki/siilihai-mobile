@@ -1,9 +1,16 @@
-siilihai-mobile (0.9.4) unstable; urgency=low
+siilihai-mobile (0.9.5) unstable; urgency=low
 
-  * Updated to libsiilihai 2.x
-  * TapaTalk support
+  * Deuglification
+  * Minor fixes
 
- -- Ville Ranki <ville.ranki@iki.fi>  Fri, 16 Nov 2012 12:34:56 +0300
+ -- Ville Ranki <ville.ranki@iki.fi>  Tue, 20 Nov 2012 12:34:56 +0300
+
+ siilihai-mobile (0.9.4) unstable; urgency=low
+
+   * Updated to libsiilihai 2.x
+   * TapaTalk support
+
+  -- Ville Ranki <ville.ranki@iki.fi>  Fri, 16 Nov 2012 12:34:56 +0300
 
 siilihai-mobile (0.9.3) unstable; urgency=low
 

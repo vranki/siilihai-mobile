@@ -81,18 +81,18 @@ Page {
             anchors.topMargin: 10
             Button {
                 text: "Show more messages.."
-                anchors.horizontalCenter: messagelistview.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: appWindow.showMoreMessages()
                 visible: hasMoreMessages
             }
             Button {
                 text: "Mark thread read"
-                anchors.horizontalCenter: messagelistview.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: appWindow.markThreadRead(true)
             }
             Button {
                 text: "Mark thread unread"
-                anchors.horizontalCenter: messagelistview.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: appWindow.markThreadRead(false)
             }
         }

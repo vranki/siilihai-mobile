@@ -44,7 +44,7 @@ Rectangle {
     WebView {
         id: body
         html: message.messageBody
-        width: mainPage.width/2
+        width: mainPage.width
         preferredWidth: width
         anchors.top: toolLine.bottom
         z: 10

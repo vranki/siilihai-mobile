@@ -29,7 +29,8 @@ Page {
             ButtonWithUnreadCount {
                 label: displayName
                 unreads: unreadCount
-                icon: unreads > 0 ? "folder-new.png" : "folder.png"
+                moreAvailable: hasMoreMessages
+                icon: (unreads > 0 || hasMoreMessages) ? "folder-new.png" : "folder.png"
                 onClicked:  {
                     appWindow.threadSelected(id)
                     messageListPage.hasMoreMessages = hasMoreMessages

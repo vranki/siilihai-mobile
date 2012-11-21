@@ -1,3 +1,9 @@
+siilihai-mobile (0.9.6) unstable; urgency=low
+
+  * Fixed parsers not updating
+
+ -- Ville Ranki <ville.ranki@iki.fi>  Wed, 21 Nov 2012 12:34:56 +0300
+
 siilihai-mobile (0.9.5) unstable; urgency=low
 
   * Deuglification

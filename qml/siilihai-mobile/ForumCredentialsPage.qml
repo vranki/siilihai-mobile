@@ -6,7 +6,7 @@ Page {
     anchors.fill: parent
     property string forumname: ""
     property string subscribeError: ""
-    property int forumid: -1
+    property int forumid: 0
     property bool supportsLogin: false
     property bool forumDownloaded: false
     Column {
@@ -62,11 +62,11 @@ Page {
                     appWindow.subscribeForum(forumid, forumname)
                 }
                 subscribeWizardPage.selectionMode = 0;
+                forumid = 0
+                forumname = ""
                 appWindow.pageStack.pop(mainPage)
             }
         }
-    }
-    Column {
         Label {
             text: subscribeError
             visible: subscribeError.length > 0

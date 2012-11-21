@@ -4,7 +4,6 @@ import com.nokia.meego 1.1
 PageStackWindow {
     id: appWindow
     initialPage: mainPage
-    //initialPage: testMsgDisplay
 
     // QML -> C++
     signal subscriptionSelected(int parser)
@@ -29,7 +28,7 @@ PageStackWindow {
     signal showMoreMessages();
     signal updateClicked();
     signal openInBrowser(string id);
-    signal displayNextMessage();
+    signal confirmMessages();
 
     Component.onCompleted: {
         console.log("Loaded")
@@ -38,20 +37,6 @@ PageStackWindow {
         console.log("QML exit")
         haltSiilihai()
     }
-/*
-    MessageDisplay {
-        id: testMsgDisplay
-        msgSubject: "subject"
-        msgBody: "body"
-        msgAuthor: "author"
-        visible: false
-    }
-    Rectangle {
-        color: "black"
-        anchors.fill: parent
-        z: -100
-    }
-*/
 
     MainPage {
         id: mainPage
@@ -90,26 +75,26 @@ PageStackWindow {
     ToolBarLayout {
         id: commonTools
         Row {
-        ToolIcon {
-            id: backButton
-            platformIconId: "toolbar-back"
-            onClicked: {
-                if(pageStack.currentPage==messagePage) {
-                    pageStack.pop()
-                    displayNextMessage();
-                } else {
-                    pageStack.pop()
+            ToolIcon {
+                id: backButton
+                platformIconId: "toolbar-back"
+                onClicked: {
+                    if(pageStack.currentPage==messagePage) {
+                        pageStack.pop()
+                        displayNextMessage();
+                    } else {
+                        pageStack.pop()
+                    }
                 }
+                visible: appWindow.pageStack.currentPage != mainPage
             }
-            visible: appWindow.pageStack.currentPage != mainPage
-        }
-        ToolIcon {
-            platformIconId: "toolbar-refresh"
-            enabled: !mainPage.busy
-            onClicked: appWindow.updateClicked()
-            visible: !backButton.visible
-//            anchors.left: backButton.right
-        }
+            ToolIcon {
+                platformIconId: "toolbar-refresh"
+                enabled: !mainPage.busy
+                onClicked: appWindow.updateClicked()
+                visible: !backButton.visible
+                //            anchors.left: backButton.right
+            }
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
@@ -156,26 +141,22 @@ PageStackWindow {
     Dialog {
         id: errorDialog
         property string errorText: ""
-        content: [
-        Label {
+        content: Label {
+                id: errorLabel
                 text: errorDialog.errorText
                 width: parent.width
+                anchors.centerIn: parent
                 wrapMode: Text.Wrap
                 color: "white"
             }
-        ]
-
-        buttons: [
-            Button {
-                text: "Ok"
-                onClicked: {
-                    errorDialog.close()
-                    displayNextMessage()
-                    color: "black"
-                }
-            }
-
-        ]
+        buttons: ButtonRow {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 30
+            anchors.top: errorLabel.Bottom
+            Button {text: "Ok"; onClicked: errorDialog.accept()}
+          }
+        onRejected: confirmMessages()
+        onAccepted: confirmMessages()
     }
 
 
@@ -183,9 +164,9 @@ PageStackWindow {
         console.log("onSubscriptionSelected " + parser)
     }
 
-    function showMessage(msg) {
-        console.log("showMessage " + msg)
-        errorDialog.errorText = msg;
+    function showErrorMessage(msg) {
+        console.log("showErrorMessage")
+        errorDialog.errorText = msg
         errorDialog.open()
     }
 
@@ -223,6 +204,7 @@ PageStackWindow {
         forumCredentialsPage.forumname = name
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.forumDownloaded = true
+        appWindow.pageStack.push(forumCredentialsPage)
     }
     function subscribeFailed(msg) {
         subscribeWizardPage.selectionMode = 0;

@@ -6,6 +6,7 @@
 #include <siilihai/forumprobe.h>
 #include <qdeclarativecontext.h>
 #include <QStringList>
+#include <QTimer>
 
 class SiilihaiMobile : public ClientLogic
 {
@@ -33,7 +34,6 @@ private slots:
     void listForumsFinished(QList <ForumSubscription*>);
     void subscribeForum(int id, QString name);
     void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
-//    void getParserFinished(ForumParser *fp);
     void showSubscribeGroups();
     void setGroupSubscribed(QString id, bool sub);
     void applyGroupSubscriptions();
@@ -43,12 +43,13 @@ private slots:
     void getForumUrlDetails(QString url);
     void markThreadRead(bool read);
     virtual void showStatusMessage(QString message);
+    void confirmMessages();
     void showMoreMessages();
     void updateCurrentMessageModel();
     void openInBrowser(QString messageId);
-    void displayNextMessage(bool requestedByUI=true);
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
+    void showNextError();
 protected:
     virtual QString getDataFilePath();
     virtual void changeState(siilihai_states newState);
@@ -63,17 +64,18 @@ private:
     void subscribeFailed(QString reason);
 
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
+    QStringList messageQueue;
     QDeclarativeContext* rootContext;
     QObject *rootObject;
     ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;
     QString regOrLoginUser, regOrLoginPass;
-    QStringList messageQueue;
     bool messageDisplayed;
     bool haltRequested;
     ForumSubscription *newForum; // the one being subscribed
     ForumProbe probe;
+    QTimer showNextErrorTimer;
 };
 
 #endif // SIILIHAIMOBILE_H

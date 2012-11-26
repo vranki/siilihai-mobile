@@ -63,11 +63,6 @@ Page {
         model: messages
         boundsBehavior: Flickable.StopAtBounds
 
-        header: Label {
-            text: "Messages in " + threadname;
-            wrapMode: Text.Wrap
-        }
-
         delegate: Row {
             MessageDisplay {
                 subject: displayName
@@ -79,6 +74,7 @@ Page {
         }
         footer: Column {
             anchors.topMargin: 10
+            spacing: 30
             Button {
                 text: "Show more messages.."
                 anchors.horizontalCenter: parent.horizontalCenter

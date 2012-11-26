@@ -62,6 +62,7 @@ protected:
 
 private:
     void subscribeFailed(QString reason);
+    void setContextProperties();
 
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList messageQueue;

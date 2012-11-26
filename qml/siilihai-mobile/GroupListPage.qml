@@ -2,10 +2,10 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 
 Page {
-    tools: commonTools
     anchors.fill: parent
     property string forumname: "?"
     property string forumIcon: ""
+    tools: commonTools
 
     ListView {
         anchors.fill: parent
@@ -39,10 +39,38 @@ Page {
                 }
             }
         }
-        footer: Button {
-            text: "Manage Subscriptions"
+        footer: Column {
+            Button {
+                text: "Manage Subscriptions"
+                onClicked: appWindow.subscribeGroups()
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            Button {
+                text: "Unsubscribe"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: confirmUnsubscribeDialog.open()
+            }
+        }
+    }
+    Dialog {
+        id: confirmUnsubscribeDialog
+        content: Label {
+            text: "Really unsubscribe from forum?"
+            width: parent.width
+            anchors.centerIn: parent
+            wrapMode: Text.Wrap
+            color: "white"
+        }
+        buttons: ButtonRow {
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: appWindow.subscribeGroups()
+            anchors.topMargin: 30
+            anchors.top: errorLabel.Bottom
+            Button {text: "Yes"; onClicked: confirmUnsubscribeDialog.accept()}
+            Button {text: "No"; onClicked: confirmUnsubscribeDialog.reject()}
+          }
+        onAccepted: {
+            pageStack.pop()
+            appWindow.unSubscribeCurrentForum()
         }
     }
 }

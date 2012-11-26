@@ -19,12 +19,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
         closeUi();
         return;
     }
-    rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
-    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
-    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
-    rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
-    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
-    rootContext->setContextProperty("messageQueue", QVariant::fromValue(messageQueue));
+    setContextProperties();
 
     QObject *appWindow = rootObject;
     Q_ASSERT(appWindow);
@@ -100,7 +95,8 @@ void SiilihaiMobile::confirmMessages() {
 
 void SiilihaiMobile::closeUi() {
     qDebug() << Q_FUNC_INFO;
-    QCoreApplication::quit();
+    if(!QCoreApplication::closingDown())
+        QCoreApplication::quit();
 }
 
 void SiilihaiMobile::showMainWindow() {
@@ -141,6 +137,15 @@ void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
 
 void SiilihaiMobile::subscribeFailed(QString reason) {
     QMetaObject::invokeMethod(rootObject, "subscribeFailed", Q_ARG(QVariant, reason));
+}
+
+void SiilihaiMobile::setContextProperties() {
+    rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
+    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
+    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
+    rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
+    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
+    rootContext->setContextProperty("messageQueue", QVariant::fromValue(messageQueue));
 }
 
 void SiilihaiMobile::subscriptionSelected(int parser) {
@@ -347,8 +352,8 @@ void SiilihaiMobile::getForumDetails(int id) {
     Q_ASSERT(id);
     if(newForum) {
         newForum->deleteLater();
-        newForum = 0;
     }
+    newForum = 0;
     connect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
     probe.probeUrl(id);
 }
@@ -427,8 +432,16 @@ void SiilihaiMobile::showMoreMessages() {
 }
 
 void SiilihaiMobile::haltSiilihai() {
-    haltRequested = true;
-    QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+    if(!haltRequested) {
+        haltRequested = true;
+        QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+        messageList.clear();
+        threadList.clear();
+        groupList.clear();
+        subscriptionList.clear();
+
+        setContextProperties();
+    }
     ClientLogic::haltSiilihai();
 }
 

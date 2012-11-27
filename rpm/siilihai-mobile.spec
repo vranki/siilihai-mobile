@@ -1,5 +1,5 @@
 Name: siilihai-mobile
-Version: 0.9.6
+Version: 0.9.7
 Release: 1
 Summary: Siilihai web forum reader mobile version
 License: GPL

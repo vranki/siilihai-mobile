@@ -28,6 +28,7 @@ Page {
 
         footer: Button {
             text: "Apply"
+            anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 appWindow.applyGroupSubscriptions()
                 appWindow.pageStack.pop()

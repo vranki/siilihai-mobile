@@ -9,12 +9,9 @@ Page {
     ListView {
         anchors.fill: parent
         model: subscriptions
+        spacing: 5
         header: Column {
             width: parent.width
-            Label {
-                text: "Subscribed Forums";
-                wrapMode: Text.Wrap
-            }
             ProgressBar {
                 indeterminate: true
                 width: parent.width
@@ -31,15 +28,17 @@ Page {
                 label: alias
                 unreads: unreadCount
                 busy: beingUpdated || beingSynced || scheduledForUpdate
+                icon: faviconUrl.length > 0 ? faviconUrl : "emblem-web.png"
                 onClicked:  {
                     groupListPage.forumname = alias
+                    groupListPage.forumIcon = icon
                     appWindow.subscriptionSelected(forumId)
                     appWindow.pageStack.push(groupListPage)
                 }
             }
         }
         footer: Button {
-            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
             text: "Subscribe new.."
             onClicked: appWindow.showSubscribeWizard()
         }

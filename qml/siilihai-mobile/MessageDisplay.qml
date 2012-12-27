@@ -6,9 +6,23 @@ Rectangle {
     id: message
     property string subject: "?"
     property string author: "?"
-    property string messageBody: "xxx"
+    property string messageBody: ""
     property bool messageRead: false
     property string messageId: ""
+
+    property string styleHtml: "<style type=\"text/css\">#siilihai-header {
+    color: white;
+    margin: 3px;
+    padding: 3px 3%;
+    }
+    div.monospace { font-family: \"Fixed\",\"monospace\"; }
+    div.quotecontent { background: #EEEEEE; margin: 5px; }
+    div.quote { background: #EEEEEE; margin: 5px; }
+    blockquote { background: #EEEEEE; margin: 5px; }
+    td.quote { background: #EEEEEE; margin: 5px; }
+    </style>"
+    property string contentHtml: "<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">" +
+                                 styleHtml + "</head><body>" + messageBody + "</body>"
     width: mainPage.width
     height: subjectLine.height + body.height + 40
     radius: 15
@@ -41,12 +55,17 @@ Rectangle {
         font.pointSize: 12
         anchors.top: subjectLine.bottom
     }
-    WebView {
+
+    WebView { // Causes some trouble, won't wrap text as expected
         id: body
-        html: message.messageBody
-        width: parent.width
+        html: message.contentHtml
+        width: mainPage.width
+        preferredWidth: width
         anchors.top: toolLine.bottom
         z: 10
+        settings.pluginsEnabled: true
+        settings.javascriptEnabled: true
+        settings.javascriptCanOpenWindows: false
     }
     Rectangle {
         radius: 5

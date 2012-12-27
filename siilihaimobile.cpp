@@ -1,6 +1,7 @@
 #include "siilihaimobile.h"
 #include <QDesktopServices>
 #include <QDebug>
+
 #include <siilihai/forumdata/forumgroup.h>
 #include <siilihai/forumdata/forumthread.h>
 #include <siilihai/forumdata/forummessage.h>
@@ -18,11 +19,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
         closeUi();
         return;
     }
-    rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
-    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
-    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
-    rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
-    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
+    setContextProperties();
 
     QObject *appWindow = rootObject;
     Q_ASSERT(appWindow);
@@ -43,16 +40,19 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(appWindow, SIGNAL(getForumDetails(int)), this, SLOT(getForumDetails(int)));
     connect(appWindow, SIGNAL(getForumUrlDetails(QString)), this, SLOT(getForumUrlDetails(QString)));
     connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
+    connect(appWindow, SIGNAL(confirmMessages()), this, SLOT(confirmMessages()));
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
     connect(appWindow, SIGNAL(openInBrowser(QString)), this, SLOT(openInBrowser(QString)));
-    connect(appWindow, SIGNAL(displayNextMessage()), this, SLOT(displayNextMessage()));
-    messageDisplayed = true;
+    messageDisplayed = true; // Prevent messages until main win is shown
     offlineModeSet(true);
+
+    connect(&showNextErrorTimer, SIGNAL(timeout()), this, SLOT(showNextError()));
+    showNextErrorTimer.setSingleShot(true);
+    showNextErrorTimer.setInterval(200);
 }
 
 QString SiilihaiMobile::getDataFilePath() {
-//    return "/home/cosmo/.local/share/data/Siilihai/Siilihai";
     return QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 }
 
@@ -68,34 +68,42 @@ void SiilihaiMobile::showLoginWizard() {
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
-    qDebug() << Q_FUNC_INFO << message << " queue " << messageQueue.size();
-    messageQueue.append(message);
-    displayNextMessage(false);
+    // qDebug() << Q_FUNC_INFO << message << " queue " << messageQueue.size();
+    messageQueue << message;
+    showNextError();
+}
+
+void SiilihaiMobile::showNextError() {
+    if(!messageDisplayed) {
+        QMetaObject::invokeMethod(rootObject, "showErrorMessage", Q_ARG(QVariant, messageQueue.takeFirst()));
+        messageDisplayed = true;
+    } else {
+        qDebug() << Q_FUNC_INFO << "message displayed, queueing";
+    }
 }
 
 // requestedByUI means user has dismissed previous message
-void SiilihaiMobile::displayNextMessage(bool requestedByUI) {
-    qDebug() << Q_FUNC_INFO << "queue: " << messageQueue.size() << " by UI:" << requestedByUI;
-    if(!requestedByUI && messageDisplayed) return; // NOP, wait until user acks current msg
-    if(messageQueue.isEmpty()) {
-        messageDisplayed = false;
-        return;
+void SiilihaiMobile::confirmMessages() {
+    qDebug() << Q_FUNC_INFO << "queue: " << messageQueue.size() << " by UI:" << " displayed:" << messageDisplayed;
+    Q_ASSERT(messageDisplayed);
+    messageDisplayed = false;
+    if(!messageQueue.isEmpty()) {
+        showNextErrorTimer.start(); // Delay
     }
-    QVariant msg = messageQueue.takeFirst();
-    QMetaObject::invokeMethod(rootObject, "showMessage", Q_ARG(QVariant, msg));
-    messageDisplayed = true;
 }
 
 
 void SiilihaiMobile::closeUi() {
     qDebug() << Q_FUNC_INFO;
-    QCoreApplication::quit();
+    if(!QCoreApplication::closingDown())
+        QCoreApplication::quit();
 }
 
 void SiilihaiMobile::showMainWindow() {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Settings at " << settings->fileName();
     messageDisplayed = false;
+    //displayNextMessage(false);
 }
 
 void SiilihaiMobile::subscriptionFound(ForumSubscription *sub) {
@@ -128,8 +136,16 @@ void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
 }
 
 void SiilihaiMobile::subscribeFailed(QString reason) {
-    QMetaObject::invokeMethod(rootObject, "subscribeFailed");
-    errorDialog(reason);
+    QMetaObject::invokeMethod(rootObject, "subscribeFailed", Q_ARG(QVariant, reason));
+}
+
+void SiilihaiMobile::setContextProperties() {
+    rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
+    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
+    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
+    rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
+    rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
+    rootContext->setContextProperty("messageQueue", QVariant::fromValue(messageQueue));
 }
 
 void SiilihaiMobile::subscriptionSelected(int parser) {
@@ -244,10 +260,12 @@ void SiilihaiMobile::listSubscriptions() {
 
 void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
     qDebug() << Q_FUNC_INFO << forums.size();
-    qDeleteAll(forumList);
-    forumList.clear();
     foreach(ForumSubscription *p, forums) {
-        forumList.append(p);
+        if(forumList.contains(p)) {
+            p->deleteLater();
+        } else {
+            forumList.append(p);
+        }
     }
     rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
@@ -270,7 +288,6 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
     newForum->setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
 
     forumAdded(newForum);
-    newForum->setForumId(0);
     newForum->deleteLater();
     newForum = 0;
 }
@@ -335,8 +352,8 @@ void SiilihaiMobile::getForumDetails(int id) {
     Q_ASSERT(id);
     if(newForum) {
         newForum->deleteLater();
-        newForum = 0;
     }
+    newForum = 0;
     connect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
     probe.probeUrl(id);
 }
@@ -361,7 +378,7 @@ void SiilihaiMobile::getForumUrlDetails(QString urlString)
 void SiilihaiMobile::probeResults(ForumSubscription *probedSub) {
     disconnect(&probe, SIGNAL(probeResults(ForumSubscription*)), this, SLOT(probeResults(ForumSubscription*)));
     if(!probedSub) {
-        subscribeFailed("Unsupported forum");
+        errorDialog("Unsupported forum");
         return;
     } else {
         newForum = ForumSubscription::newForProvider(probedSub->provider(), 0, true);
@@ -387,6 +404,7 @@ void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
         subscribeFailed("Adding forum failed, check log");
     }
 }
+
 
 void SiilihaiMobile::markThreadRead(bool read) {
     qDebug() << Q_FUNC_INFO << currentThread;
@@ -414,8 +432,16 @@ void SiilihaiMobile::showMoreMessages() {
 }
 
 void SiilihaiMobile::haltSiilihai() {
-    haltRequested = true;
-    QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+    if(!haltRequested) {
+        haltRequested = true;
+        QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+        messageList.clear();
+        threadList.clear();
+        groupList.clear();
+        subscriptionList.clear();
+
+        setContextProperties();
+    }
     ClientLogic::haltSiilihai();
 }
 

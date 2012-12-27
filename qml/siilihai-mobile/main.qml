@@ -1,10 +1,9 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import com.nokia.meego 1.1
 
 PageStackWindow {
     id: appWindow
     initialPage: mainPage
-    //initialPage: testMsgDisplay
 
     // QML -> C++
     signal subscriptionSelected(int parser)
@@ -29,7 +28,7 @@ PageStackWindow {
     signal showMoreMessages();
     signal updateClicked();
     signal openInBrowser(string id);
-    signal displayNextMessage();
+    signal confirmMessages();
 
     Component.onCompleted: {
         console.log("Loaded")
@@ -38,20 +37,6 @@ PageStackWindow {
         console.log("QML exit")
         haltSiilihai()
     }
-/*
-    MessageDisplay {
-        id: testMsgDisplay
-        msgSubject: "subject"
-        msgBody: "body"
-        msgAuthor: "author"
-        visible: false
-    }
-    Rectangle {
-        color: "black"
-        anchors.fill: parent
-        z: -100
-    }
-*/
 
     MainPage {
         id: mainPage
@@ -90,59 +75,24 @@ PageStackWindow {
     ToolBarLayout {
         id: commonTools
         Row {
-        ToolIcon {
-            id: backButton
-            platformIconId: "toolbar-back"
-            onClicked: {
-                if(pageStack.currentPage==messagePage) {
-                    pageStack.pop()
-                    displayNextMessage();
-                } else {
-                    pageStack.pop()
-                }
-            }
-            visible: appWindow.pageStack.currentPage != mainPage
-        }
-        ToolIcon {
-            platformIconId: "toolbar-refresh"
-            enabled: !mainPage.busy
-            onClicked: appWindow.updateClicked()
-            visible: !backButton.visible
-//            anchors.left: backButton.right
-        }
-        }
-        ToolIcon {
-            platformIconId: "toolbar-view-menu"
-            anchors.right: (parent === undefined) ? undefined : parent.right
-            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
-        }
-    }
-
-    Menu {
-        id: myMenu
-        visualParent: pageStack
-        MenuLayout {
-            MenuItem {
-                text: qsTr("Quit")
+            ToolIcon {
+                id: backButton
+                platformIconId: "toolbar-back"
                 onClicked: {
-                    console.log("halting ")
-                    appWindow.haltSiilihai()
+                    if(pageStack.currentPage==messagePage) {
+                        pageStack.pop()
+                        displayNextMessage();
+                    } else {
+                        pageStack.pop()
+                    }
                 }
+                visible: appWindow.pageStack.currentPage != mainPage
             }
-            MenuItem {
-                visible: groupListPage.status == PageStatus.Active
-                text: "Unsubscribe Forum"
-                onClicked: {
-                    pageStack.pop()
-                    appWindow.unSubscribeCurrentForum()
-                }
-            }
-            MenuItem {
-                visible: mainPage.status == PageStatus.Active
-                text: "Subscribe to .."
-                onClicked: {
-                    appWindow.showSubscribeWizard()
-                }
+            ToolIcon {
+                platformIconId: "toolbar-refresh"
+                enabled: !mainPage.busy
+                onClicked: appWindow.updateClicked()
+                visible: !backButton.visible
             }
         }
     }
@@ -153,15 +103,38 @@ PageStackWindow {
         onTriggered: mainPage.message = " "
     }
 
+    Dialog {
+        id: errorDialog
+        property string errorText: ""
+        content: Label {
+                id: errorLabel
+                text: errorDialog.errorText
+                width: parent.width
+                anchors.centerIn: parent
+                wrapMode: Text.Wrap
+                color: "white"
+            }
+        buttons: ButtonRow {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 30
+            anchors.top: errorLabel.Bottom
+            Button {text: "Ok"; onClicked: errorDialog.accept()}
+          }
+        onRejected: confirmMessages()
+        onAccepted: confirmMessages()
+    }
+
+
     onSubscriptionSelected: {
         console.log("onSubscriptionSelected " + parser)
     }
 
-    function showMessage(msg) {
-        console.log("showMessage " + msg)
-        messagePage.text = msg
-        appWindow.pageStack.push(messagePage)
+    function showErrorMessage(msg) {
+        console.log("showErrorMessage")
+        errorDialog.errorText = msg
+        errorDialog.open()
     }
+
     function showLoginWizard() {
         console.log("showLoginWizard")
         appWindow.pageStack.push(loginWizardPage)
@@ -196,11 +169,12 @@ PageStackWindow {
         forumCredentialsPage.forumname = name
         forumCredentialsPage.supportsLogin = supportsLogin
         forumCredentialsPage.forumDownloaded = true
+        appWindow.pageStack.push(forumCredentialsPage)
     }
-    function subscribeFailed() {
+    function subscribeFailed(msg) {
         subscribeWizardPage.selectionMode = 0;
         forumCredentialsPage.forumid = 0
-        appWindow.pageStack.pop(mainPage);
+        forumCredentialsPage.subscribeError = msg
     }
     function setBusy(busy) {
         console.log("setBusy " + busy)

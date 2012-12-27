@@ -17,12 +17,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     shm.launchSiilihai();
     int ret = app->exec();
 
-    // Ugly hack to make sure Siilihai quits graceously
+    // Ugly hack to make sure Siilihai quits graceously after swipe close
     qDebug() << Q_FUNC_INFO << "exec() exited";
     if(!shm.isHaltRequested()) {
         qDebug() << Q_FUNC_INFO << "halt NOT requested yet - forcing halt";
         shm.haltSiilihai();
         app->exec(); // Re-start Qt main loop
+        // Crashes here
     } else {
         qDebug() << Q_FUNC_INFO << "halt ok";
     }

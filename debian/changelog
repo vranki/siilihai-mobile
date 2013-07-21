@@ -1,3 +1,9 @@
+siilihai-mobile (1.0.2) unstable; urgency=low
+
+  * Even More fixes in libsiilihai.
+
+ -- Ville Ranki <ville.ranki@iki.fi>  Sun, 21 Jun 2013 12:34:56 +0300
+
 siilihai-mobile (1.0.1) unstable; urgency=low
 
   * More fixes in libsiilihai

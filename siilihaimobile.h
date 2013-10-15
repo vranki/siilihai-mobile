@@ -4,15 +4,16 @@
 #include <siilihai/clientlogic.h>
 #include <siilihai/forumdata/forumsubscription.h>
 #include <siilihai/forumprobe.h>
-#include <qdeclarativecontext.h>
 #include <QStringList>
 #include <QTimer>
+#include <QQmlContext>
+#include <QQuickItem>
 
 class SiilihaiMobile : public ClientLogic
 {
     Q_OBJECT
 public:
-    explicit SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj);
+    explicit SiilihaiMobile(QObject *parent, QQmlContext* ctx, QQuickItem *rootObj);
     bool isHaltRequested();
 signals:
 
@@ -51,7 +52,6 @@ private slots:
     void newForumAdded(ForumSubscription *sub);
     void showNextError();
 protected:
-    virtual QString getDataFilePath();
     virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();
     virtual void errorDialog(QString message);
@@ -66,8 +66,8 @@ private:
 
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList messageQueue;
-    QDeclarativeContext* rootContext;
-    QObject *rootObject;
+    QQmlContext* rootContext;
+    QQuickItem *rootObject;
     ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;

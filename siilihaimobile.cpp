@@ -11,7 +11,7 @@
 #include <siilihai/parser/forumsubscriptionparsed.h>
 #include <siilihai/tapatalk/forumsubscriptiontapatalk.h>
 
-SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObject *rootObj) :
+SiilihaiMobile::SiilihaiMobile(QObject *parent, QQmlContext *ctx, QQuickItem *rootObj) :
     ClientLogic(parent), rootContext(ctx), rootObject(rootObj), currentSub(0), currentGroup(0),
     currentThread(0), haltRequested(false), newForum(0), probe(0, protocol)
 {
@@ -50,10 +50,6 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QDeclarativeContext* ctx, QObjec
     connect(&showNextErrorTimer, SIGNAL(timeout()), this, SLOT(showNextError()));
     showNextErrorTimer.setSingleShot(true);
     showNextErrorTimer.setInterval(200);
-}
-
-QString SiilihaiMobile::getDataFilePath() {
-    return QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 }
 
 void SiilihaiMobile::subscribeForum() {

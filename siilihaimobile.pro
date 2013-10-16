@@ -39,7 +39,7 @@ CONFIG(with_lib) {
     LIBS += -lsiilihai
 }
 
-DEFINES += use_components
+#DEFINES += use_components
 
 # Running without components is very WIP
 CONFIG(use_components) {
@@ -94,7 +94,9 @@ OTHER_FILES += debian/rules \
     android/src/org/kde/necessitas/ministro/IMinistro.aidl \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/version.xml \
-    qml/siilihai-mobile-nocomponents/Button.qml
+    qml/siilihai-mobile-nocomponents/Toolbar.qml \
+    qml/siilihai-mobile-nocomponents/ForumListView.qml \
+    qml/siilihai-mobile-nocomponents/ForumButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications
@@ -106,8 +108,7 @@ INSTALLS += desktops icons
 
 OTHER_FILES += qml/siilihai-mobile/* qml/siilihai-mobile-nocomponents/*
 
-OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
-debian/changelog
+OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop debian/changelog
 
 OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
 

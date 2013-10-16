@@ -20,25 +20,7 @@
         <file>qml/siilihai-mobile/ThreadListPage.qml</file>
         <file>qml/siilihai-mobile/folder.png</file>
         <file>qml/siilihai-mobile/folder-new.png</file>
-        <file>qml/siilihai-mobile-nocomponents/AccountlessRegistration.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/ButtonWithUnreadCount.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/ConfirmUnsubscribe.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/CredentialsDialogPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/emblem-web.png</file>
-        <file>qml/siilihai-mobile-nocomponents/folder.png</file>
-        <file>qml/siilihai-mobile-nocomponents/folder-new.png</file>
-        <file>qml/siilihai-mobile-nocomponents/ForumCredentialsPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/GroupListPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/HaltScreen.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/LoginWizardPage.qml</file>
         <file>qml/siilihai-mobile-nocomponents/main.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/MainPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/MessageDisplay.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/MessageListPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/MessagePage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/RegistrationPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/SubscribeGroupsPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/SubscribeWizardPage.qml</file>
-        <file>qml/siilihai-mobile-nocomponents/ThreadListPage.qml</file>
+        <file>qml/siilihai-mobile-nocomponents/Toolbar.qml</file>
     </qresource>
 </RCC>

@@ -1,23 +1,19 @@
 import QtQuick 2.0
 
-Rectangle {
-    width: parent.width
-    height: 42
-    color: "transparent"
-    radius: 10
-    border.color: "black"
-    Text {
-        anchors.verticalCenter: parent.verticalCenter
-        x: parent.width / 30
-        text: name
-        color: "black"
-        font.pointSize: 30
-    }
-    Text {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        text: unreadcount
-        color: "black"
-        font.pointSize: 25
+UiButton {
+    property bool isSelectedForum: siilihaimobile.selectedForumId === forumId
+    text: alias
+    rightText: unreadCount
+    onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectedForumId = forumId
+    height: uiButtonHeight + (isSelectedForum ? groupListView.height : 0)
+    Behavior on height { SmoothedAnimation { velocity: 800 } }
+    clip: true
+    GroupListView {
+        id: groupListView
+        width: parent.width * 0.9
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: count * (uiButtonHeight + spacing)
+        visible: isSelectedForum
+        y: uiButtonHeight
     }
 }

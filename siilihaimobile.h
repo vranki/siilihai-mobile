@@ -8,22 +8,28 @@
 #include <QTimer>
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QtQuick/QQuickView>
 
 class SiilihaiMobile : public ClientLogic
 {
     Q_OBJECT
+    Q_PROPERTY(int selectedForumId READ selectedForumId WRITE selectForum NOTIFY selectedForumChanged)
 public:
-    explicit SiilihaiMobile(QObject *parent, QQmlContext* ctx, QQuickItem *rootObj);
+    explicit SiilihaiMobile(QObject *parent, QQuickView &view);
     bool isHaltRequested();
+    int selectedForumId() const;
 signals:
+    void selectedForumChanged(int arg);
 
 public slots:
     virtual void haltSiilihai();
+    void selectForum(int arg);
+    void reloadUi();
+
 private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
-    void subscriptionSelected(int parser);
     void groupSelected(QString id);
     void threadSelected(QString id);
     void registerUser(QString user, QString password, QString email, bool sync);
@@ -51,6 +57,7 @@ private slots:
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
     void showNextError();
+    void reloadUiReally();
 protected:
     virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();
@@ -64,6 +71,7 @@ private:
     void subscribeFailed(QString reason);
     void setContextProperties();
 
+    QQuickView &qQuickView;
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList messageQueue;
     QQmlContext* rootContext;
@@ -77,6 +85,7 @@ private:
     ForumSubscription *newForum; // the one being subscribed
     ForumProbe probe;
     QTimer showNextErrorTimer;
+    int m_selectedForumId;
 };
 
 #endif // SIILIHAIMOBILE_H

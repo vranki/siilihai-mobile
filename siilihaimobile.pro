@@ -96,7 +96,11 @@ OTHER_FILES += debian/rules \
     android/version.xml \
     qml/siilihai-mobile-nocomponents/Toolbar.qml \
     qml/siilihai-mobile-nocomponents/ForumListView.qml \
-    qml/siilihai-mobile-nocomponents/ForumButton.qml
+    qml/siilihai-mobile-nocomponents/ForumButton.qml \
+    qml/siilihai-mobile-nocomponents/ToolbarButton.qml \
+    qml/siilihai-mobile-nocomponents/GroupListView.qml \
+    qml/siilihai-mobile-nocomponents/GroupButton.qml \
+    qml/siilihai-mobile-nocomponents/UiButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

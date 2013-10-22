@@ -1,5 +1,5 @@
 #include <QGuiApplication>
-#include <QQmlEngine>
+
 #include <QQmlComponent>
 #include "qtquick2applicationviewer.h"
 #include "siilihaimobile.h"
@@ -7,6 +7,9 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("Siilihai");
+    QCoreApplication::setOrganizationDomain("siilihai.com");
+    QCoreApplication::setApplicationName("Siilihai");
     QtQuick2ApplicationViewer viewer;
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
@@ -16,9 +19,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.showExpanded();
-
-//    SiilihaiMobile shm(0, viewer.engine()->rootContext(), viewer.rootObject());
-//    shm.launchSiilihai();
+    SiilihaiMobile shm(0, viewer);
+    shm.launchSiilihai(true);
     int ret = app.exec();
 
     /*

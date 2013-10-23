@@ -4,4 +4,5 @@ UiButton {
     text: name
     rightText: unreadCount
     smallText: hierarchy
+
 }

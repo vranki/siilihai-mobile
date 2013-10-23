@@ -14,24 +14,31 @@ class SiilihaiMobile : public ClientLogic
 {
     Q_OBJECT
     Q_PROPERTY(int selectedForumId READ selectedForumId WRITE selectForum NOTIFY selectedForumChanged)
+    Q_PROPERTY(QString selectedGroupId READ selectedGroupId WRITE selectGroup NOTIFY selectedGroupIdChanged)
+    Q_PROPERTY(QString selectedThreadId READ selectedThreadId WRITE selectThread NOTIFY selectedThreadIdChanged)
+
 public:
     explicit SiilihaiMobile(QObject *parent, QQuickView &view);
     bool isHaltRequested();
     int selectedForumId() const;
+    QString selectedGroupId() const;
+    QString selectedThreadId() const;
 signals:
     void selectedForumChanged(int arg);
+    void selectedGroupIdChanged(QString arg);
+    void selectedThreadIdChanged(QString arg);
 
 public slots:
     virtual void haltSiilihai();
-    void selectForum(int arg);
+    void selectForum(int id=0);
+    void selectGroup(QString id=QString::null);
+    void selectThread(QString id=QString::null);
     void reloadUi();
 
 private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
-    void groupSelected(QString id);
-    void threadSelected(QString id);
     void registerUser(QString user, QString password, QString email, bool sync);
     void registerFinished(bool success, QString motd, bool sync);
     void loginUser(QString user, QString password);
@@ -72,6 +79,7 @@ private:
     void setContextProperties();
 
     QQuickView &qQuickView;
+    // @todo check if qt quick has smarter way for this
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList messageQueue;
     QQmlContext* rootContext;
@@ -85,7 +93,6 @@ private:
     ForumSubscription *newForum; // the one being subscribed
     ForumProbe probe;
     QTimer showNextErrorTimer;
-    int m_selectedForumId;
 };
 
 #endif // SIILIHAIMOBILE_H

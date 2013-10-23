@@ -100,7 +100,11 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/ToolbarButton.qml \
     qml/siilihai-mobile-nocomponents/GroupListView.qml \
     qml/siilihai-mobile-nocomponents/GroupButton.qml \
-    qml/siilihai-mobile-nocomponents/UiButton.qml
+    qml/siilihai-mobile-nocomponents/UiButton.qml \
+    qml/siilihai-mobile-nocomponents/ThreadListView.qml \
+    qml/siilihai-mobile-nocomponents/ThreadButton.qml \
+    qml/siilihai-mobile-nocomponents/MessageListView.qml \
+    qml/siilihai-mobile-nocomponents/MessageDisplay.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

@@ -1,22 +1,37 @@
 import QtQuick 2.0
 
 Rectangle {
+    id: uibutton
     property string text: ""
     property string rightText: ""
     property string smallText: ""
+    property string icon: ""
     property int uiButtonHeight: 42
+    property bool drawBorder: true
     signal clicked
 
     width: parent.width
     height: uiButtonHeight
-    color: "#f7f7f7"
+    color: drawBorder ? "#f7f7f7" : "transparent"
     radius: 5
-    border.color: "black"
+    border.color: drawBorder ? "black" : "transparent"
+    Image {
+        id: iconImage
+        anchors.left: parent.left
+        anchors.leftMargin: parent.width * 0.005
+        anchors.top: parent.top
+        anchors.topMargin: 4
+        height: uiButtonHeight * 0.8
+        width: height
+        source: icon
+    }
     Item {
-        width: parent.width
+        anchors.left: iconImage.right
+        anchors.right: rightText.left
+        width: parent.width * 0.7
         height: uiButtonHeight
         Text {
-            text: parent.parent.smallText
+            text: uibutton.smallText
             font.pixelSize: uiButtonHeight * 0.25
             color: "gray"
             anchors.bottom: parent.bottom
@@ -26,17 +41,20 @@ Rectangle {
             id: mainLabel
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 30
-            text: parent.parent.text
+            text: uibutton.text
             color: "black"
             font.pointSize: uiButtonHeight *0.3
+            width: parent.width * 0.8
+            wrapMode: Text.Wrap
         }
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            text: parent.parent.rightText
-            color: "black"
-            font.pointSize: uiButtonHeight *0.7
-        }
+    }
+    Text {
+        id: rightText
+        anchors.top: parent.top
+        anchors.right: parent.right
+        text: uibutton.rightText
+        color: text !== "0" ? "#7d7dc0" : "#bdbdee"
+        font.pointSize: uiButtonHeight *0.7
     }
     MouseArea {
         anchors.fill: parent

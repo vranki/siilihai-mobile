@@ -6,5 +6,7 @@ ListView {
     height: contentHeight
     spacing: 10
     model: groups
-    delegate: GroupButton {}
+    delegate: GroupButton {
+        onClicked: siilihaimobile.selectedGroupId = id
+    }
 }

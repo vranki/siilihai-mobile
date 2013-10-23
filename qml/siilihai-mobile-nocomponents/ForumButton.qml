@@ -4,6 +4,8 @@ UiButton {
     property bool isSelectedForum: siilihaimobile.selectedForumId === forumId
     text: alias
     rightText: unreadCount
+    // busy: beingUpdated || beingSynced || scheduledForUpdate
+    icon: faviconUrl.length > 0 ? faviconUrl : undefined
     onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectedForumId = forumId
     height: uiButtonHeight + (isSelectedForum ? groupListView.height : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }

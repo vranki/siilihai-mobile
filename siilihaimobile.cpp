@@ -14,7 +14,7 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
     ClientLogic(parent), qQuickView(view), rootContext(view.engine()->rootContext()), rootObject(view.rootObject()),
-    currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0), m_selectedForumId(0),
+    currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
     probe(0, protocol)
 {
     if(!rootContext)  {
@@ -25,8 +25,6 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
 
     QObject *appWindow = rootObject;
     Q_ASSERT(appWindow);
-    connect(appWindow, SIGNAL(groupSelected(QString)), this, SLOT(groupSelected(QString)));
-    connect(appWindow, SIGNAL(threadSelected(QString)), this, SLOT(threadSelected(QString)));
     connect(appWindow, SIGNAL(haltSiilihai()), this, SLOT(haltSiilihai()));
     connect(appWindow, SIGNAL(registerUser(QString, QString, QString, bool)), this, SLOT(registerUser(QString,QString,QString,bool)));
     connect(appWindow, SIGNAL(loginUser(QString, QString)), this, SLOT(loginUser(QString,QString)));
@@ -115,12 +113,7 @@ void SiilihaiMobile::subscriptionDeleted(QObject* subobj) {
     ForumSubscription *sub = static_cast<ForumSubscription*> (subobj);
     subscriptionList.removeAll(sub);
     if(sub==currentSub) {
-        threadSelected(QString::null);
-        groupSelected(QString::null);
-        selectForum(0);
-        currentSub = 0;
-        currentGroup = 0;
-        currentThread = 0;
+        selectForum();
     }
     rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
     ClientLogic::subscriptionDeleted(subobj);
@@ -146,34 +139,6 @@ void SiilihaiMobile::setContextProperties() {
     rootContext->setContextProperty("messageQueue", QVariant::fromValue(messageQueue));
 }
 
-
-
-void SiilihaiMobile::groupSelected(QString id) {
-    qDebug() << Q_FUNC_INFO << id;
-    if(currentThread)
-        disconnect(currentThread, 0, this, 0);
-    threadList.clear();
-    if(!id.isEmpty()) {
-        currentGroup = currentSub->value(id);
-        currentThread = 0;
-        foreach(ForumThread *ft, currentGroup->values()) {
-            threadList.append(ft);
-        }
-    }
-    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
-}
-
-void SiilihaiMobile::threadSelected(QString id) {
-    qDebug() << Q_FUNC_INFO << id;
-    if(currentThread)
-        disconnect(currentThread, 0, this, 0);
-    if(!id.isEmpty()) {
-        currentThread = currentGroup->value(id);
-        connect(currentThread, SIGNAL(messageAdded(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
-        connect(currentThread, SIGNAL(messageRemoved(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
-        updateCurrentMessageModel();
-    }
-}
 
 void SiilihaiMobile::updateCurrentMessageModel() {
     messageList.clear();
@@ -322,12 +287,7 @@ void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
 void SiilihaiMobile::unsubscribeCurrentForum() {
     Q_ASSERT(currentSub);
     ForumSubscription *cs = currentSub;
-    threadSelected(QString::null);
-    groupSelected(QString::null);
     selectForum(0);
-    currentSub = 0;
-    currentGroup = 0;
-    currentThread = 0;
     unsubscribeForum(cs);
 }
 
@@ -389,7 +349,6 @@ void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
     }
 }
 
-
 void SiilihaiMobile::markThreadRead(bool read) {
     qDebug() << Q_FUNC_INFO << currentThread;
     if(!currentThread) return;
@@ -441,17 +400,19 @@ void SiilihaiMobile::openInBrowser(QString messageId) {
 
 int SiilihaiMobile::selectedForumId() const
 {
-    return m_selectedForumId;
+    return currentSub ? currentSub->forumId() : 0;
+}
+
+QString SiilihaiMobile::selectedGroupId() const {
+    return currentGroup ? currentGroup->id() : QString::null;
 }
 
 void SiilihaiMobile::selectForum(int id) {
     qDebug() << Q_FUNC_INFO << id;
-    if (m_selectedForumId != id) {
-        m_selectedForumId = id;
+    if (selectedForumId() != id) {
         groupList.clear();
         currentSub = forumDatabase.value(id);
-        currentGroup = 0;
-        currentThread = 0;
+        selectGroup();
         subscribeGroupList.clear();
         if(currentSub) {
             foreach(ForumGroup *fg, currentSub->values()) {
@@ -460,7 +421,45 @@ void SiilihaiMobile::selectForum(int id) {
             }
         }
         rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
-        emit selectedForumChanged(id);
+        emit selectedForumChanged(currentSub ? currentSub->forumId() : 0);
+    }
+}
+
+QString SiilihaiMobile::selectedThreadId() const {
+    return currentThread ? currentThread->id() : QString::null;
+}
+
+void SiilihaiMobile::selectGroup(QString id) {
+    qDebug() << Q_FUNC_INFO << id;
+    if (!currentGroup || currentGroup->id() != id) {
+        selectThread();
+        threadList.clear();
+
+        currentGroup = currentSub->value(id);
+        if(!id.isEmpty()) {
+            Q_ASSERT(currentGroup);
+            foreach(ForumThread *ft, currentGroup->values()) threadList.append(ft);
+        }
+        rootContext->setContextProperty("selectedgroup", currentGroup);
+        rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
+        emit selectedGroupIdChanged(currentGroup ? currentGroup->id() : QString::null);
+    }
+}
+
+void SiilihaiMobile::selectThread(QString id) {
+    qDebug() << Q_FUNC_INFO << id;
+    if(currentThread)
+        disconnect(currentThread, 0, this, 0);
+    if(!currentThread || currentThread->id() != id) {
+        currentThread = 0;
+        if(currentGroup) currentThread = currentGroup->value(id);
+        if(currentThread) {
+            connect(currentThread, SIGNAL(messageAdded(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
+            connect(currentThread, SIGNAL(messageRemoved(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
+        }
+        updateCurrentMessageModel();
+        rootContext->setContextProperty("selectedthread",currentThread);
+        emit selectedThreadIdChanged(currentThread ? currentThread->id() : QString::null);
     }
 }
 

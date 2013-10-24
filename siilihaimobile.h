@@ -5,7 +5,6 @@
 #include <siilihai/forumdata/forumsubscription.h>
 #include <siilihai/forumprobe.h>
 #include <QStringList>
-#include <QTimer>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QtQuick/QQuickView>
@@ -39,6 +38,7 @@ private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
+    virtual void showStatusMessage(QString message);
     void registerUser(QString user, QString password, QString email, bool sync);
     void registerFinished(bool success, QString motd, bool sync);
     void loginUser(QString user, QString password);
@@ -56,14 +56,11 @@ private slots:
     void getForumDetails(int id);
     void getForumUrlDetails(QString url);
     void markThreadRead(bool read);
-    virtual void showStatusMessage(QString message);
-    void confirmMessages();
     void showMoreMessages();
     void updateCurrentMessageModel();
     void openInBrowser(QString messageId);
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
-    void showNextError();
     void reloadUiReally();
 protected:
     virtual void changeState(siilihai_states newState);
@@ -81,18 +78,16 @@ private:
     QQuickView &qQuickView;
     // @todo check if qt quick has smarter way for this
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
-    QStringList messageQueue;
+    QStringList statusMessageList;
     QQmlContext* rootContext;
     QQuickItem *rootObject;
     ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;
     QString regOrLoginUser, regOrLoginPass;
-    bool messageDisplayed;
     bool haltRequested;
     ForumSubscription *newForum; // the one being subscribed
     ForumProbe probe;
-    QTimer showNextErrorTimer;
 };
 
 #endif // SIILIHAIMOBILE_H

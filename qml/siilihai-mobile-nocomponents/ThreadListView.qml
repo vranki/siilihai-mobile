@@ -9,7 +9,6 @@ ListView {
         text: selectedgroup ? selectedgroup.displayName : "no group"
         rightText: selectedgroup ? selectedgroup.unreadCount : "no group"
         smallText: selectedgroup ? selectedgroup.hierarchy : "no group"
-        height: uiButtonHeight*2
         width:parent.width * 0.95
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter

@@ -21,6 +21,9 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
         closeUi();
         return;
     }
+    rootContext->setContextProperty("selectedforum", 0);
+    rootContext->setContextProperty("selectedgroup", 0);
+    rootContext->setContextProperty("selectedthread", 0);
     setContextProperties();
 
     QObject *appWindow = rootObject;
@@ -43,12 +46,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
     connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
     connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
     connect(appWindow, SIGNAL(openInBrowser(QString)), this, SLOT(openInBrowser(QString)));
-    messageDisplayed = true; // Prevent messages until main win is shown
     offlineModeSet(true);
-
-    connect(&showNextErrorTimer, SIGNAL(timeout()), this, SLOT(showNextError()));
-    showNextErrorTimer.setSingleShot(true);
-    showNextErrorTimer.setInterval(200);
 }
 
 void SiilihaiMobile::subscribeForum() {
@@ -63,30 +61,8 @@ void SiilihaiMobile::showLoginWizard() {
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
-    // qDebug() << Q_FUNC_INFO << message << " queue " << messageQueue.size();
-    messageQueue << message;
-    showNextError();
+    showStatusMessage(message);
 }
-
-void SiilihaiMobile::showNextError() {
-    if(!messageDisplayed) {
-        QMetaObject::invokeMethod(rootObject, "showErrorMessage", Q_ARG(QVariant, messageQueue.takeFirst()));
-        messageDisplayed = true;
-    } else {
-        qDebug() << Q_FUNC_INFO << "message displayed, queueing";
-    }
-}
-
-// requestedByUI means user has dismissed previous message
-void SiilihaiMobile::confirmMessages() {
-    qDebug() << Q_FUNC_INFO << "queue: " << messageQueue.size() << " by UI:" << " displayed:" << messageDisplayed;
-    Q_ASSERT(messageDisplayed);
-    messageDisplayed = false;
-    if(!messageQueue.isEmpty()) {
-        showNextErrorTimer.start(); // Delay
-    }
-}
-
 
 void SiilihaiMobile::closeUi() {
     qDebug() << Q_FUNC_INFO;
@@ -97,8 +73,6 @@ void SiilihaiMobile::closeUi() {
 void SiilihaiMobile::showMainWindow() {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Settings at " << settings->fileName();
-    messageDisplayed = false;
-    //displayNextMessage(false);
 }
 
 void SiilihaiMobile::subscriptionFound(ForumSubscription *sub) {
@@ -136,7 +110,7 @@ void SiilihaiMobile::setContextProperties() {
     rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
     rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
-    rootContext->setContextProperty("messageQueue", QVariant::fromValue(messageQueue));
+    rootContext->setContextProperty("messageQueue", QVariant::fromValue(statusMessageList));
 }
 
 
@@ -365,7 +339,8 @@ void SiilihaiMobile::changeState(siilihai_states newState) {
 }
 
 void SiilihaiMobile::showStatusMessage(QString message) {
-    QMetaObject::invokeMethod(rootObject, "showStatusMessage", Q_ARG(QVariant, message));
+    statusMessageList.append(message);
+    rootContext->setContextProperty("statusmessages", QVariant::fromValue(threadList));
 }
 
 void SiilihaiMobile::showMoreMessages() {
@@ -420,6 +395,7 @@ void SiilihaiMobile::selectForum(int id) {
                     groupList.append(fg);
             }
         }
+        rootContext->setContextProperty("selectedforum", currentSub);
         rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
         emit selectedForumChanged(currentSub ? currentSub->forumId() : 0);
     }
@@ -431,6 +407,7 @@ QString SiilihaiMobile::selectedThreadId() const {
 
 void SiilihaiMobile::selectGroup(QString id) {
     qDebug() << Q_FUNC_INFO << id;
+    Q_ASSERT(currentSub || id.isEmpty());
     if (!currentGroup || currentGroup->id() != id) {
         selectThread();
         threadList.clear();
@@ -448,6 +425,7 @@ void SiilihaiMobile::selectGroup(QString id) {
 
 void SiilihaiMobile::selectThread(QString id) {
     qDebug() << Q_FUNC_INFO << id;
+    Q_ASSERT(currentGroup || id.isEmpty());
     if(currentThread)
         disconnect(currentThread, 0, this, 0);
     if(!currentThread || currentThread->id() != id) {

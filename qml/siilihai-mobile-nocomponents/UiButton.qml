@@ -6,8 +6,11 @@ Rectangle {
     property string rightText: ""
     property string smallText: ""
     property string icon: ""
+    property string iconEmblems: ""
+
     property int uiButtonHeight: 42
     property bool drawBorder: true
+    property bool busy: false
     signal clicked
 
     width: parent.width
@@ -15,6 +18,13 @@ Rectangle {
     color: drawBorder ? "#f7f7f7" : "transparent"
     radius: 5
     border.color: drawBorder ? "black" : "transparent"
+    BusyIndicator {
+        enabled: parent.busy
+        x: parent.width * 0.6
+        width: parent.width * 0.2
+        anchors.verticalCenter: rightText.verticalCenter
+        height: 10
+    }
     Image {
         id: iconImage
         anchors.left: parent.left
@@ -24,6 +34,13 @@ Rectangle {
         height: uiButtonHeight * 0.8
         width: height
         source: icon
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: iconEmblems
+            style: Text.Outline
+            color: "white"
+            styleColor: "black"
+        }
     }
     Item {
         anchors.left: iconImage.right
@@ -53,9 +70,11 @@ Rectangle {
         anchors.top: parent.top
         anchors.right: parent.right
         text: uibutton.rightText
-        color: text !== "0" ? "#7d7dc0" : "#bdbdee"
+        color: text !== "0" ? color1 : "#bdbdee"
         font.pointSize: uiButtonHeight *0.7
     }
+
+
     MouseArea {
         anchors.fill: parent
         onClicked: parent.clicked()

@@ -8,13 +8,17 @@ ListView {
     header: ThreadButton {
         text: selectedthread ? selectedthread.displayName : "no thread"
         rightText: selectedthread ? selectedthread.unreadCount : "no threas"
-        height: uiButtonHeight*2
-        width:parent.width * 0.95
+        smallText: selectedgroup ? selectedgroup.displayName + " - " + selectedforum.alias : ""
+        icon: selectedforum.faviconUrl
+        width: parent.width * 0.95
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
         drawBorder: false
     }
-    delegate: MessageDisplay {}
+    delegate: MessageDisplay {
+        width: parent.width * 0.98
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
 
     UiButton {
         anchors.fill: parent

@@ -2,9 +2,9 @@ import QtQuick 2.0
 import QtWebKit 3.0
 
 Rectangle {
-    color: "#e6e6e6"
+    color: colorDark
     width: parent.width
-    height: bodyView.height + 100
+    height: bodyView.height + headers.height
     radius: 10
 
     Text {
@@ -21,6 +21,7 @@ Rectangle {
             color: "white"
             anchors.fill: parent
             z: -10
+            radius: 2
         }
     }
     /*
@@ -33,8 +34,28 @@ Rectangle {
         Component.onCompleted: loadHtml(modelData.body)
     }
     */
-    Text {
-        color: "black"
-        text: modelData.authorCleaned
+    Item {
+        id: headers
+        width: parent.width * 0.9
+        height: author.height + subject.height + 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        Text {
+            id: author
+            anchors.left: parent.left
+            color: color2
+            text: modelData.authorCleaned
+        }
+        Text {
+            anchors.right: parent.right
+            color: color2
+            text: modelData.lastchange
+        }
+        Text {
+            id: subject
+            anchors.left: author.left
+            anchors.top: author.bottom
+            color: color2
+            text: modelData.displayName
+        }
     }
 }

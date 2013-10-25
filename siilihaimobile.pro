@@ -106,7 +106,10 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/MessageListView.qml \
     qml/siilihai-mobile-nocomponents/MessageDisplay.qml \
     qml/siilihai-mobile-nocomponents/HideEffect.qml \
-    qml/siilihai-mobile-nocomponents/BusyIndicator.qml
+    qml/siilihai-mobile-nocomponents/BusyIndicator.qml \
+    qml/siilihai-mobile-nocomponents/MessageDialog.qml \
+    qml/siilihai-mobile-nocomponents/StatusIndicator.qml \
+    qml/siilihai-mobile-nocomponents/SimpleButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

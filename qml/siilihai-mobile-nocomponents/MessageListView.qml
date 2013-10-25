@@ -20,8 +20,26 @@ ListView {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    footer: Column {
+        width: parent.width * 0.5
+        anchors.horizontalCenter: parent.horizontalCenter
+//        height: UiButton.uiButtonHeight
+        UiButton {
+            text: "Mark all read"
+            onClicked: markAll(true)
+        }
+        UiButton {
+            text: "Mark all unread"
+            onClicked: markAll(false)
+        }
+    }
     UiButton {
         anchors.fill: parent
         z: -10
+    }
+    function markAll(r) {
+        for(var i=0;i<count;i++) {
+            model[i].isRead = r
+        }
     }
 }

@@ -24,29 +24,10 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
     rootContext->setContextProperty("selectedforum", 0);
     rootContext->setContextProperty("selectedgroup", 0);
     rootContext->setContextProperty("selectedthread", 0);
+    dismissMessages();
     setContextProperties();
 
-    QObject *appWindow = rootObject;
-    Q_ASSERT(appWindow);
-    connect(appWindow, SIGNAL(haltSiilihai()), this, SLOT(haltSiilihai()));
-    connect(appWindow, SIGNAL(registerUser(QString, QString, QString, bool)), this, SLOT(registerUser(QString,QString,QString,bool)));
-    connect(appWindow, SIGNAL(loginUser(QString, QString)), this, SLOT(loginUser(QString,QString)));
-    connect(appWindow, SIGNAL(listSubscriptions()), this, SLOT(listSubscriptions()));
-    connect(appWindow, SIGNAL(subscribeForum(int, QString)), this, SLOT(subscribeForum(int, QString)));
-    connect(appWindow, SIGNAL(subscribeForumWithCredentials(int, QString, QString, QString)), this, SLOT(subscribeForumWithCredentials(int, QString, QString, QString)));
-    connect(appWindow, SIGNAL(subscribeGroups()), this, SLOT(showSubscribeGroups()));
-    connect(appWindow, SIGNAL(setGroupSubscribed(QString, bool)), this, SLOT(setGroupSubscribed(QString, bool)));
-    connect(appWindow, SIGNAL(applyGroupSubscriptions()), this, SLOT(applyGroupSubscriptions()));
-    connect(appWindow, SIGNAL(credentialsEntered(QString, QString, bool)), this, SLOT(credentialsEntered(QString,QString,bool)));
-    connect(appWindow, SIGNAL(unSubscribeCurrentForum()), this, SLOT(unsubscribeCurrentForum()));
-    connect(appWindow, SIGNAL(getForumDetails(int)), this, SLOT(getForumDetails(int)));
-    connect(appWindow, SIGNAL(getForumUrlDetails(QString)), this, SLOT(getForumUrlDetails(QString)));
-    connect(appWindow, SIGNAL(markThreadRead(bool)), this, SLOT(markThreadRead(bool)));
-    connect(appWindow, SIGNAL(confirmMessages()), this, SLOT(confirmMessages()));
-    connect(appWindow, SIGNAL(showMoreMessages()), this, SLOT(showMoreMessages()));
-    connect(appWindow, SIGNAL(updateClicked()), this, SLOT(updateClicked()));
-    connect(appWindow, SIGNAL(openInBrowser(QString)), this, SLOT(openInBrowser(QString)));
-    offlineModeSet(true);
+    // offlineModeSet(true);
 }
 
 void SiilihaiMobile::subscribeForum() {
@@ -61,7 +42,9 @@ void SiilihaiMobile::showLoginWizard() {
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
-    showStatusMessage(message);
+    if(!message.isEmpty()) errorMessageList.append(message);
+    rootContext->setContextProperty("errormessages", errorMessageList);
+
 }
 
 void SiilihaiMobile::closeUi() {
@@ -73,6 +56,8 @@ void SiilihaiMobile::closeUi() {
 void SiilihaiMobile::showMainWindow() {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Settings at " << settings->fileName();
+    if(state() == SH_OFFLINE)
+        showStatusMessage("Started in offline mode");
 }
 
 void SiilihaiMobile::subscriptionFound(ForumSubscription *sub) {
@@ -110,7 +95,7 @@ void SiilihaiMobile::setContextProperties() {
     rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
     rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
-    rootContext->setContextProperty("messageQueue", QVariant::fromValue(statusMessageList));
+    rootContext->setContextProperty("messageQueue", QVariant::fromValue(errorMessageList));
 }
 
 
@@ -334,13 +319,6 @@ void SiilihaiMobile::markThreadRead(bool read) {
 
 void SiilihaiMobile::changeState(siilihai_states newState) {
     ClientLogic::changeState(newState);
-    QMetaObject::invokeMethod(rootObject, "setBusy",
-                              Q_ARG(QVariant, newState != SH_READY && newState != SH_OFFLINE));
-}
-
-void SiilihaiMobile::showStatusMessage(QString message) {
-    statusMessageList.append(message);
-    rootContext->setContextProperty("statusmessages", QVariant::fromValue(threadList));
 }
 
 void SiilihaiMobile::showMoreMessages() {
@@ -444,6 +422,12 @@ void SiilihaiMobile::selectThread(QString id) {
 void SiilihaiMobile::reloadUi() {
     qDebug() << Q_FUNC_INFO;
     QMetaObject::invokeMethod(this, "reloadUiReally", Qt::QueuedConnection);
+}
+
+void SiilihaiMobile::dismissMessages()
+{
+    errorMessageList.clear();
+    errorDialog(QString::null);
 }
 
 void SiilihaiMobile::reloadUiReally()

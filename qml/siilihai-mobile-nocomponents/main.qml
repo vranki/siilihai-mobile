@@ -7,6 +7,7 @@ Rectangle {
     property string color1: "#7d7dc0"
     property string color2: "#ffd884"
     property string colorDark: "#003e5e"
+    property string colorLessDark: "#407e9e"
 
     ForumListView {
         id: forumListView
@@ -37,4 +38,5 @@ Rectangle {
         id: toolbar
         anchors.bottom: parent.bottom
     }
+    MessageDialog {}
 }

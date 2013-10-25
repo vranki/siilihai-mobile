@@ -4,5 +4,6 @@ ListView {
     spacing: 10
     snapMode: ListView.SnapToItem
     model: subscriptions
+    header: StatusIndicator {}
     delegate: ForumButton {}
 }

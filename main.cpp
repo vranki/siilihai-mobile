@@ -20,10 +20,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.showExpanded();
     SiilihaiMobile shm(0, viewer);
-    shm.launchSiilihai(true);
+    shm.launchSiilihai(false);
     int ret = app.exec();
 
-    /*
     // Ugly hack to make sure Siilihai quits graceously after swipe close
     qDebug() << Q_FUNC_INFO << "exec() exited";
     if(!shm.isHaltRequested()) {
@@ -34,6 +33,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     } else {
         qDebug() << Q_FUNC_INFO << "halt ok";
     }
-    */
+
     return ret;
 }

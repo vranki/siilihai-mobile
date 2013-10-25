@@ -6,4 +6,5 @@ UiButton {
     width: parent.width * 0.95
     anchors.horizontalCenter: parent.horizontalCenter
     onClicked: siilihaimobile.selectThread(id)
+    clip: true
 }

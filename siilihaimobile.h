@@ -33,12 +33,12 @@ public slots:
     void selectGroup(QString id=QString::null);
     void selectThread(QString id=QString::null);
     void reloadUi();
+    void dismissMessages();
 
 private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
-    virtual void showStatusMessage(QString message);
     void registerUser(QString user, QString password, QString email, bool sync);
     void registerFinished(bool success, QString motd, bool sync);
     void loginUser(QString user, QString password);
@@ -78,7 +78,7 @@ private:
     QQuickView &qQuickView;
     // @todo check if qt quick has smarter way for this
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
-    QStringList statusMessageList;
+    QStringList errorMessageList;
     QQmlContext* rootContext;
     QQuickItem *rootObject;
     ForumSubscription *currentSub;

@@ -109,7 +109,10 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/BusyIndicator.qml \
     qml/siilihai-mobile-nocomponents/MessageDialog.qml \
     qml/siilihai-mobile-nocomponents/StatusIndicator.qml \
-    qml/siilihai-mobile-nocomponents/SimpleButton.qml
+    qml/siilihai-mobile-nocomponents/SimpleButton.qml \
+    qml/siilihai-mobile-nocomponents/LoginWizard.qml \
+    qml/siilihai-mobile-nocomponents/SubscribeForumDialog.qml \
+    qml/siilihai-mobile-nocomponents/SubscribeForumButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

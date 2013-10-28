@@ -34,34 +34,33 @@ public slots:
     void selectThread(QString id=QString::null);
     void reloadUi();
     void dismissMessages();
+    void registerUser(QString user, QString password, QString email, bool sync);
+    void loginUser(QString user, QString password);
+    void listSubscriptions();
+    void subscribeForum(int id, QString name);
+    void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
+    void getForumDetails(int id);
+    void getForumUrlDetails(QString url);
 
 private slots:
     virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
-    void registerUser(QString user, QString password, QString email, bool sync);
     void registerFinished(bool success, QString motd, bool sync);
-    void loginUser(QString user, QString password);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
-    void listSubscriptions();
     void listForumsFinished(QList <ForumSubscription*>);
-    void subscribeForum(int id, QString name);
-    void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
     void showSubscribeGroups();
     void setGroupSubscribed(QString id, bool sub);
     void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
     void unsubscribeCurrentForum();
-    void getForumDetails(int id);
-    void getForumUrlDetails(QString url);
-    void markThreadRead(bool read);
     void showMoreMessages();
     void updateCurrentMessageModel();
-    void openInBrowser(QString messageId);
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
     void reloadUiReally();
+
 protected:
     virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();

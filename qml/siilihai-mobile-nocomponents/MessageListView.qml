@@ -9,7 +9,7 @@ ListView {
         text: selectedthread ? selectedthread.displayName : "no thread"
         rightText: selectedthread ? selectedthread.unreadCount : "no threas"
         smallText: selectedgroup ? selectedgroup.displayName + " - " + selectedforum.alias : ""
-        icon: selectedforum.faviconUrl
+        icon: selectedforum ? selectedforum.faviconUrl : ""
         width: parent.width * 0.95
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
@@ -23,7 +23,6 @@ ListView {
     footer: Column {
         width: parent.width * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
-//        height: UiButton.uiButtonHeight
         UiButton {
             text: "Mark all read"
             onClicked: markAll(true)

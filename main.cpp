@@ -9,7 +9,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName("Siilihai");
     QCoreApplication::setOrganizationDomain("siilihai.com");
-    QCoreApplication::setApplicationName("Siilihai");
+    QCoreApplication::setApplicationName("Siilihai-mobile");
     QtQuick2ApplicationViewer viewer;
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));

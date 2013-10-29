@@ -25,7 +25,7 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
     rootContext->setContextProperty("selectedgroup", 0);
     rootContext->setContextProperty("selectedthread", 0);
     rootContext->setContextProperty("newForum", 0);
-
+    rootContext->setContextProperty("forumList", 0);
     dismissMessages();
     setContextProperties();
 
@@ -35,7 +35,21 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
 void SiilihaiMobile::subscribeForum() {
     qDebug() << Q_FUNC_INFO;
     QObject *lw = rootObject->findChild<QObject*>("subscribeForumDialog");
-    if (lw) lw->setProperty("visible", "true");
+    if (lw) lw->setProperty("topItem", "true");
+    connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
+    protocol.listForums();
+}
+
+// Receiver owns the forums!
+void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
+    qDebug() << Q_FUNC_INFO << forums.size();
+    rootContext->setContextProperty("forumList", 0);
+    qDeleteAll(forumList); // Delete 'em old
+
+    foreach(ForumSubscription *p, forums)
+        forumList.append(p);
+
+    rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
 
 void SiilihaiMobile::showLoginWizard() {
@@ -47,7 +61,6 @@ void SiilihaiMobile::showLoginWizard() {
 void SiilihaiMobile::errorDialog(QString message) {
     if(!message.isEmpty()) errorMessageList.append(message);
     rootContext->setContextProperty("errormessages", errorMessageList);
-
 }
 
 void SiilihaiMobile::closeUi() {
@@ -73,11 +86,12 @@ void SiilihaiMobile::subscriptionFound(ForumSubscription *sub) {
 void SiilihaiMobile::subscriptionDeleted(QObject* subobj) {
     qDebug() << Q_FUNC_INFO;
     ForumSubscription *sub = static_cast<ForumSubscription*> (subobj);
+    Q_ASSERT(sub);
     subscriptionList.removeAll(sub);
     if(sub==currentSub) {
         selectForum();
     }
-    rootContext->setContextProperty("subscriptions", QVariant::fromValue(subscriptionList));
+    setContextProperties();
     ClientLogic::subscriptionDeleted(subobj);
 }
 
@@ -85,6 +99,14 @@ void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
     qDebug() << Q_FUNC_INFO << cr->subscription->alias() << 50;
     QMetaObject::invokeMethod(rootObject, "askCredentials", Q_ARG(QVariant, currentCredentialsRequest->subscription->alias()),
                               Q_ARG(QVariant, currentCredentialsRequest->credentialType==CredentialsRequest::SH_CREDENTIAL_HTTP?"HTTP":"forum") );
+}
+
+void SiilihaiMobile::groupListChanged(ForumSubscription *sub) {
+    qDebug() << Q_FUNC_INFO << sub->toString();
+    if(currentSub == sub || !currentSub) {
+        selectForum(sub->forumId());
+        showSubscribeGroups();
+    }
 }
 
 void SiilihaiMobile::subscribeFailed(QString reason) {
@@ -109,6 +131,25 @@ void SiilihaiMobile::updateCurrentMessageModel() {
         }
     }
     rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
+}
+
+void SiilihaiMobile::updateCurrentThreadModel() {
+    threadList.clear();
+    if(currentGroup) {
+        foreach(ForumThread *ft, currentGroup->values()) threadList.append(ft);
+    }
+    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
+}
+
+void SiilihaiMobile::updateCurrentGroupModel() {
+    groupList.clear();
+    if(currentSub) {
+        foreach(ForumGroup *fg, currentSub->values()) {
+            if(fg->isSubscribed())
+                groupList.append(fg);
+        }
+    }
+    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
 }
 
 void SiilihaiMobile::registerUser(QString user, QString password, QString email, bool sync) {
@@ -168,26 +209,7 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     // QMetaObject::invokeMethod(rootObject, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
 }
 
-void SiilihaiMobile::listSubscriptions() {
-    connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
-    protocol.listForums();
-}
 
-void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
-    qDebug() << Q_FUNC_INFO << forums.size();
-    foreach(ForumSubscription *p, forums) {
-        if(forumList.contains(p)) {
-            p->deleteLater();
-        } else {
-            forumList.append(p);
-        }
-    }
-    rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
-}
-
-void SiilihaiMobile::subscribeForum(int id, QString name) {
-    subscribeForumWithCredentials(id, name, QString::null, QString::null);
-}
 
 void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString username, QString password) {
     qDebug() << Q_FUNC_INFO << id << name;
@@ -205,41 +227,34 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
     forumAdded(newForum);
     newForum->deleteLater();
     newForum = 0;
-    rootContext->setContextProperty("newForum", newForum);
+    rootContext->setContextProperty("newForum", 0);
 }
 
-void SiilihaiMobile::showSubscribeGroup(ForumSubscription* forum) {
-    qDebug() << Q_FUNC_INFO << forum->toString();
-    selectForum(forum->forumId());
+void SiilihaiMobile::showSubscribeGroups() {
+    Q_ASSERT(currentSub);
+    qDebug() << Q_FUNC_INFO << currentSub->toString();
+    subscribeGroupList.clear();
+    rootContext->setContextProperty("subscribeGroupList", 0);
     foreach(ForumGroup *fg, currentSub->values()) {
         subscribeGroupList.append(fg);
     }
     rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
-    QMetaObject::invokeMethod(rootObject, "showSubscribeGroups");
-}
-
-void SiilihaiMobile::showSubscribeGroups(){
-    qDebug() << Q_FUNC_INFO;
-    if(!currentSub) return;
-    showSubscribeGroup(currentSub);
-}
-
-void SiilihaiMobile::setGroupSubscribed(QString id, bool sub) {
-    qDebug() << Q_FUNC_INFO << id << sub;
-    if(!currentSub) return;
-    ForumGroup *grp = currentSub->value(id);
-    if(!grp) return;
-    grp->setSubscribed(sub);
+    QObject *lw = rootObject->findChild<QObject*>("forumSettingsDialog");
+    Q_ASSERT(lw);
+    if (lw) lw->setProperty("topItem", "true");
 }
 
 void SiilihaiMobile::applyGroupSubscriptions() {
     qDebug() << Q_FUNC_INFO;
+    Q_ASSERT(currentSub);
+    subscribeGroupList.clear();
+    setContextProperties();
     foreach(ForumGroup *group, currentSub->values()) {
         group->markToBeUpdated();
         group->setHasChanged(true);
         group->commitChanges();
     }
-    selectForum(currentSub->forumId());
+    updateCurrentGroupModel();
     ClientLogic::updateGroupSubscriptions(currentSub);
 }
 
@@ -314,8 +329,6 @@ void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
         Q_ASSERT(sub->forumId());
         newForum->copyFrom(sub);
         rootContext->setContextProperty("newForum", newForum);
-
-        // QMetaObject::invokeMethod(rootObject, "forumDetails", Q_ARG(QVariant, newForum->forumId()), Q_ARG(QVariant, newForum->alias()), Q_ARG(QVariant, newForum->supportsLogin()));
     } else {
         subscribeFailed("Adding forum failed, check log");
     }
@@ -334,13 +347,13 @@ void SiilihaiMobile::showMoreMessages() {
 void SiilihaiMobile::haltSiilihai() {
     if(!haltRequested) {
         haltRequested = true;
-        QMetaObject::invokeMethod(rootObject, "showHaltScreen");
+        /*
         messageList.clear();
         threadList.clear();
         groupList.clear();
         subscriptionList.clear();
-
-        setContextProperties();
+*/
+        // setContextProperties();
     }
     ClientLogic::haltSiilihai();
 }
@@ -362,17 +375,10 @@ void SiilihaiMobile::selectForum(int id) {
     qDebug() << Q_FUNC_INFO << id;
     if (selectedForumId() != id) {
         selectGroup();
-        groupList.clear();
         currentSub = forumDatabase.value(id);
         subscribeGroupList.clear();
-        if(currentSub) {
-            foreach(ForumGroup *fg, currentSub->values()) {
-                if(fg->isSubscribed())
-                    groupList.append(fg);
-            }
-        }
         rootContext->setContextProperty("selectedforum", currentSub);
-        rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
+        updateCurrentGroupModel();
         emit selectedForumChanged(currentSub ? currentSub->forumId() : 0);
     }
 }
@@ -386,14 +392,9 @@ void SiilihaiMobile::selectGroup(QString id) {
     Q_ASSERT(currentSub || id.isEmpty());
     if (!currentGroup || currentGroup->id() != id) {
         selectThread();
-        threadList.clear();
         currentGroup = currentSub ? currentSub->value(id) : 0;
-        if(!id.isEmpty()) {
-            Q_ASSERT(currentGroup);
-            foreach(ForumThread *ft, currentGroup->values()) threadList.append(ft);
-        }
         rootContext->setContextProperty("selectedgroup", currentGroup);
-        rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
+        updateCurrentThreadModel();
         emit selectedGroupIdChanged(currentGroup ? currentGroup->id() : QString::null);
     }
 }

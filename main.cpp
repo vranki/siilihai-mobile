@@ -22,6 +22,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     SiilihaiMobile shm(0, viewer);
     shm.launchSiilihai(false);
     int ret = app.exec();
+    viewer.setSource(QUrl("")); // Otherwise things may crash
 
     // Ugly hack to make sure Siilihai quits graceously after swipe close
     qDebug() << Q_FUNC_INFO << "exec() exited";

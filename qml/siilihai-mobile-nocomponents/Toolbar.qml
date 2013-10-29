@@ -8,8 +8,12 @@ Rectangle {
         anchors.fill: parent
         ToolbarButton {
             text: "⇐"
-            visible: siilihaimobile.selectedGroupId != "" || siilihaimobile.selectedThreadId != ""
+            visible: siilihaimobile.selectedGroupId != "" || siilihaimobile.selectedThreadId != "" || subscribeForumDialog.topItem
             onClicked: {
+                if(subscribeForumDialog.topItem) {
+                    subscribeForumDialog.topItem = false
+                    return
+                }
                 if(siilihaimobile.selectedThreadId) {
                     siilihaimobile.selectedThreadId = ""
                 } else {

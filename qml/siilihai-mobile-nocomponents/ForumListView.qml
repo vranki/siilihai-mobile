@@ -6,4 +6,11 @@ ListView {
     model: subscriptions
     header: StatusIndicator {}
     delegate: ForumButton {}
+    footer: SimpleButton {
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width / 3
+        text: "+"
+        buttonColor: "black"
+        onClicked: siilihaimobile.subscribeForum()
+    }
 }

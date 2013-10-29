@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import "forum"
+import "account"
 
 Rectangle {
     width: 600
@@ -38,10 +40,24 @@ Rectangle {
         width: parent.width
         height: parent.height - toolbar.height
     }
-    SubscribeForumDialog { }
+    SubscribeForumDialog {
+        id: subscribeForumDialog
+        width: parent.width
+        height: parent.height - toolbar.height
+        Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
+    }
+
     Toolbar {
         id: toolbar
         anchors.bottom: parent.bottom
+    }
+
+    ForumSettingsDialog {
+        id: forumSettingsDialog
+        objectName: "forumSettingsDialog"
+
+        Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
+        HideEffect {}
     }
     MessageDialog {}
 }

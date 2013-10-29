@@ -36,27 +36,26 @@ public slots:
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
     void loginUser(QString user, QString password);
-    void listSubscriptions();
-    void subscribeForum(int id, QString name);
-    void subscribeForumWithCredentials(int id, QString name, QString username, QString password);
+    virtual void subscribeForum(); // Call to show dialog
+    void subscribeForumWithCredentials(int id, QString name, QString username=QString::null, QString password=QString::null);
     void getForumDetails(int id);
     void getForumUrlDetails(QString url);
+    void unsubscribeCurrentForum();
+    void showMoreMessages();
+    void showSubscribeGroups(); // Remember to call applyGroupSubscriptions afterwards!
+    void applyGroupSubscriptions();
 
 private slots:
-    virtual void subscribeForum();
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
     void registerFinished(bool success, QString motd, bool sync);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
     void listForumsFinished(QList <ForumSubscription*>);
-    void showSubscribeGroups();
-    void setGroupSubscribed(QString id, bool sub);
-    void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
-    void unsubscribeCurrentForum();
-    void showMoreMessages();
     void updateCurrentMessageModel();
+    void updateCurrentThreadModel();
+    void updateCurrentGroupModel(); // Updates the "groups" list
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
     void reloadUiReally();
@@ -67,8 +66,8 @@ protected:
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
-    virtual void showSubscribeGroup(ForumSubscription* forum);
     virtual void showCredentialsDialog(CredentialsRequest *cr);
+    virtual void groupListChanged(ForumSubscription* sub);
 
 private:
     void subscribeFailed(QString reason);

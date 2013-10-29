@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+import ".."
 
 Flickable {
     property bool busy: false

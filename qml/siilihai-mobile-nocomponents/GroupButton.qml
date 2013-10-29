@@ -1,8 +1,7 @@
 import QtQuick 2.0
 
 UiButton {
-    text: name
+    text: displayName
     rightText: unreadCount
     smallText: hierarchy
-
 }

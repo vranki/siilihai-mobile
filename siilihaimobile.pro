@@ -5,44 +5,13 @@
 
 TARGET=siilihai-mobile
 
+QT += core quick xml network
+
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
-symbian:TARGET.UID3 = 0xE61CB5A8
-
-# Smart Installer package's UID
-# This UID is from the protected range and therefore the package will
-# fail to install if self-signed. By default qmake uses the unprotected
-# range value if unprotected UID is defined for the application and
-# 0x2002CCCF value if protected UID is given to the application
-#symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-
-# Allow network access on Symbian
-symbian:TARGET.CAPABILITY += NetworkServices
-
-# If your application uses the Qt Mobility libraries, uncomment the following
-# lines and add the respective components to the MOBILITY variable.
-# CONFIG += mobility
-# MOBILITY +=
-
-# Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-
-#CONFIG += link_pkgconfig
-
-#LIBS += -lmdeclarativecache
-#INCLUDEPATH += /usr/include/applauncherd
-#PKGCONFIG += qdeclarative-boostable
-
-# enable booster
-CONFIG += qdeclarative-boostable
 QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
 QMAKE_LFLAGS += -pie -rdynamic
-
-#QMAKE_CXXFLAGS += `pkg-config --cflags qdeclarative-boostable`
-#QMAKE_LFLAGS += `pkg-config --libs qdeclarative-boostable`
-
-# Add dependency to Symbian components
-# CONFIG += qt-components
 
 # Always on
 CONFIG += with_lib
@@ -70,19 +39,21 @@ CONFIG(with_lib) {
     LIBS += -lsiilihai
 }
 
+#DEFINES += use_components
+
+# Running without components is very WIP
+CONFIG(use_components) {
+DEFINES += use_components
+}
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     siilihaimobile.cpp
 
-QT += network xml
 
 QML_FILES.source = qml
 QML_FILES.target = .
 #DEPLOYMENTFOLDERS += QML_FILES
-
-# Please do not modify the following two lines. Required for deployment.
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
-qtcAddDeployment()
 
 HEADERS += \
     siilihaimobile.h
@@ -122,7 +93,29 @@ OTHER_FILES += debian/rules \
     android/src/org/kde/necessitas/origo/QtActivity.java \
     android/src/org/kde/necessitas/ministro/IMinistro.aidl \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
-    android/version.xml
+    android/version.xml \
+    qml/siilihai-mobile-nocomponents/Toolbar.qml \
+    qml/siilihai-mobile-nocomponents/ForumListView.qml \
+    qml/siilihai-mobile-nocomponents/ForumButton.qml \
+    qml/siilihai-mobile-nocomponents/ToolbarButton.qml \
+    qml/siilihai-mobile-nocomponents/GroupListView.qml \
+    qml/siilihai-mobile-nocomponents/GroupButton.qml \
+    qml/siilihai-mobile-nocomponents/UiButton.qml \
+    qml/siilihai-mobile-nocomponents/ThreadListView.qml \
+    qml/siilihai-mobile-nocomponents/ThreadButton.qml \
+    qml/siilihai-mobile-nocomponents/MessageListView.qml \
+    qml/siilihai-mobile-nocomponents/MessageDisplay.qml \
+    qml/siilihai-mobile-nocomponents/HideEffect.qml \
+    qml/siilihai-mobile-nocomponents/BusyIndicator.qml \
+    qml/siilihai-mobile-nocomponents/MessageDialog.qml \
+    qml/siilihai-mobile-nocomponents/StatusIndicator.qml \
+    qml/siilihai-mobile-nocomponents/SimpleButton.qml \
+    qml/siilihai-mobile-nocomponents/account/LoginWizard.qml \
+    qml/siilihai-mobile-nocomponents/forum/SubscribeForumDialog.qml \
+    qml/siilihai-mobile-nocomponents/forum/SubscribeForumButton.qml \
+    qml/siilihai-mobile-nocomponents/SimpleTextEdit.qml \
+    qml/siilihai-mobile-nocomponents/forum/ForumSettingsDialog.qml \
+    qml/siilihai-mobile-nocomponents/forum/GroupSubscriptionButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications
@@ -132,10 +125,9 @@ icons.path = /usr/share/icons/hicolor/scalable/apps
 
 INSTALLS += desktops icons
 
-OTHER_FILES += qml/siilihai-mobile/*
+OTHER_FILES += qml/siilihai-mobile/* qml/siilihai-mobile-nocomponents/*
 
-OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop\
-debian/changelog
+OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop debian/changelog
 
 OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
 
@@ -144,3 +136,7 @@ OTHER_FILES += desktops.files
 QMAKE_CLEAN += *.o
 
 RESOURCES += siilihai-mobile.qrc
+
+# Please do not modify the following two lines. Required for deployment.
+include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
+qtcAddDeployment()

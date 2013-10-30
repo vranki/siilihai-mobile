@@ -200,16 +200,14 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     qDebug() << Q_FUNC_INFO;
     ClientLogic::loginFinished(success, motd, sync);
     disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
-    if(!regOrLoginUser.isEmpty()) {
+    if(success && !regOrLoginUser.isEmpty()) {
         settings->setValue("account/username", regOrLoginUser);
         settings->setValue("account/password", regOrLoginPass);
         settings->sync();
     }
-    // Should i do something now?
-    // QMetaObject::invokeMethod(rootObject, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
+    QObject *lw = rootObject->findChild<QObject*>("loginWizard");
+    if (lw) QMetaObject::invokeMethod(lw, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
 }
-
-
 
 void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString username, QString password) {
     qDebug() << Q_FUNC_INFO << id << name;

@@ -5,7 +5,7 @@ Rectangle {
     height: parent.height
     color: "black"
     y: errormessages.length ? 0 : parent.height
-    Behavior on y { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
+    Behavior on y { SmoothedAnimation { velocity: 2500; easing.type: Easing.InOutQuad  } }
     ListView {
         width: parent.width
         height: parent.height - closeButton.height
@@ -25,10 +25,11 @@ Rectangle {
             }
         }
     }
-    UiButton {
+    SimpleButton {
         id: closeButton
         text: "Ok"
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: siilihaimobile.dismissMessages()
     }

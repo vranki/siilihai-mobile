@@ -2,20 +2,9 @@ import QtQuick 2.0
 import ".."
 
 
-SimpleButton {
+SimpleCheckBox {
     text: displayName
-    height: 40
-    anchors.horizontalCenter: parent.horizontalCenter
-    Text {
-        text: "✓"
-        color: "white"
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        font.pointSize: 30
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: isSubscribed
-        z: 10
-    }
+    checked: isSubscribed
     Text {
         text: hierarchy
         color: color1

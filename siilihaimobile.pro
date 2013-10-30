@@ -115,7 +115,10 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/forum/SubscribeForumButton.qml \
     qml/siilihai-mobile-nocomponents/SimpleTextEdit.qml \
     qml/siilihai-mobile-nocomponents/forum/ForumSettingsDialog.qml \
-    qml/siilihai-mobile-nocomponents/forum/GroupSubscriptionButton.qml
+    qml/siilihai-mobile-nocomponents/forum/GroupSubscriptionButton.qml \
+    qml/siilihai-mobile-nocomponents/account/LoginButton.qml \
+    qml/siilihai-mobile-nocomponents/account/RegisterButton.qml \
+    qml/siilihai-mobile-nocomponents/SimpleCheckBox.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

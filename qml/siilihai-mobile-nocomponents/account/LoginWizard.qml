@@ -1,45 +1,57 @@
 import QtQuick 2.0
 import ".."
 
-Flickable {
+Rectangle {
+    anchors.fill: parent
+    property bool useExitingAccount: false
+    property bool registerAccount: false
     property bool busy: false
     id: loginWizard
     objectName: "loginWizard"
     visible: false
+    color: "black"
 
-    Rectangle {
+    Flickable {
         anchors.fill: parent
-        color: "black"
-    }
-    Column {
-        width: parent.width
-        spacing: 20
-        Text {
-            text: "Welcome to Siilihai. You need a Siilihai account to use synchronization between devices."
-            font.pointSize: 16
-            wrapMode: Text.WordWrap
-            color: "white"
-            width: parent.width
-        }
-        SimpleButton {
-            text: "Use existing account"
+        contentWidth: width
+        contentHeight: childrenRect.height
+        Column {
+            y: 50
+            width: parent.width*0.9
+
             anchors.horizontalCenter: parent.horizontalCenter
-        }
-        SimpleButton {
-            text: "Register a new account"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-        SimpleButton {
-            text: "Use without account (sync disabled)"
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-                busy = true
-                siilihaimobile.registerUser("", "", "", false)
+            spacing: 30
+            Text {
+                text: "Welcome to Siilihai. You need a Siilihai account to use synchronization between devices."
+                font.pointSize: 16
+                wrapMode: Text.WordWrap
+                color: "white"
+                width: parent.width
+            }
+            LoginButton {
+                id: loginButton
+            }
+            RegisterButton {
+                id: registerButton
+            }
+            SimpleButton {
+                text: "Use without account (sync disabled)"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    busy = true
+                    siilihaimobile.registerUser("", "", "", false)
+                }
             }
         }
     }
 
     function registrationFinished(success, motd) {
+        busy = false
+        if(success) {
+            visible = false
+        }
+    }
+    function loginFinished(success, motd) {
         busy = false
         if(success) {
             visible = false

@@ -36,10 +36,6 @@ Rectangle {
         Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         HideEffect {}
     }
-    LoginWizard {
-        width: parent.width
-        height: parent.height - toolbar.height
-    }
     SubscribeForumDialog {
         id: subscribeForumDialog
         width: parent.width
@@ -50,6 +46,11 @@ Rectangle {
     Toolbar {
         id: toolbar
         anchors.bottom: parent.bottom
+    }
+
+    LoginWizard {
+        width: parent.width
+        height: parent.height
     }
 
     ForumSettingsDialog {

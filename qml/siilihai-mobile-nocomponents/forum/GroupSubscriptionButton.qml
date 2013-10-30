@@ -1,10 +1,11 @@
 import QtQuick 2.0
 import ".."
-
+import "../widgets"
 
 SimpleCheckBox {
     text: displayName
     checked: isSubscribed
+    clip: true
     Text {
         text: hierarchy
         color: color1

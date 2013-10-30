@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "widgets"
 
 ListView {
     spacing: 10
@@ -6,11 +7,17 @@ ListView {
     model: subscriptions
     header: StatusIndicator {}
     delegate: ForumButton {}
-    footer: SimpleButton {
+    footer: Item {
+        width: parent.width * 0.5
+        height: width
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width / 3
-        text: "+"
-        buttonColor: "black"
-        onClicked: siilihaimobile.subscribeForum()
+        SimpleButton {
+            anchors.centerIn: parent
+            width: parent.width / 2
+            height: width
+            text: "+ Subscribe"
+            buttonColor: "gray"
+            onClicked: siilihaimobile.subscribeForum()
+        }
     }
 }

@@ -1,6 +1,7 @@
 import QtQuick 2.0
+import "widgets"
 
-UiButton {
+ButtonWithUnreadCount {
     property bool isSelectedForum: siilihaimobile.selectedForumId === forumId
     text: alias
     rightText: unreadCount
@@ -24,8 +25,14 @@ UiButton {
         anchors.top: groupListView.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         width: height*2
-        text: "☰"
+        //text: "☰"
         buttonColor: "black"
         onClicked: { forumSettingsDialog.topItem = true; siilihaimobile.showSubscribeGroups() }
+        Image {
+            source: "gfx/Folder-move2.svg"
+            anchors.fill: parent
+            z: -10
+            fillMode: Image.PreserveAspectFit
+        }
     }
 }

@@ -13,10 +13,11 @@ ListView {
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
         drawBorder: false
+        icon: "gfx/Gnome-folder-open.svg"
     }
     delegate: ThreadButton {}
-
-    UiButton {
+    footer: Item {width: 1; height: 50}
+    ButtonWithUnreadCount {
         anchors.fill: parent
         z: -10
     }

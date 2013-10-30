@@ -48,6 +48,10 @@ public slots:
 private slots:
     virtual void subscriptionFound(ForumSubscription *sub);
     virtual void subscriptionDeleted(QObject* subobj);
+    void groupDeleted();
+    void threadDeleted();
+    void messageDeleted();
+
     void registerFinished(bool success, QString motd, bool sync);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
@@ -72,6 +76,7 @@ protected:
 private:
     void subscribeFailed(QString reason);
     void setContextProperties();
+    void deleteNewForum();
 
     QQuickView &qQuickView;
     // @todo check if qt quick has smarter way for this

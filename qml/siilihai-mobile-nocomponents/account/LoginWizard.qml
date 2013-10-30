@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import ".."
+import "../widgets"
 
 Rectangle {
     anchors.fill: parent

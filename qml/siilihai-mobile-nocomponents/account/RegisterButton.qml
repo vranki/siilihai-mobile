@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import ".."
+import "../widgets"
 
 SimpleButton {
     property bool valuesValid: username.length > 0 && password.length > 3 && email.length > 3

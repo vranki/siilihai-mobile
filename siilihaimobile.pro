@@ -100,25 +100,26 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/ToolbarButton.qml \
     qml/siilihai-mobile-nocomponents/GroupListView.qml \
     qml/siilihai-mobile-nocomponents/GroupButton.qml \
-    qml/siilihai-mobile-nocomponents/UiButton.qml \
+    qml/siilihai-mobile-nocomponents/ButtonWithUnreadCount.qml \
     qml/siilihai-mobile-nocomponents/ThreadListView.qml \
     qml/siilihai-mobile-nocomponents/ThreadButton.qml \
     qml/siilihai-mobile-nocomponents/MessageListView.qml \
     qml/siilihai-mobile-nocomponents/MessageDisplay.qml \
     qml/siilihai-mobile-nocomponents/HideEffect.qml \
-    qml/siilihai-mobile-nocomponents/BusyIndicator.qml \
+    qml/siilihai-mobile-nocomponents/widgets/BusyIndicator.qml \
     qml/siilihai-mobile-nocomponents/MessageDialog.qml \
     qml/siilihai-mobile-nocomponents/StatusIndicator.qml \
-    qml/siilihai-mobile-nocomponents/SimpleButton.qml \
+    qml/siilihai-mobile-nocomponents/widgets/SimpleButton.qml \
     qml/siilihai-mobile-nocomponents/account/LoginWizard.qml \
     qml/siilihai-mobile-nocomponents/forum/SubscribeForumDialog.qml \
     qml/siilihai-mobile-nocomponents/forum/SubscribeForumButton.qml \
-    qml/siilihai-mobile-nocomponents/SimpleTextEdit.qml \
+    qml/siilihai-mobile-nocomponents/widgets/SimpleTextEdit.qml \
     qml/siilihai-mobile-nocomponents/forum/ForumSettingsDialog.qml \
     qml/siilihai-mobile-nocomponents/forum/GroupSubscriptionButton.qml \
     qml/siilihai-mobile-nocomponents/account/LoginButton.qml \
     qml/siilihai-mobile-nocomponents/account/RegisterButton.qml \
-    qml/siilihai-mobile-nocomponents/SimpleCheckBox.qml
+    qml/siilihai-mobile-nocomponents/widgets/SimpleCheckBox.qml \
+    qml/siilihai-mobile-nocomponents/forum/SubscribeCustomButton.qml
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

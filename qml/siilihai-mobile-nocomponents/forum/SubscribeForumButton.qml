@@ -1,8 +1,9 @@
 import QtQuick 2.0
 import ".."
+import "../widgets"
 
 SimpleButton {
-    property bool isSelectedForum: subscribeForumDialog.subscribeForumId === forumId
+    property bool isSelectedForum: subscribeForumDialog.subscribeForumId === forumId && !enterUrl
     Text {
         id: forumLabel
         text: modelData.alias
@@ -17,6 +18,7 @@ SimpleButton {
     height: 32 + (isSelectedForum ? forumDetails.height + 20 : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     onClicked: {
+        enterUrl = false
         subscribeForumDialog.subscribeForumId = forumId
         siilihaimobile.getForumDetails(modelData.forumId)
     }
@@ -77,6 +79,7 @@ SimpleButton {
             onClicked: {
                 siilihaimobile.subscribeForumWithCredentials(newForum.forumId, newForum.alias, username.text, password.text)
                 subscribeForumDialog.topItem = false
+                subscribeForumDialog.subscribeForumId = 0
             }
         }
     }

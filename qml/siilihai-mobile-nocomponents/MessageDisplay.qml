@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtWebKit 3.0
+import "widgets"
 
 Rectangle {
     property string htmlHeader: "<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">" +

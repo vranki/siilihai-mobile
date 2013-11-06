@@ -29,8 +29,6 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView &view) :
     dismissMessages();
     setContextProperties();
     connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
-
-    // offlineModeSet(true);
 }
 
 void SiilihaiMobile::subscribeForum() {
@@ -117,8 +115,22 @@ void SiilihaiMobile::messageDeleted() {
 
 void SiilihaiMobile::showCredentialsDialog(CredentialsRequest *cr) {
     qDebug() << Q_FUNC_INFO << cr->subscription->alias() << 50;
+    Q_ASSERT(!currentCredentialsRequest);
+    currentCredentialsRequest = cr;
+    QObject *lw = rootObject->findChild<QObject*>("credentialsDialog");
+    if (lw) lw->setProperty("forumAlias", cr->subscription->alias());
+    /*
     QMetaObject::invokeMethod(rootObject, "askCredentials", Q_ARG(QVariant, currentCredentialsRequest->subscription->alias()),
                               Q_ARG(QVariant, currentCredentialsRequest->credentialType==CredentialsRequest::SH_CREDENTIAL_HTTP?"HTTP":"forum") );
+                              */
+}
+
+void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
+    qDebug() << Q_FUNC_INFO << u << remember;
+    Q_ASSERT(currentCredentialsRequest);
+    currentCredentialsRequest->authenticator.setUser(u);
+    currentCredentialsRequest->authenticator.setPassword(p);
+    currentCredentialsRequest->signalCredentialsEntered(remember);
 }
 
 void SiilihaiMobile::groupListChanged(ForumSubscription *sub) {
@@ -288,13 +300,7 @@ void SiilihaiMobile::applyGroupSubscriptions() {
     ClientLogic::updateGroupSubscriptions(currentSub);
 }
 
-void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
-    qDebug() << Q_FUNC_INFO << u << remember;
-    Q_ASSERT(currentCredentialsRequest);
-    currentCredentialsRequest->authenticator.setUser(u);
-    currentCredentialsRequest->authenticator.setPassword(p);
-    currentCredentialsRequest->signalCredentialsEntered(remember);
-}
+
 
 void SiilihaiMobile::unsubscribeCurrentForum() {
     Q_ASSERT(currentSub);

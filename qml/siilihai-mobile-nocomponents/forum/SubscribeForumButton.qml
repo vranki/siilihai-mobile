@@ -48,36 +48,16 @@ SimpleButton {
             font.pointSize: 12
             wrapMode: Text.WordWrap
         }
-        Text {
-            id: login
+        UserPassForm {
+            id: upf
             visible: newForum && newForum.supportsLogin
-            text: "Username"
-            color: "white"
-            font.pointSize: 15
-        }
-        SimpleTextEdit {
-            id: username
-            focus: true
-            visible: login.visible
-            inputMethodHints: Qt.ImhNoAutoUppercase
-        }
-        Text {
-            visible: login.visible
-            text: "Password"
-            color: "white"
-            font.pointSize: 15
-        }
-        SimpleTextEdit {
-            id: password
-            visible: login.visible
-            inputMethodHints: Qt.ImhHiddenText | Qt.ImhNoAutoUppercase
         }
         SimpleButton {
             visible: newForum
             text: "Subscribe"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                siilihaimobile.subscribeForumWithCredentials(newForum.forumId, newForum.alias, username.text, password.text)
+                siilihaimobile.subscribeForumWithCredentials(newForum.forumId, newForum.alias, upf.username, upf.password)
                 subscribeForumDialog.topItem = false
                 subscribeForumDialog.subscribeForumId = 0
             }

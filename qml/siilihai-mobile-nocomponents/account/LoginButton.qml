@@ -16,40 +16,20 @@ SimpleButton {
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 10
         Item { width: 1; height: 1}
-        Text {
-            text: "Username"
-            color: "white"
-            width: parent.width
+        UserPassForm {
+            id: upf
             visible: useExitingAccount
-        }
-        SimpleTextEdit {
-            id: username
-            width: parent.width
-            visible: useExitingAccount
-            inputMethodHints: Qt.ImhNoAutoUppercase
-        }
-        Text {
-            text: "Password"
-            color: "white"
-            width: parent.width
-            visible: useExitingAccount
-        }
-        SimpleTextEdit {
-            id: password
-            width: parent.width
-            visible: useExitingAccount
-            inputMethodHints: Qt.ImhHiddenText | Qt.ImhNoAutoUppercase
+            optional: false
         }
         SimpleButton {
             text: "Login"
+            enabled: !loginWizard.busy && upf.hasValues
             width: parent.width / 3
             anchors.horizontalCenter: parent.horizontalCenter
             visible: useExitingAccount
-            opacity: loginWizard.busy ? 0.5 : 1
             onClicked: {
-                if(loginWizard.busy) return
                 loginWizard.busy = true
-                siilihaimobile.loginUser(username.text, password.text)
+                siilihaimobile.loginUser(upf.username, upf.password)
             }
         }
     }

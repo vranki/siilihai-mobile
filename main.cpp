@@ -11,6 +11,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("siilihai.com");
     QCoreApplication::setApplicationName("Siilihai-mobile");
     QtQuick2ApplicationViewer viewer;
+    SiilihaiMobile shm(0, &viewer);
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else
@@ -18,8 +19,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // viewer.setSource(QUrl("qrc:/qml/siilihai-mobile-nocomponents/main.qml"));
 #endif
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    shm.setContextProperties(); // Root ctx may change when loading, so redo this
     viewer.showExpanded();
-    SiilihaiMobile shm(0, viewer);
     shm.launchSiilihai(false);
     int ret = app.exec();
     viewer.setSource(QUrl("")); // Otherwise things may crash

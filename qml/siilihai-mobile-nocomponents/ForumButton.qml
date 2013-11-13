@@ -22,12 +22,14 @@ ButtonWithUnreadCount {
     }
     SimpleButton {
         id: settingsButton
-        anchors.top: groupListView.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        x: parent.width * 0.7
+        anchors.topMargin: 5
+        opacity: (isSelectedForum && !busy) ? 1 : 0
+        Behavior on opacity { SmoothedAnimation { velocity: 1 } }
         width: height*2
-        //text: "☰"
         buttonColor: "black"
-        onClicked: { forumSettingsDialog.topItem = true; siilihaimobile.showSubscribeGroups() }
+        onClicked: siilihaimobile.showSubscribeGroups()
         Image {
             source: "gfx/Folder-move2.svg"
             anchors.fill: parent

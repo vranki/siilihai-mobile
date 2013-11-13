@@ -17,11 +17,12 @@ class SiilihaiMobile : public ClientLogic
     Q_PROPERTY(QString selectedThreadId READ selectedThreadId WRITE selectThread NOTIFY selectedThreadIdChanged)
 
 public:
-    explicit SiilihaiMobile(QObject *parent, QQuickView &view);
+    explicit SiilihaiMobile(QObject *parent, QQuickView *view);
     bool isHaltRequested();
     int selectedForumId() const;
     QString selectedGroupId() const;
     QString selectedThreadId() const;
+    void setContextProperties();
 signals:
     void selectedForumChanged(int arg);
     void selectedGroupIdChanged(QString arg);
@@ -44,6 +45,7 @@ public slots:
     void showMoreMessages();
     void showSubscribeGroups(); // Remember to call applyGroupSubscriptions afterwards!
     void applyGroupSubscriptions();
+    void credentialsEntered(QString u, QString p, bool remember);
 
 private slots:
     virtual void subscriptionFound(ForumSubscription *sub);
@@ -56,7 +58,6 @@ private slots:
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
     void listForumsFinished(QList <ForumSubscription*>);
-    void credentialsEntered(QString u, QString p, bool remember);
     void updateCurrentMessageModel();
     void updateCurrentThreadModel();
     void updateCurrentGroupModel(); // Updates the "groups" list
@@ -65,25 +66,23 @@ private slots:
     void reloadUiReally();
 
 protected:
-    virtual void changeState(siilihai_states newState);
     virtual void showLoginWizard();
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
-    virtual void showCredentialsDialog(CredentialsRequest *cr);
+    virtual void showCredentialsDialog();
     virtual void groupListChanged(ForumSubscription* sub);
 
 private:
     void subscribeFailed(QString reason);
-    void setContextProperties();
     void deleteNewForum();
+    void setObjectProperty(QString objectName, QString property, QString value);
 
-    QQuickView &qQuickView;
+    QQuickView *qQuickView;
     // @todo check if qt quick has smarter way for this
     QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList errorMessageList;
-    QQmlContext* rootContext;
-    QQuickItem *rootObject;
+    QQuickView *quickView;
     ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;

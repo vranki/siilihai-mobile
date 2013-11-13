@@ -2,15 +2,25 @@ import QtQuick 2.0
 import ".."
 import "../widgets"
 
-Rectangle {
-    anchors.fill: parent
+SimpleDialog {
     property bool useExitingAccount: false
     property bool registerAccount: false
     property bool busy: false
     id: loginWizard
     objectName: "loginWizard"
-    visible: false
-    color: "black"
+    opacity: 1
+    Image {
+        source: "../gfx/siilis3.png"
+        opacity: 0.5
+        visible: topItem
+        NumberAnimation on x {
+            from: -parent.width
+            to: loginWizard.width
+            duration: 60000
+            loops: Animation.Infinite
+            onStopped: restart()
+        }
+    }
 
     Flickable {
         anchors.fill: parent
@@ -23,11 +33,19 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 30
             Text {
-                text: "Welcome to Siilihai. You need a Siilihai account to use synchronization between devices."
-                font.pointSize: 16
+                text: "Welcome to Siilihai, the no-nonsense open source web forum reader. You need a Siilihai account to use synchronization between devices."
+                font.pointSize: largePointSize
                 wrapMode: Text.WordWrap
                 color: "white"
                 width: parent.width
+            }
+            Text {
+                id: loginError
+                color: "red"
+                font.pointSize: 12
+                visible: text.length > 0
+                width: parent.width
+                wrapMode: Text.Wrap
             }
             LoginButton {
                 id: loginButton
@@ -36,7 +54,7 @@ Rectangle {
                 id: registerButton
             }
             SimpleButton {
-                text: "Use without account (sync disabled)"
+                text: "Use without account (sync disabled!)"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
                     busy = true
@@ -49,13 +67,18 @@ Rectangle {
     function registrationFinished(success, motd) {
         busy = false
         if(success) {
-            visible = false
+            topItem = false
+        } else {
+            loginError.text = "Registration failed - check username & password"
         }
     }
+
     function loginFinished(success, motd) {
         busy = false
         if(success) {
-            visible = false
+            topItem = false
+        } else {
+            loginError.text = "Login failed - check username & password"
         }
     }
 }

@@ -42,8 +42,7 @@ SimpleButton {
             }
         }
         Text {
-            text: newForum ? (newForum.supportsLogin ? "Enter forum credentials below, if you have an account" :
-                                                       "Login not supported") : "Getting details .."
+            text: newForum ? (newForum.supportsLogin ? "" : "Login not supported") : "Getting details .."
             color: "white"
             font.pointSize: 12
             wrapMode: Text.WordWrap
@@ -51,6 +50,8 @@ SimpleButton {
         UserPassForm {
             id: upf
             visible: newForum && newForum.supportsLogin
+            questionText: "Authenticate to forum"
+            checked: false
         }
         SimpleButton {
             visible: newForum

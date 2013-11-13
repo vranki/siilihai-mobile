@@ -5,6 +5,7 @@ Rectangle {
     property bool enabled: true
     property string buttonColor: "white"
     signal clicked
+    clip: true
     radius: 10
     color: "transparent"
     border.color: buttonColor

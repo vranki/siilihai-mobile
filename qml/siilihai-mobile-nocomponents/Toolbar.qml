@@ -52,5 +52,9 @@ Rectangle {
             text: "R"
             onClicked: siilihaimobile.reloadUi()
         }
+        ToolbarButton {
+            text: "S"
+            onClicked: settingsDialog.topItem = true
+        }
     }
 }

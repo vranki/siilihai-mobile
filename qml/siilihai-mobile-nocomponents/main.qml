@@ -3,13 +3,22 @@ import "forum"
 import "account"
 
 Rectangle {
-    width: 600
-    height: 1024
-    color: "white"
     property string color1: "#7d7dc0"
     property string color2: "#ffd884"
     property string colorDark: "#003e5e"
     property string colorLessDark: "#407e9e"
+
+    property string color_a_bg: "white"
+    property string color_a_text: "black"
+    property string color_b_bg: "black"
+    property string color_b_text: "white"
+
+    property int headerPointSize: 42
+    property int largePointSize: 16
+
+    width: 600
+    height: 1024
+    color: color_a_bg
 
     ForumListView {
         id: forumListView
@@ -40,7 +49,6 @@ Rectangle {
         id: subscribeForumDialog
         width: parent.width
         height: parent.height - toolbar.height
-        Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
     }
 
     Toolbar {
@@ -55,10 +63,10 @@ Rectangle {
 
     ForumSettingsDialog {
         id: forumSettingsDialog
-        objectName: "forumSettingsDialog"
-
-        Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
-        HideEffect {}
     }
+    SettingsDialog {
+        id: settingsDialog
+    }
+    CredentialsDialog {}
     MessageDialog {}
 }

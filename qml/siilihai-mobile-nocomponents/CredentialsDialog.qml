@@ -1,20 +1,24 @@
 import QtQuick 2.0
 import "widgets"
 
-Rectangle {
-    width: parent.width
-    height: parent.height
-    color: "black"
+SimpleDialog {
     objectName: "credentialsDialog"
     property string forumAlias: ""
-    y: forumAlias.length > 0 ? 0 : parent.height
-    Behavior on y { SmoothedAnimation { velocity: 2500; easing.type: Easing.InOutQuad  } }
+
     Column {
-        Text {
-            text: "Enter credentials for " + forumAlias
-            font.pointSize: 20
-            wrapMode: Text.Wrap
-            color: "white"
+        y: 50
+        spacing: 20
+        width: parent.width
+        UserPassForm {
+            id: upf
+            optional: true
+            questionText: "Authenticate to " + forumAlias
+        }
+        SimpleCheckBox {
+            id: remember
+            text: "Remember credentials"
+            checked: true
+            enabled: upf.checked
         }
     }
     SimpleButton {
@@ -23,6 +27,11 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: siilihaimobile.dismissMessages()
+        onClicked: {
+            topItem = false
+            forumAlias = ""
+            siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
+            upf.reset()
+        }
     }
 }

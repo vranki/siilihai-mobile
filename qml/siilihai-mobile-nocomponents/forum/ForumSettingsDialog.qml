@@ -2,12 +2,8 @@ import QtQuick 2.0
 import ".."
 import "../widgets"
 
-Rectangle {
-    property bool topItem: false
-    x: topItem ? 0 : parent.width
-    color: "black"
-    width: parent.width
-    height: parent.height
+SimpleDialog {
+    objectName: "forumSettingsDialog"
     Flickable {
         anchors.fill: parent
         contentWidth: width
@@ -19,7 +15,7 @@ Rectangle {
             Text {
                 font.pointSize: 20
                 color: "white"
-                text: topItem ? selectedforum.alias : ""
+                text: topItem && selectedforum ? selectedforum.alias : ""
             }
             ListView {
                 width: parent.width
@@ -28,6 +24,12 @@ Rectangle {
                 spacing: 10
                 model: subscribeGroupList
                 delegate: GroupSubscriptionButton { }
+            }
+            UserPassForm {
+                id: authentication
+                checked: selectedforum ? selectedforum.isAuthenticated : true
+                username: selectedforum ? selectedforum.username : ""
+                password: selectedforum ? selectedforum.password : ""
             }
             SimpleButton {
                 text: "Unsubscribe forum"
@@ -43,6 +45,9 @@ Rectangle {
                 text: "Ok"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
+                    selectedforum.isAuthenticated = authentication.checked
+                    selectedforum.username = authentication.username
+                    selectedforum.password = authentication.password
                     siilihaimobile.applyGroupSubscriptions()
                     forumSettingsDialog.topItem = false
                 }

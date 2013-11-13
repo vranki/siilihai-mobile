@@ -1,10 +1,7 @@
 import QtQuick 2.0
 import "widgets"
 
-Rectangle {
-    width: parent.width
-    height: parent.height
-    color: "black"
+SimpleDialog {
     y: errormessages.length ? 0 : parent.height
     Behavior on y { SmoothedAnimation { velocity: 2500; easing.type: Easing.InOutQuad  } }
     ListView {

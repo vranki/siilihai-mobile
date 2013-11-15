@@ -10,8 +10,8 @@ SimpleDialog {
         spacing: 15
         header: Column {
             width: parent.width
+            height: childrenRect.height
             spacing: 10
-
             Text {
                 text: count > 0 ? "Subscribe to a forum" : "Getting forum list.."
                 color: "white"

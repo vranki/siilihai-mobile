@@ -13,7 +13,7 @@ Rectangle {
     property string color_b_bg: "black"
     property string color_b_text: "white"
 
-    property int headerPointSize: 42
+    property int headerPointSize: 32
     property int largePointSize: 16
 
     width: 600

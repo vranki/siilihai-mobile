@@ -90,6 +90,8 @@ private:
     bool haltRequested;
     ForumSubscription *newForum; // the one being subscribed
     ForumProbe probe;
+    // True if user just added a forum.
+    bool forumWasSubscribedByUser;
 };
 
 #endif // SIILIHAIMOBILE_H

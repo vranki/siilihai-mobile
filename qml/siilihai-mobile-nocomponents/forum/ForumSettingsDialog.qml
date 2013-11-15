@@ -13,9 +13,10 @@ SimpleDialog {
             width: parent.width
             spacing: 25
             Text {
-                font.pointSize: 20
-                color: "white"
+                font.pointSize: headerPointSize
+                color: color_b_text
                 text: topItem && selectedforum ? selectedforum.alias : ""
+
             }
             ListView {
                 width: parent.width
@@ -23,6 +24,11 @@ SimpleDialog {
                 interactive: false
                 spacing: 10
                 model: subscribeGroupList
+                header: Text {
+                    font.pointSize: largePointSize
+                    color: color_b_text
+                    text: "Group subscriptions"
+                }
                 delegate: GroupSubscriptionButton { }
             }
             UserPassForm {

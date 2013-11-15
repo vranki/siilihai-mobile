@@ -14,7 +14,7 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     ClientLogic(parent), qQuickView(view), currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
-    probe(0, protocol) {
+    probe(0, protocol), forumWasSubscribedByUser(false) {
     if(!view->rootContext())  {
         closeUi();
         return;
@@ -123,7 +123,8 @@ void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
 
 void SiilihaiMobile::groupListChanged(ForumSubscription *sub) {
     qDebug() << Q_FUNC_INFO << sub->toString();
-    if(currentSub == sub || !currentSub) {
+    // Show subscribe groups after subbing a new forum
+    if(forumWasSubscribedByUser && (currentSub == sub || !currentSub)) {
         selectForum(sub->forumId());
         showSubscribeGroups();
     }
@@ -269,8 +270,10 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
     }
     newForum->setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
     newForum->setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
-
+    forumWasSubscribedByUser=true;
     forumAdded(newForum);
+    Q_ASSERT(forumDatabase.contains(newForum->forumId()));
+    selectForum(newForum->forumId());
     deleteNewForum();
 }
 
@@ -284,6 +287,7 @@ void SiilihaiMobile::showSubscribeGroups() {
     }
     qQuickView->rootContext()->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
     setObjectProperty("forumSettingsDialog", "topItem", "true");
+    forumWasSubscribedByUser=true;
 }
 
 void SiilihaiMobile::applyGroupSubscriptions() {
@@ -415,6 +419,13 @@ void SiilihaiMobile::selectForum(int id) {
 
         updateCurrentGroupModel();
         emit selectedForumChanged(currentSub ? currentSub->forumId() : 0);
+        if(currentSub) { // Show subscribe groups if none are subbed
+            int subscribedGroups = 0;
+            foreach(ForumGroup *grp, currentSub->values()) {
+                if(grp->isSubscribed()) subscribedGroups++;
+            }
+            if(!subscribedGroups) showSubscribeGroups();
+        }
     }
 }
 

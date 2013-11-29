@@ -15,7 +15,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else
-    viewer.setMainQmlFile("../siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
+    //    viewer.setMainQmlFile("../siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
+    viewer.setMainQmlFile("/usr/share/siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
     // viewer.setSource(QUrl("qrc:/qml/siilihai-mobile-nocomponents/main.qml"));
 #endif
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

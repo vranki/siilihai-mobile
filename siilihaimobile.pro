@@ -1,17 +1,6 @@
-# Add more folders to ship with the application, here
-#folder_01.source = qml/siilihai-mobile
-#folder_01.target = qml
-#DEPLOYMENTFOLDERS = folder_01
-
 TARGET=siilihai-mobile
-
+CONFIG += sailfishapp
 QT += core quick xml network
-
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
-
-QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
-QMAKE_LFLAGS += -pie -rdynamic
 
 # Always on
 CONFIG += with_lib
@@ -39,28 +28,18 @@ CONFIG(with_lib) {
     LIBS += -lsiilihai
 }
 
-#DEFINES += use_components
-
-# Running without components is very WIP
-CONFIG(use_components) {
-DEFINES += use_components
-}
-
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
-    siilihaimobile.cpp
+SOURCES += main.cpp siilihaimobile.cpp
 
+HEADERS += siilihaimobile.h
 
-QML_FILES.source = qml
-QML_FILES.target = .
-#DEPLOYMENTFOLDERS += QML_FILES
-
-HEADERS += \
-    siilihaimobile.h
+OTHER_FILES += \
+    rpm/siilihai-mobile.spec \
+    rpm/siilihai-mobile.yaml \
+    siilihai-mobile.desktop
 
 OTHER_FILES += debian/rules \
                debian/control\
-               *.desktop \
     android/AndroidManifest.xml \
     android/res/values-ja/strings.xml \
     android/res/values-pt-rBR/strings.xml \
@@ -127,25 +106,25 @@ OTHER_FILES += debian/rules \
     android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java
 
-desktops.files = siilihai-mobile.desktop
-desktops.path = /usr/share/applications
+#desktops.files = siilihai-mobile.desktop
+#desktops.path = /usr/share/applications
 
-icons.files = siilihai-mobile.svg
-icons.path = /usr/share/icons/hicolor/scalable/apps
+#icons.files = siilihai-mobile.svg
+#icons.path = /usr/share/icons/hicolor/scalable/apps
 
-INSTALLS += desktops icons
+#INSTALLS += desktops icons
 
-OTHER_FILES += qml/siilihai-mobile/* qml/siilihai-mobile-nocomponents/*
+#OTHER_FILES += qml/siilihai-mobile/* qml/siilihai-mobile-nocomponents/*
 
-OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop debian/changelog
+#OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop debian/changelog
 
-OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
+#OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
 
-OTHER_FILES += desktops.files
+#OTHER_FILES += desktops.files
 
 QMAKE_CLEAN += *.o
 
-RESOURCES += siilihai-mobile.qrc
+#RESOURCES += siilihai-mobile.qrc
 
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)

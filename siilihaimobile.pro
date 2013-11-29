@@ -123,7 +123,9 @@ OTHER_FILES += debian/rules \
     qml/siilihai-mobile-nocomponents/CredentialsDialog.qml \
     qml/siilihai-mobile-nocomponents/UserPassForm.qml \
     qml/siilihai-mobile-nocomponents/SimpleDialog.qml \
-    qml/siilihai-mobile-nocomponents/SettingsDialog.qml
+    qml/siilihai-mobile-nocomponents/SettingsDialog.qml \
+    android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
+    android/src/org/qtproject/qt5/android/bindings/QtActivity.java
 
 desktops.files = siilihai-mobile.desktop
 desktops.path = /usr/share/applications

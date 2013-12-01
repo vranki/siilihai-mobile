@@ -1,6 +1,6 @@
 TARGET=siilihai-mobile
 CONFIG += sailfishapp
-QT += core quick xml network
+QT += core quick xml network svg
 
 # Always on
 CONFIG += with_lib
@@ -73,6 +73,8 @@ OTHER_FILES += debian/rules \
     android/src/org/kde/necessitas/ministro/IMinistro.aidl \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/version.xml \
+    qml/siilihai-mobile-nocomponents/gfx/* \
+    qml/siilihai-mobile-nocomponents/main.qml \
     qml/siilihai-mobile-nocomponents/Toolbar.qml \
     qml/siilihai-mobile-nocomponents/ForumListView.qml \
     qml/siilihai-mobile-nocomponents/ForumButton.qml \

@@ -5,6 +5,7 @@ TextEdit {
     font.pointSize: 15
     width: parent.width * 0.9
     anchors.horizontalCenter: parent.horizontalCenter
+    focus: false
     Rectangle {
         anchors.fill: parent
         color: "yellow"

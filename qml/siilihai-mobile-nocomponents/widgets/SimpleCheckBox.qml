@@ -6,15 +6,28 @@ SimpleButton {
     property bool checked: false
     height: 40
     anchors.horizontalCenter: parent.horizontalCenter
-    Text {
-        text: "✓"
-        color: "white"
+    outline: false
+    centerText: false
+
+    Rectangle {
+        height: parent.height / 2
+        width: height
+        color: "transparent"
+        border.color: buttonColor
+        border.width: 1
         anchors.left: parent.left
         anchors.leftMargin: 10
-        font.pointSize: 30
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: checked
+        anchors.top: parent.top
+        anchors.topMargin: 10
         z: 10
+        Text {
+            text: "✓"
+            color: buttonColor
+            font.pointSize: 20
+            visible: checked
+            anchors.centerIn: parent
+        }
     }
+
     onClicked: checked = !checked
 }

@@ -6,6 +6,7 @@ SimpleDialog {
     property int subscribeForumId: 0
     objectName: "subscribeForumDialog"
     ListView {
+        id: subscribeList
         anchors.fill: parent
         spacing: 15
         header: Column {
@@ -13,9 +14,9 @@ SimpleDialog {
             height: childrenRect.height
             spacing: 10
             Text {
-                text: count > 0 ? "Subscribe to a forum" : "Getting forum list.."
+                text: subscribeList.count ? "Subscribe to a forum" : "Getting forum list.."
                 color: "white"
-                font.pointSize: 25
+                font.pointSize: headerPointSize
                 width: parent.width
             }
             SubscribeCustomButton {}

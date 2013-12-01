@@ -11,6 +11,8 @@ Description: |
 Configure: none
 Builder: qtc5
 PkgConfigBR:
+- Qt5Xml
+- Qt5Svg
 - Qt5Core
 - Qt5Qml
 - Qt5Quick

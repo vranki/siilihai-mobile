@@ -72,9 +72,8 @@ Rectangle {
         anchors.right: parent.right
         text: uibutton.rightText
         color: text !== "0" ? color1 : "#bdbdee"
-        font.pointSize: uiButtonHeight *0.7
+        font.pixelSize: uiButtonHeight * 0.7
     }
-
 
     MouseArea {
         anchors.fill: parent

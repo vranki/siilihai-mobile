@@ -6,14 +6,14 @@ SimpleCheckBox {
     text: displayName
     checked: isSubscribed
     clip: true
+    boldText: checked
     Text {
         text: hierarchy
         color: color1
-        font.pointSize: 8
+        font.pointSize: smallPointSize
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 50
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 3
     }
     onClicked: isSubscribed = !isSubscribed
 }

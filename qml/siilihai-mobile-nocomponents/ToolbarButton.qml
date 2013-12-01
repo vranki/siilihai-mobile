@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
-    property string text: "?"
+    property string image: ""
     signal clicked
 
     color: "white"
@@ -9,10 +9,9 @@ Rectangle {
     width: height
     radius: 5
     scale: 0.9
-    Text {
+    Image {
         anchors.centerIn: parent
-        text: parent.text
-        font.pixelSize: parent.height
+        source: parent.image
     }
     MouseArea {
         id: mousearea

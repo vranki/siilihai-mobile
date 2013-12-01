@@ -15,9 +15,8 @@ Rectangle {
 
     property int headerPointSize: 32
     property int largePointSize: 16
+    property int smallPointSize: 10
 
-    width: 600
-    height: 1024
     color: color_a_bg
 
     ForumListView {

@@ -15,7 +15,7 @@ SimpleButton {
         font.pointSize: 15
     }
     anchors.horizontalCenter: parent.horizontalCenter
-    height: 32 + (isSelectedForum ? forumDetails.height + 20 : 0)
+    height: 42 + (isSelectedForum ? forumDetails.height + 20 : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     onClicked: {
         enterUrl = false

@@ -37,12 +37,12 @@ SimpleDialog {
                 font.pointSize: largePointSize
                 wrapMode: Text.WordWrap
                 color: "white"
-                width: parent.width
+                width: parent.width*0.9
             }
             Text {
                 id: loginError
                 color: "red"
-                font.pointSize: 12
+                font.pointSize: largePointSize
                 visible: text.length > 0
                 width: parent.width
                 wrapMode: Text.Wrap
@@ -81,4 +81,6 @@ SimpleDialog {
             loginError.text = "Login failed - check username & password"
         }
     }
+
+    onTopItemChanged: Qt.inputMethod.hide();
 }

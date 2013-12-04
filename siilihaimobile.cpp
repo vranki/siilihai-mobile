@@ -502,8 +502,8 @@ bool SiilihaiMobile::eventFilter(QObject *object, QEvent *event) {
      qDebug() << Q_FUNC_INFO << event->type();
      */
     if (event->type() == QEvent::ApplicationDeactivate ) {
-        qDebug() << Q_FUNC_INFO << "ApplicationDeactivate EVENT!! Halting!";
-        haltSiilihai();
+        qDebug() << Q_FUNC_INFO << "ApplicationDeactivate EVENT!!";
+//        haltSiilihai();
         return true;
     }
     return false;

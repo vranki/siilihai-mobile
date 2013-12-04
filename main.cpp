@@ -14,6 +14,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QtQuick2ApplicationViewer viewer;
     SiilihaiMobile shm(0, &viewer);
     app.installEventFilter(&shm);
+    app.setQuitOnLastWindowClosed(false);
+    app.connect(&app, SIGNAL(aboutToQuit()), &shm, SLOT(aboutToQuit()));
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else
@@ -37,10 +39,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.showFullScreen();
     shm.launchSiilihai(false);
     int ret = app.exec();
-    viewer.setSource(QUrl("")); // Otherwise things may crash
-
     // Ugly hack to make sure Siilihai quits graceously after swipe close
     qDebug() << Q_FUNC_INFO << "exec() exited";
+    viewer.setSource(QUrl("")); // Otherwise things may crash
+    viewer.hide();
     if(!shm.isHaltRequested()) {
         qDebug() << Q_FUNC_INFO << "halt NOT requested yet - forcing halt";
         shm.haltSiilihai();

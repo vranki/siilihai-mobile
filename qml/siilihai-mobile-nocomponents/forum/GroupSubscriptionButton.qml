@@ -7,6 +7,7 @@ SimpleCheckBox {
     checked: isSubscribed
     clip: true
     boldText: checked
+    height: tallButtonHeight
     Text {
         text: hierarchy
         color: color1

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "forum"
 import "account"
 
-Rectangle {
+Image {
     property string color1: "#7d7dc0"
     property string color2: "#ffd884"
     property string colorDark: "#003e5e"
@@ -17,7 +17,11 @@ Rectangle {
     property int largePointSize: 16
     property int smallPointSize: 10
 
-    color: color_a_bg
+    property int defaultButtonHeight: 32
+    property int tallButtonHeight: 42
+
+    source: "gfx/backbround-bright.png"
+    fillMode: Image.Tile
 
     ForumListView {
         id: forumListView

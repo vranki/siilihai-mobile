@@ -17,6 +17,7 @@ ListView {
             height: width
             text: "+ Subscribe"
             buttonColor: "gray"
+            bgColor: "white"
             onClicked: siilihaimobile.subscribeForum()
         }
     }

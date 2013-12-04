@@ -1,9 +1,8 @@
 import QtQuick 2.0
 
-Rectangle {
+Item {
     width: parent.width
     height: 80
-    color: "black"
     Row {
         anchors.fill: parent
         ToolbarButton {
@@ -47,11 +46,11 @@ Rectangle {
                 scrollView.contentY = 0
                 scrollView.returnToBounds()
             }
-        }/*
+        }
         ToolbarButton {
             text: "R"
             onClicked: siilihaimobile.reloadUi()
-        }*/
+        }
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
             onClicked: settingsDialog.topItem = true

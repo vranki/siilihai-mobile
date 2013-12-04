@@ -23,27 +23,27 @@ Column {
     }
     Text {
         text: "Username"
-        color: "white"
+        color: color_b_text
         font.pointSize: 15
-        opacity: check.checked ? 1 : 0.5
+        opacity: check.checked ? 1 : 0.3
     }
     SimpleTextEdit {
         id: username
         focus: true
         inputMethodHints: Qt.ImhNoAutoUppercase
-        opacity: check.checked ? 1 : 0.5
+        opacity: check.checked ? 1 : 0.3
         enabled: check.checked
     }
     Text {
         text: "Password"
-        color: "white"
+        color: color_b_text
         font.pointSize: 15
-        opacity: check.checked ? 1 : 0.5
+        opacity: check.checked ? 1 : 0.3
     }
     SimpleTextEdit {
         id: password
         inputMethodHints: Qt.ImhHiddenText | Qt.ImhNoAutoUppercase
-        opacity: check.checked ? 1 : 0.5
+        opacity: check.checked ? 1 : 0.3
         enabled: check.checked
     }
     function reset() {

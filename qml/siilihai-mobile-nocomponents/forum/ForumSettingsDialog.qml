@@ -20,7 +20,7 @@ SimpleDialog {
             }
             ListView {
                 width: parent.width
-                height: childrenRect.height
+                height: count * tallButtonHeight + 100 // Ugly
                 interactive: false
                 spacing: 10
                 model: subscribeGroupList
@@ -58,6 +58,7 @@ SimpleDialog {
                     forumSettingsDialog.topItem = false
                 }
             }
+            Item {width: 1; height: 50} // Spacer
         }
     }
 }

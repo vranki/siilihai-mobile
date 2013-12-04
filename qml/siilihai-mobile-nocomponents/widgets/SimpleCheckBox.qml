@@ -4,7 +4,6 @@ import ".."
 SimpleButton {
     property string text: ""
     property bool checked: false
-    height: 40
     anchors.horizontalCenter: parent.horizontalCenter
     outline: false
     centerText: false

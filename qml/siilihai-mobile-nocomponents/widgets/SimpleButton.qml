@@ -6,15 +6,16 @@ Rectangle {
     property bool outline: true
     property bool centerText: true
     property string buttonColor: "white"
+    property string bgColor: "transparent"
     property bool boldText: false
     signal clicked
     clip: true
     radius: 10
-    color: "transparent"
+    color: bgColor
     border.color: outline ? buttonColor : "transparent"
     border.width: 2
     width: parent.width * 0.8
-    height: 32
+    height: defaultButtonHeight
     opacity: enabled ? 1 : 0.5
     Text {
         anchors.verticalCenter: parent.verticalCenter

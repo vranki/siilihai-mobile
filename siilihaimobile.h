@@ -23,6 +23,7 @@ public:
     QString selectedGroupId() const;
     QString selectedThreadId() const;
     void setContextProperties();
+    bool eventFilter(QObject *object, QEvent *event);
 signals:
     void selectedForumChanged(int arg);
     void selectedGroupIdChanged(QString arg);

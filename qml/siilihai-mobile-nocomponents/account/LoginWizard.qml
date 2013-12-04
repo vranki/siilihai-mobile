@@ -14,9 +14,10 @@ SimpleDialog {
         opacity: 0.5
         visible: topItem
         NumberAnimation on x {
+            running: true
             from: -parent.width
             to: loginWizard.width
-            duration: 60000
+            duration: 40000
             loops: Animation.Infinite
             onStopped: restart()
         }

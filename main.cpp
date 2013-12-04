@@ -13,6 +13,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Siilihai-mobile");
     QtQuick2ApplicationViewer viewer;
     SiilihaiMobile shm(0, &viewer);
+    app.installEventFilter(&shm);
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else

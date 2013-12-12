@@ -13,9 +13,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Siilihai-mobile");
     QtQuick2ApplicationViewer viewer;
     SiilihaiMobile shm(0, &viewer);
-    app.installEventFilter(&shm);
-    app.setQuitOnLastWindowClosed(false);
-    app.connect(&app, SIGNAL(aboutToQuit()), &shm, SLOT(aboutToQuit()));
+
+    app.setQuitOnLastWindowClosed(false); // This does NOT work in SDK currently
+
+    app.connect(&app, SIGNAL(lastWindowClosed()), &shm, SLOT(haltSiilihai()));
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else
@@ -44,11 +45,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.setSource(QUrl("")); // Otherwise things may crash
     viewer.hide();
     if(!shm.isHaltRequested()) {
-        qDebug() << Q_FUNC_INFO << "halt NOT requested yet - forcing halt";
+        qDebug() << Q_FUNC_INFO << "halt NOT requested yet - forcing halt. This will probably crash on Sailfish";
         shm.haltSiilihai();
         app.exec(); // Re-start Qt main loop
+        qDebug() << Q_FUNC_INFO << "Second main loop run exited - all should be good now.";
     } else {
-        qDebug() << Q_FUNC_INFO << "halt ok";
+        qDebug() << Q_FUNC_INFO << "Halt ok";
     }
     return ret;
 }

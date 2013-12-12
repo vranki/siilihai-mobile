@@ -491,20 +491,3 @@ void SiilihaiMobile::reloadUiReally() {
     qQuickView->setSource(src);
     setContextProperties();
 }
-
-// This is a terrible hack to do the end sync cleanly.
-// It catches ApplicationDeactivate event from the main gui class
-// and prevents it.
-bool SiilihaiMobile::eventFilter(QObject *object, QEvent *event) {
-    /*
-     int et = event->type();
-     if(et == 1 || et == 43 || et == 68 || et == 71) return false;
-     qDebug() << Q_FUNC_INFO << event->type();
-     */
-    if (event->type() == QEvent::ApplicationDeactivate ) {
-        qDebug() << Q_FUNC_INFO << "ApplicationDeactivate EVENT!!";
-//        haltSiilihai();
-        return true;
-    }
-    return false;
-}

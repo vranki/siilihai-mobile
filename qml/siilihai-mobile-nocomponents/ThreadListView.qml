@@ -21,4 +21,5 @@ ListView {
         anchors.fill: parent
         z: -10
     }
+    clip: true
 }

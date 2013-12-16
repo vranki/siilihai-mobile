@@ -46,11 +46,11 @@ Item {
                 scrollView.contentY = 0
                 scrollView.returnToBounds()
             }
-        }
+        }/*
         ToolbarButton {
             text: "R"
             onClicked: siilihaimobile.reloadUi()
-        }
+        }*/
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
             onClicked: settingsDialog.topItem = true

@@ -378,6 +378,7 @@ void SiilihaiMobile::showMoreMessages() {
 }
 
 void SiilihaiMobile::haltSiilihai() {
+    qDebug() << Q_FUNC_INFO;
     if(!haltRequested) {
         haltRequested = true;
         /*

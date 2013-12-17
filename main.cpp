@@ -14,9 +14,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QtQuick2ApplicationViewer viewer;
     SiilihaiMobile shm(0, &viewer);
 
-    app.setQuitOnLastWindowClosed(false); // This does NOT work in SDK currently
+    app.setQuitOnLastWindowClosed(false);
+    app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
 
-    app.connect(&app, SIGNAL(lastWindowClosed()), &shm, SLOT(haltSiilihai()));
 #ifdef use_components
     viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
 #else

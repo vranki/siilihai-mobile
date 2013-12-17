@@ -6,7 +6,7 @@ ButtonWithUnreadCount {
     text: alias
     rightText: unreadCount
     icon: faviconUrl.length > 0 ? faviconUrl : undefined
-    iconEmblems: (beingSynced ? "⇄" : "") + (beingUpdated ? "⟲" : "")
+    iconEmblems: (beingSynced ? "S" : "") + (beingUpdated ? "U" : "")
     onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectedForumId = forumId
     height: uiButtonHeight + (isSelectedForum ? groupListView.height + settingsButton.height : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }

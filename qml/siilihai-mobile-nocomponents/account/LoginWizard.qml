@@ -15,9 +15,9 @@ SimpleDialog {
         visible: topItem
         NumberAnimation on x {
             running: true
-            from: -parent.width
+            from: -loginWizard.width
             to: loginWizard.width
-            duration: 40000
+            duration: 20000
             loops: Animation.Infinite
             onStopped: restart()
         }
@@ -34,8 +34,15 @@ SimpleDialog {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 30
             Text {
-                text: "Welcome to Siilihai, the no-nonsense open source web forum reader. You need a Siilihai account to use synchronization between devices."
+                text: "Welcome to Siilihai, the no-nonsense open source web forum reader"
                 font.pointSize: largePointSize
+                wrapMode: Text.WordWrap
+                color: "white"
+                width: parent.width*0.9
+            }
+            Text {
+                text: "You need a Siilihai account to use synchronization between devices"
+                font.pointSize: smallPointSize
                 wrapMode: Text.WordWrap
                 color: "white"
                 width: parent.width*0.9

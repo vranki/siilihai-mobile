@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+X-Nemo-Application-Type=no-invoker
 Name=Siilihai
-Icon=/usr/share/icons/hicolor/90x90/apps/siilihai-mobile.png
+Icon=siilihai-mobile
 Exec=siilihai-mobile

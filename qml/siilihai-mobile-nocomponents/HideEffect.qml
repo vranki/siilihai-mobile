@@ -1,6 +1,11 @@
 import QtQuick 2.0
-import QtGraphicalEffects 1.0
+// Disabled until QGE are allowed
+//import QtGraphicalEffects 1.0
 
+Item {
+
+}
+/*
 RecursiveBlur {
     anchors.fill: parent
     source: parent
@@ -10,3 +15,4 @@ RecursiveBlur {
     visible: opacity > 0
     Behavior on opacity { SmoothedAnimation { velocity: 5 } }
 }
+*/

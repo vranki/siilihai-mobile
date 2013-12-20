@@ -17,15 +17,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setQuitOnLastWindowClosed(false);
     app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
 
-#ifdef use_components
-    viewer.setMainQmlFile(QStringLiteral("qrc:/qml/siilihai-mobile/main.qml"));
-#else
     // Find the main.qml to use..
     QFile mainQml("../siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
     if(mainQml.exists()) {
         viewer.setMainQmlFile(mainQml.fileName());
     } else {
-        mainQml.setFileName("/usr/share/siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
+        mainQml.setFileName("/usr/share/harbour-siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
         if(mainQml.exists()) {
             viewer.setMainQmlFile(mainQml.fileName());
         } else {
@@ -33,7 +30,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
             return -1;
         }
     }
-#endif
+
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     shm.setContextProperties(); // Root ctx may change when loading, so redo this
     //viewer.showExpanded();

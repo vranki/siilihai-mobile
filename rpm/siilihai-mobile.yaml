@@ -1,4 +1,4 @@
-Name: siilihai-mobile
+Name: harbour-siilihai-mobile
 Summary: Siilihai
 Version: 2.0.1
 Release: 1
@@ -21,11 +21,10 @@ Requires:
 - qt5-plugin-imageformat-jpeg
 - qt5-plugin-imageformat-ico
 - qt5-qtsvg-plugin-imageformat-svg
-- qt5-qtgraphicaleffects
 Files:
 - /usr/share/icons/hicolor/86x86/apps
 - /usr/share/applications
-- /usr/share/siilihai-mobile
+- /usr/share/harbour-siilihai-mobile
 - /usr/bin
 - '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
 - '%{_datadir}/applications/%{name}.desktop'

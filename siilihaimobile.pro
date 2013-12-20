@@ -1,4 +1,4 @@
-TARGET=siilihai-mobile
+TARGET=harbour-siilihai-mobile
 CONFIG += sailfishapp
 QT += core quick xml network svg
 
@@ -34,9 +34,9 @@ SOURCES += main.cpp siilihaimobile.cpp
 HEADERS += siilihaimobile.h
 
 OTHER_FILES += \
-    rpm/siilihai-mobile.spec \
-    rpm/siilihai-mobile.yaml \
-    siilihai-mobile.desktop
+    rpm/harbour-siilihai-mobile.spec \
+    rpm/harbour-siilihai-mobile.yaml \
+    harbour-siilihai-mobile.desktop
 
 OTHER_FILES += debian/rules \
                debian/control\
@@ -125,8 +125,6 @@ OTHER_FILES += debian/rules \
 #OTHER_FILES += desktops.files
 
 QMAKE_CLEAN += *.o
-
-#RESOURCES += siilihai-mobile.qrc
 
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)

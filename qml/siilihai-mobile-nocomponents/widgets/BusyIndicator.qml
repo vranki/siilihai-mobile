@@ -11,7 +11,7 @@ Rectangle {
         height: parent.height
         width: height*2
         SequentialAnimation on x {
-             running: enabled
+             running: enabled && Qt.application.active
              loops: Animation.Infinite
              NumberAnimation { from: 0; to: busyindicator.width; duration: 500; easing.type: Easing.InOutQuad }
              NumberAnimation { from: busyindicator.width; to: 0; duration: 500; easing.type: Easing.InOutQuad }

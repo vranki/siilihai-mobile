@@ -24,10 +24,10 @@ ListView {
     footer: Column {
         width: parent.width * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 10
+        spacing: 20
         Item {
             width: 1
-            height: 1
+            height: 50
         }
         ButtonWithUnreadCount {
             text: "Download more messages"
@@ -44,6 +44,11 @@ ListView {
             onClicked: markAll(false)
             icon: "gfx/Gnome-mail-mark-unread.svg"
         }
+        Item {
+            width: 1
+            height: toolbar.height
+        }
+
     }
     ButtonWithUnreadCount {
         anchors.fill: parent

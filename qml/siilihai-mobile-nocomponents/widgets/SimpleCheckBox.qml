@@ -2,7 +2,6 @@ import QtQuick 2.0
 import ".."
 
 SimpleButton {
-    property string text: ""
     property bool checked: false
     anchors.horizontalCenter: parent.horizontalCenter
     outline: false

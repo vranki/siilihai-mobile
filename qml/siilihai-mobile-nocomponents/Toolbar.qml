@@ -3,6 +3,11 @@ import QtQuick 2.0
 Item {
     width: parent.width
     height: 80
+    Rectangle {
+        color: "black"
+        opacity: 0.5
+        anchors.fill: parent
+    }
     Row {
         anchors.fill: parent
         ToolbarButton {
@@ -23,6 +28,7 @@ Item {
         ToolbarButton {
             image: "gfx/Gnome-view-refresh.svg"
             onClicked: siilihaimobile.updateClicked()
+            visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
         }
         ToolbarButton {
             id: scrollDownButton
@@ -54,6 +60,7 @@ Item {
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
             onClicked: settingsDialog.topItem = true
+            visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
         }
     }
 }

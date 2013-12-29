@@ -20,8 +20,10 @@ SimpleDialog {
                 width: parent.width
             }
             SubscribeCustomButton {}
+            Item {width: 1;height: 50}
         }
         model: forumList
         delegate: SubscribeForumButton { }
+        footer: Item {width: 1;height: toolbar.height}
     }
 }

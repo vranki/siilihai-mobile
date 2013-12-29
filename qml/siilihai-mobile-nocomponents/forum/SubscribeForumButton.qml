@@ -18,6 +18,7 @@ SimpleButton {
     height: 42 + (isSelectedForum ? forumDetails.height + 20 : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     onClicked: {
+        if(isSelectedForum) return
         enterUrl = false
         subscribeForumDialog.subscribeForumId = forumId
         siilihaimobile.getForumDetails(modelData.forumId)

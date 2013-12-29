@@ -10,7 +10,7 @@ SimpleDialog {
             color: color_b_text
             font.pointSize: headerPointSize
         }
-        SimpleButton {
+        ConfirmationButton {
             text: "Unregister this copy of Siilihai"
             onClicked: siilihaimobile.unregisterSiilihai()
             anchors.horizontalCenter: parent.horizontalCenter

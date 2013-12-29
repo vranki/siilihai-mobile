@@ -16,7 +16,7 @@ ListView {
         icon: "gfx/Gnome-folder-open.svg"
     }
     delegate: ThreadButton {}
-    footer: Item {width: 1; height: 50}
+    footer: Item { width: 1; height: toolbar.height}
     ButtonWithUnreadCount {
         anchors.fill: parent
         z: -10

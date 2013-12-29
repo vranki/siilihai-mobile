@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "forum"
 import "account"
 
-Image {
+Item {
     property string color1: "#7d7dc0"
     property string color2: "#ffd884"
     property string colorDark: "#003e5e"
@@ -19,22 +19,26 @@ Image {
 
     property int defaultButtonHeight: 32
     property int tallButtonHeight: 42
-
-    source: "gfx/backbround-bright.png"
-    fillMode: Image.Tile
-
+    Image {
+        source: "gfx/backbround-bright.png"
+        fillMode: Image.Tile
+        width: parent.width
+        height: parent.height*2 + forumListView.height
+        y: -parent.height - forumListView.contentY
+    }
     ForumListView {
         id: forumListView
         property bool topItem: !threadListView.topItem && !messageListView.topItem
         width: parent.width * 0.98
         height: parent.height - toolbar.height
+        anchors.horizontalCenter: parent.horizontalCenter
         HideEffect {}
     }
     ThreadListView {
         id: threadListView
         property bool topItem: siilihaimobile.selectedGroupId
         width: parent.width
-        height: parent.height - toolbar.height
+        height: parent.height
         x: topItem ? 0 : parent.width
         Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         HideEffect {}
@@ -43,7 +47,7 @@ Image {
         id: messageListView
         property bool topItem: siilihaimobile.selectedThreadId
         width: parent.width
-        height: parent.height - toolbar.height
+        height: parent.height
         x: topItem ? 0 : parent.width
         Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         HideEffect {}
@@ -51,7 +55,7 @@ Image {
     SubscribeForumDialog {
         id: subscribeForumDialog
         width: parent.width
-        height: parent.height - toolbar.height
+        height: parent.height
     }
 
     Toolbar {
@@ -72,4 +76,5 @@ Image {
     }
     CredentialsDialog {}
     MessageDialog {}
+    InactiveScreen {}
 }

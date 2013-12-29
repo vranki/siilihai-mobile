@@ -31,10 +31,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
     }
 
-    // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto); // @todo how to do this in Qt5?
     shm.setContextProperties(); // Root ctx may change when loading, so redo this
-    //viewer.showExpanded();
+#ifdef FULLSCREEN
     viewer.showFullScreen();
+#else
+    viewer.resize(540, 960);
+    viewer.show();
+#endif
     shm.launchSiilihai(false);
     int ret = app.exec();
     // Ugly hack to make sure Siilihai quits graceously after swipe close

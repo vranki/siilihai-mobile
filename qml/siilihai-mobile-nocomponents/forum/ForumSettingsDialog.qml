@@ -37,7 +37,7 @@ SimpleDialog {
                 username: selectedforum ? selectedforum.username : ""
                 password: selectedforum ? selectedforum.password : ""
             }
-            SimpleButton {
+            ConfirmationButton {
                 text: "Unsubscribe forum"
                 width: parent.width / 3
                 buttonColor: "red"

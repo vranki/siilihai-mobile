@@ -36,7 +36,9 @@ HEADERS += siilihaimobile.h
 OTHER_FILES += \
     rpm/harbour-siilihai-mobile.spec \
     rpm/harbour-siilihai-mobile.yaml \
-    harbour-siilihai-mobile.desktop
+    harbour-siilihai-mobile.desktop \
+    qml/siilihai-mobile-nocomponents/InactiveScreen.qml \
+    qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml
 
 OTHER_FILES += debian/rules \
                debian/control\
@@ -108,6 +110,10 @@ OTHER_FILES += debian/rules \
     android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java
 
+
+android|nemo {
+    DEFINES += FULLSCREEN
+}
 #desktops.files = siilihai-mobile.desktop
 #desktops.path = /usr/share/applications
 

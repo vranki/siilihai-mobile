@@ -17,7 +17,7 @@ Column {
         text: questionText
         id: check
         checked: true
-        onCheckedChanged: if(!checked) { username.text = ""; password.text = "" }
+        onCheckedChanged: if(!checked) { username.text = ""; password.text = ""; hideVkb(); }
         width: parent.width
         visible: optional
     }

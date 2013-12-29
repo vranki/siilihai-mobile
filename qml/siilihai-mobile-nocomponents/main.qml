@@ -20,7 +20,7 @@ Item {
     property int defaultButtonHeight: 32
     property int tallButtonHeight: 42
     Image {
-        source: "gfx/backbround-bright.png"
+        source: "gfx/backbround-dark.png"
         fillMode: Image.Tile
         width: parent.width
         height: parent.height*2 + forumListView.height
@@ -42,6 +42,7 @@ Item {
         x: topItem ? 0 : parent.width
         Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         HideEffect {}
+        onTopItemChanged: hideVkb()
     }
     MessageListView {
         id: messageListView
@@ -51,6 +52,7 @@ Item {
         x: topItem ? 0 : parent.width
         Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         HideEffect {}
+        onTopItemChanged: hideVkb()
     }
     SubscribeForumDialog {
         id: subscribeForumDialog
@@ -77,4 +79,8 @@ Item {
     CredentialsDialog {}
     MessageDialog {}
     InactiveScreen {}
+
+    function hideVkb() {
+        Qt.inputMethod.hide();
+    }
 }

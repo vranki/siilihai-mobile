@@ -89,6 +89,4 @@ SimpleDialog {
             loginError.text = "Login failed - check username & password"
         }
     }
-
-    onTopItemChanged: Qt.inputMethod.hide();
 }

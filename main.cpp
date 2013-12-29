@@ -2,12 +2,14 @@
 
 #include <QQmlComponent>
 #include <QDebug>
+#include <QFile>
 #include "qtquick2applicationviewer.h"
 #include "siilihaimobile.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+//    Q_INIT_RESOURCE(resources);
     QCoreApplication::setOrganizationName("Siilihai");
     QCoreApplication::setOrganizationDomain("siilihai.com");
     QCoreApplication::setApplicationName("Siilihai-mobile");
@@ -18,19 +20,30 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
 
     // Find the main.qml to use..
-    QFile mainQml("../siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
-    if(mainQml.exists()) {
-        viewer.setMainQmlFile(mainQml.fileName());
-    } else {
-        mainQml.setFileName("/usr/share/harbour-siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml");
+#ifdef Q_OS_ANDROID
+    // On android the file.exists() returns false, although this works:
+    viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/main.qml");
+#else
+    // Search from a few known paths
+    QStringList mainFileAlternatives;
+    mainFileAlternatives << "../siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml"
+                         << "qml/siilihai-mobile-nocomponents/main.qml"
+                         << "/usr/share/harbour-siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml";
+
+    QFile mainQml;
+    foreach(QString fileName, mainFileAlternatives) {
+        mainQml.setFileName(fileName);
+        qDebug() << Q_FUNC_INFO << "File " << fileName << (mainQml.exists() ? " exists, using it" : " does not exist");
         if(mainQml.exists()) {
-            viewer.setMainQmlFile(mainQml.fileName());
-        } else {
-            qDebug() << Q_FUNC_INFO << "Cannot open main.qml!";
-            return -1;
+            viewer.setMainQmlFile(fileName);
+            break;
         }
     }
-
+    if(!mainQml.exists()) {
+        qDebug() << Q_FUNC_INFO << "Cannot open main.qml!";
+        return -1;
+    }
+#endif
     // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto); // @todo how to do this in Qt5?
     shm.setContextProperties(); // Root ctx may change when loading, so redo this
 #ifdef FULLSCREEN

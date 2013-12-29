@@ -6,8 +6,8 @@ Rectangle {
     visible: y > -height
     //source: "gfx/backbround-dark.png"
     //fillMode: Image.Tile
-    color: "black"
-    opacity: 0.9
+    color: color_b_bg
+    opacity: 0.85
     width: parent.width
     height: parent.height
     Behavior on y { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
@@ -16,4 +16,5 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
     }
+    onTopItemChanged: hideVkb()
 }

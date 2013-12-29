@@ -2,6 +2,11 @@ TARGET=harbour-siilihai-mobile
 CONFIG += sailfishapp
 QT += core quick xml network svg
 
+# Required for android
+qmlfolder.source = qml/siilihai-mobile-nocomponents
+qmlfolder.target = qml
+DEPLOYMENTFOLDERS = qmlfolder
+
 # Always on
 CONFIG += with_lib
 
@@ -110,10 +115,10 @@ OTHER_FILES += debian/rules \
     android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java
 
-
 android|nemo {
     DEFINES += FULLSCREEN
 }
+
 #desktops.files = siilihai-mobile.desktop
 #desktops.path = /usr/share/applications
 
@@ -135,3 +140,5 @@ QMAKE_CLEAN += *.o
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

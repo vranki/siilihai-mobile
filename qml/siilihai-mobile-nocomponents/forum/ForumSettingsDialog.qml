@@ -57,6 +57,7 @@ SimpleDialog {
                     siilihaimobile.applyGroupSubscriptions()
                     forumSettingsDialog.topItem = false
                 }
+                Component.onCompleted: mainItem.backPressed.connect(clicked)
             }
             Item {width: 1; height: 50} // Spacer
         }

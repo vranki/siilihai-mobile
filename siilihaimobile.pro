@@ -2,10 +2,12 @@ TARGET=harbour-siilihai-mobile
 CONFIG += sailfishapp
 QT += core quick xml network svg
 
-# Required for android
-qmlfolder.source = qml/siilihai-mobile-nocomponents
-qmlfolder.target = qml
-DEPLOYMENTFOLDERS = qmlfolder
+android {
+    # Required for android
+    qmlfolder.source = qml/siilihai-mobile-nocomponents
+    qmlfolder.target = qml
+    DEPLOYMENTFOLDERS = qmlfolder
+}
 
 # Always on
 CONFIG += with_lib
@@ -39,8 +41,7 @@ SOURCES += main.cpp siilihaimobile.cpp
 HEADERS += siilihaimobile.h
 
 OTHER_FILES += \
-    rpm/harbour-siilihai-mobile.spec \
-    rpm/harbour-siilihai-mobile.yaml \
+    rpm/siilihai-mobile.yaml \
     harbour-siilihai-mobile.desktop \
     qml/siilihai-mobile-nocomponents/InactiveScreen.qml \
     qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml

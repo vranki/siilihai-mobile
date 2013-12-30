@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
+    id: simpleButton
     property string text: ""
     property bool enabled: true
     property bool outline: true
@@ -10,7 +11,7 @@ Rectangle {
     property bool boldText: false
     signal clicked
     clip: true
-    radius: 10
+    radius: 6
     color: bgColor
     border.color: outline ? buttonColor : "transparent"
     border.width: 2
@@ -29,5 +30,22 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: if(enabled) parent.clicked()
+    }
+    // Bg fill
+    Rectangle {
+        anchors.fill: parent
+        radius: parent.radius
+        gradient: Gradient {
+            GradientStop {
+                position: 0;
+                color: "transparent"
+            }
+            GradientStop {
+                position: 1;
+                color: simpleButton.border.color;
+            }
+        }
+        opacity: 0.3
+        z: -100
     }
 }

@@ -40,13 +40,22 @@ Rectangle {
             height: parent.height
             width: totalforums ? parent.width * ((totalforums - busyforums) / totalforums) : 0
             color: "white"
+            Behavior on width { SmoothedAnimation { velocity: 30 } }
+        }
+        Text {
+            anchors.centerIn: parent
+            font.pixelSize: parent.height / 3
+            text: "Updating.."
+            color: "white"
+            opacity: 0.5
         }
     }
 
     Timer {
         running: parent.visible
         repeat: true
-        onTriggered: {
+        triggeredOnStart: true
+        onTriggered:  {
             var busycount = 0
             for(var i=0;i<subscriptions.length;i++) {
                 if(subscriptions[i].beingUpdated || subscriptions[i].beingSynced || subscriptions[i].scheduledForUpdate) busycount++;

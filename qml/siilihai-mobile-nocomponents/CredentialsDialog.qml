@@ -33,5 +33,6 @@ SimpleDialog {
             siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
             upf.reset()
         }
+        Component.onCompleted: mainItem.backPressed.connect(clicked)
     }
 }

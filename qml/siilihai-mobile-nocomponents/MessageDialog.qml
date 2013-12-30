@@ -32,6 +32,7 @@ SimpleDialog {
                 anchors.centerIn: parent
                 text: "Ok"
                 onClicked: siilihaimobile.dismissMessages()
+                Component.onCompleted: mainItem.backPressed.connect(clicked)
             }
         }
 

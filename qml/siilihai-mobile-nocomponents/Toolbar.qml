@@ -24,6 +24,7 @@ Item {
                     siilihaimobile.selectedGroupId = ""
                 }
             }
+            Component.onCompleted: mainItem.backPressed.connect(clicked)
         }
         ToolbarButton {
             image: "gfx/Gnome-view-refresh.svg"

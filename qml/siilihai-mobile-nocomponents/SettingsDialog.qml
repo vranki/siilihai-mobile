@@ -23,6 +23,7 @@ SimpleDialog {
             text: "Close"
             onClicked: topItem = false
             anchors.horizontalCenter: parent.horizontalCenter
+            Component.onCompleted: mainItem.backPressed.connect(clicked)
         }
     }
 }

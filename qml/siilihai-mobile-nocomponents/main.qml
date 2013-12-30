@@ -3,6 +3,7 @@ import "forum"
 import "account"
 
 Item {
+    id: mainItem
     property string color1: "#7d7dc0"
     property string color2: "#ffd884"
     property string colorDark: "#003e5e"
@@ -19,6 +20,8 @@ Item {
 
     property int defaultButtonHeight: 32
     property int tallButtonHeight: 42
+    signal backPressed
+
     Image {
         source: "gfx/backbround-dark.png"
         fillMode: Image.Tile
@@ -80,7 +83,19 @@ Item {
     MessageDialog {}
     InactiveScreen {}
 
+    // Hide the virtual keyboard if it is open
     function hideVkb() {
         Qt.inputMethod.hide();
+    }
+
+    // Android back button handling
+    focus: true // important - otherwise we'll get no key events
+
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back) {
+            console.log("Back button captured - wunderbar !")
+            event.accepted = true
+            backPressed()
+        }
     }
 }

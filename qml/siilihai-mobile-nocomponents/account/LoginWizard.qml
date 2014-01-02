@@ -6,7 +6,7 @@ SimpleDialog {
     property bool useExitingAccount: false
     property bool registerAccount: false
     property bool busy: false
-    id: loginWizard
+
     objectName: "loginWizard"
     opacity: 1
     Image {

@@ -20,6 +20,10 @@ Item {
 
     property int defaultButtonHeight: 32
     property int tallButtonHeight: 42
+    // @todo more smartly
+    property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsDialog.topItem
+                                   && !messageDialog.topItem && !credentialsDialog.topItem && !forumSettingsDialog.topItem
+                                   && !subscribeForumDialog.topItem && !loginWizard.topItem
     signal backPressed
 
     Image {
@@ -69,6 +73,7 @@ Item {
     }
 
     LoginWizard {
+        id: loginWizard
         width: parent.width
         height: parent.height
     }
@@ -79,8 +84,8 @@ Item {
     SettingsDialog {
         id: settingsDialog
     }
-    CredentialsDialog {}
-    MessageDialog {}
+    CredentialsDialog { id: credentialsDialog }
+    MessageDialog { id: messageDialog }
     InactiveScreen {}
 
     // Hide the virtual keyboard if it is open
@@ -92,8 +97,8 @@ Item {
     focus: true // important - otherwise we'll get no key events
 
     Keys.onReleased: {
-        if (event.key === Qt.Key_Back) {
-            console.log("Back button captured - wunderbar !")
+        // Handle android back button. Quit if in main view, otherwise press back
+        if (event.key === Qt.Key_Back && !mainViewVisible) {
             event.accepted = true
             backPressed()
         }

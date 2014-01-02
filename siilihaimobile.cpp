@@ -11,6 +11,7 @@
 #include <siilihai/parser/forumparser.h>
 #include <siilihai/parser/forumsubscriptionparsed.h>
 #include <siilihai/tapatalk/forumsubscriptiontapatalk.h>
+#include <siilihai/siilihaisettings.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     ClientLogic(parent), qQuickView(view), currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
@@ -60,8 +61,7 @@ void SiilihaiMobile::closeUi() {
 }
 
 void SiilihaiMobile::showMainWindow() {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Settings at " << settings->fileName();
+    qDebug() << Q_FUNC_INFO << "Settings at " << settings->fileName();
     if(state() == SH_OFFLINE)
         showStatusMessage("Started in offline mode");
 }

@@ -55,6 +55,7 @@ Rectangle {
         running: parent.visible
         repeat: true
         triggeredOnStart: true
+        interval: busyforums ? 250 : 10000 // Interval could be even longer if there are no busy forums
         onTriggered:  {
             var busycount = 0
             for(var i=0;i<subscriptions.length;i++) {

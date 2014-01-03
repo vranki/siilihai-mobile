@@ -20,19 +20,18 @@ SimpleDialog {
             checked: true
             enabled: upf.checked
         }
-    }
-    SimpleButton {
-        id: closeButton
-        text: "Ok"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: {
-            topItem = false
-            forumAlias = ""
-            siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
-            upf.reset()
+        Item { width: 1; height: 20 }
+
+        SimpleButton {
+            id: closeButton
+            text: "Ok"
+            onClicked: {
+                topItem = false
+                forumAlias = ""
+                siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
+                upf.reset()
+            }
+            Component.onCompleted: mainItem.backPressed.connect(clicked)
         }
-        Component.onCompleted: mainItem.backPressed.connect(clicked)
     }
 }

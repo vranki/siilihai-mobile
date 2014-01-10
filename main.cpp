@@ -9,7 +9,6 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-//    Q_INIT_RESOURCE(resources);
     QCoreApplication::setOrganizationName("Siilihai");
     QCoreApplication::setOrganizationDomain("siilihai.com");
     QCoreApplication::setApplicationName("Siilihai-mobile");
@@ -17,7 +16,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     SiilihaiMobile shm(0, &viewer);
 
     app.setQuitOnLastWindowClosed(false);
-    app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
+
 
     // Find the main.qml to use..
 #ifdef Q_OS_ANDROID
@@ -52,6 +51,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.resize(540, 960);
     viewer.show();
 #endif
+
+    // This works on Sailfish, but not on desktop
+    app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
+
+    // These don't work anywhere
+    //shm.connect(&app, SIGNAL(lastWindowClosed()), &shm, SLOT(haltSiilihai()));
+    //shm.connect(&viewer, SIGNAL(destroyed()), &shm, SLOT(haltSiilihai()));
+
     shm.launchSiilihai(false);
     int ret = app.exec();
     // Ugly hack to make sure Siilihai quits graceously after swipe close

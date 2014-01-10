@@ -29,6 +29,7 @@ ButtonWithUnreadCount {
         opacity: shown ? 1 : 0
         Behavior on opacity { SmoothedAnimation { velocity: 1 } }
         width: height*2
+        height: uiButtonHeight*0.8
         buttonColor: "black"
         onClicked: if(shown) siilihaimobile.showSubscribeGroups()
         Image {

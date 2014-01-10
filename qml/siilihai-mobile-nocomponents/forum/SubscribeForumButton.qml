@@ -4,28 +4,31 @@ import "../widgets"
 
 SimpleButton {
     property bool isSelectedForum: subscribeForumDialog.subscribeForumId === forumId && !enterUrl
-    Text {
-        id: forumLabel
-        text: modelData.alias
-        color: "white"
-        anchors.left: favicon.right
-        anchors.leftMargin: 5
-        anchors.top: parent.top
-        anchors.topMargin: 5
-        font.pointSize: 15
-    }
     anchors.horizontalCenter: parent.horizontalCenter
-    height: 42 + (isSelectedForum ? forumDetails.height + 20 : 0)
+    height: tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
 
-    Image {
-        id: favicon
-        width: height
-        height: parent.height * 0.8
-        source: faviconUrl
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: parent.height - height + 1
+    Item {
+        id: topLine
+        width: parent.width
+        height: tallButtonHeight
+        Text {
+            text: modelData.alias
+            color: "white"
+            anchors.left: favicon.right
+            anchors.leftMargin: 5
+            font.pointSize: 15
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        Image {
+            id: favicon
+            width: height
+            height: tallButtonHeight * 0.8
+            source: faviconUrl
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: parent.height - height + 1
+        }
     }
 
     onClicked: {
@@ -40,7 +43,7 @@ SimpleButton {
         width: parent.width * 0.9
         anchors.horizontalCenter: parent.horizontalCenter
         visible: isSelectedForum
-        anchors.top: forumLabel.bottom
+        anchors.top: topLine.bottom
         anchors.topMargin: 10
         spacing: 10
         Text {

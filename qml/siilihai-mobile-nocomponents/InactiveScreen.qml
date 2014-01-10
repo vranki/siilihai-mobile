@@ -50,7 +50,13 @@ Rectangle {
             opacity: 0.5
         }
     }
-
+    Text {
+        text: "!"
+        font.pixelSize: parent.height *0.8
+        anchors.centerIn: parent
+        color: "white"
+        visible: messageDialog.topItem || credentialsDialog.topItem
+    }
     Timer {
         running: parent.visible
         repeat: true

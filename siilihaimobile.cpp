@@ -265,12 +265,13 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
     Q_ASSERT(newForum->forumId() == id);
 
     if(!username.isEmpty()) {
+        newForum->setAuthenticated(true);
         newForum->setUsername(username);
         newForum->setPassword(password);
     }
     newForum->setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
     newForum->setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
-    forumWasSubscribedByUser=true;
+    forumWasSubscribedByUser = true;
     forumAdded(newForum);
     Q_ASSERT(forumDatabase.contains(newForum->forumId()));
     selectForum(newForum->forumId());
@@ -290,6 +291,7 @@ void SiilihaiMobile::showSubscribeGroups() {
     forumWasSubscribedByUser=true;
 }
 
+// And authentications also!
 void SiilihaiMobile::applyGroupSubscriptions() {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT(currentSub);
@@ -302,9 +304,8 @@ void SiilihaiMobile::applyGroupSubscriptions() {
     }
     updateCurrentGroupModel();
     ClientLogic::updateGroupSubscriptions(currentSub);
+    forumUpdateNeeded(currentSub); // Send credentials
 }
-
-
 
 void SiilihaiMobile::unsubscribeCurrentForum() {
     Q_ASSERT(currentSub);

@@ -18,8 +18,8 @@ Item {
     property int largePointSize: 16
     property int smallPointSize: 10
 
-    property int defaultButtonHeight: 32
-    property int tallButtonHeight: 42
+    property int defaultButtonHeight: 40
+    property int tallButtonHeight: 55
     // @todo more smartly
     property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsDialog.topItem
                                    && !messageDialog.topItem && !credentialsDialog.topItem && !forumSettingsDialog.topItem

@@ -21,7 +21,7 @@ SimpleButton {
         Text {
             text: "✓"
             color: buttonColor
-            font.pointSize: 20
+            font.pointSize: 25
             visible: checked
             anchors.centerIn: parent
         }

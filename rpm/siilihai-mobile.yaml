@@ -1,13 +1,13 @@
 Name: harbour-siilihai-mobile
 Summary: Siilihai
-Version: 2.0.3
+Version: 2.0.4
 Release: 1
 Group: Qt/Qt
 License: GPLv2
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Siilihai web forum reader mobile version
+  Siilihai web forum client mobile version
 Configure: none
 Builder: qtc5
 PkgConfigBR:

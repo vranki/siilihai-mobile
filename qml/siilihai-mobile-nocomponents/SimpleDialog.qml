@@ -15,6 +15,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
+        onClicked: hideVkb()
     }
     onTopItemChanged: hideVkb()
 }

@@ -27,7 +27,9 @@ SimpleDialog {
         anchors.fill: parent
         contentWidth: width
         contentHeight: childrenRect.height
+        MouseArea { width: parent.width; height: regColumn.height; onClicked: hideVkb() } // Hax
         Column {
+            id: regColumn
             y: 50
             width: parent.width*0.9
 

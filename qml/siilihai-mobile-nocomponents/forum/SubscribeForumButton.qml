@@ -8,7 +8,7 @@ SimpleButton {
         id: forumLabel
         text: modelData.alias
         color: "white"
-        anchors.left: parent.left
+        anchors.left: favicon.right
         anchors.leftMargin: 5
         anchors.top: parent.top
         anchors.topMargin: 5
@@ -17,6 +17,17 @@ SimpleButton {
     anchors.horizontalCenter: parent.horizontalCenter
     height: 42 + (isSelectedForum ? forumDetails.height + 20 : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
+
+    Image {
+        id: favicon
+        width: height
+        height: parent.height * 0.8
+        source: faviconUrl
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: parent.height - height + 1
+    }
+
     onClicked: {
         if(isSelectedForum) return
         enterUrl = false

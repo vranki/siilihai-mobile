@@ -90,6 +90,7 @@ Item {
 
     // Hide the virtual keyboard if it is open
     function hideVkb() {
+        console.log("Hide the damn VKB")
         Qt.inputMethod.hide();
     }
 

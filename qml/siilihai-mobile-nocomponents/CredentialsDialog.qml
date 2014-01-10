@@ -25,6 +25,7 @@ SimpleDialog {
         SimpleButton {
             id: closeButton
             text: "Ok"
+            anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 topItem = false
                 forumAlias = ""

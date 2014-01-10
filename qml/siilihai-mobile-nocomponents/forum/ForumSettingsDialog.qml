@@ -8,6 +8,7 @@ SimpleDialog {
         anchors.fill: parent
         contentWidth: width
         contentHeight: contentColumn.height
+        MouseArea { width: parent.width; height: contentColumn.height; onClicked: hideVkb() } // Hax
         Column {
             id: contentColumn
             width: parent.width
@@ -59,7 +60,7 @@ SimpleDialog {
                 }
                 Component.onCompleted: mainItem.backPressed.connect(clicked)
             }
-            Item {width: 1; height: 50} // Spacer
+            Item {width: 1; height: mainItem.height } // Spacer
         }
     }
 }

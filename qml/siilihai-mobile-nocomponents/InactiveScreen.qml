@@ -40,7 +40,7 @@ Rectangle {
             height: parent.height
             width: totalforums ? parent.width * ((totalforums - busyforums) / totalforums) : 0
             color: "white"
-            Behavior on width { SmoothedAnimation { velocity: 30 } }
+            Behavior on width { SmoothedAnimation { velocity: busyforums ? 30 : -1 } }
         }
         Text {
             anchors.centerIn: parent

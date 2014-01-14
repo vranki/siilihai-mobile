@@ -27,12 +27,12 @@ SimpleDialog {
             text: "Ok"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
+                if(!topItem) return;
                 topItem = false
                 forumAlias = ""
                 siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
                 upf.reset()
             }
-            Component.onCompleted: mainItem.backPressed.connect(clicked)
         }
     }
 }

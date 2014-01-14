@@ -12,7 +12,7 @@ Item {
         anchors.fill: parent
         ToolbarButton {
             image: "gfx/Gnome-go-previous.svg"
-            visible: siilihaimobile.selectedGroupId != "" || siilihaimobile.selectedThreadId != "" || subscribeForumDialog.topItem
+            visible: !siilihaimobile.noBackButton && (siilihaimobile.selectedGroupId != "" || siilihaimobile.selectedThreadId != "" || subscribeForumDialog.topItem)
             onClicked: {
                 if(subscribeForumDialog.topItem) {
                     subscribeForumDialog.topItem = false

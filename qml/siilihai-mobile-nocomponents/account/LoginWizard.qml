@@ -10,16 +10,18 @@ SimpleDialog {
     objectName: "loginWizard"
     opacity: 1
     Image {
+        property double xoffset: 0
         source: "../gfx/siilis3.png"
         opacity: 0.5
         visible: topItem
-        NumberAnimation on x {
-            running: true
-            from: -loginWizard.width
-            to: loginWizard.width
-            duration: 20000
+        x: -width + xoffset
+        y: Math.sin(x / 10)* 10
+        NumberAnimation on xoffset {
+            running: parent.visible
+            from: 0
+            to: 1000
+            duration: 50000
             loops: Animation.Infinite
-            onStopped: restart()
         }
     }
 

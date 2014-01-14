@@ -7,6 +7,7 @@ android {
     qmlfolder.source = qml/siilihai-mobile-nocomponents
     qmlfolder.target = qml
     DEPLOYMENTFOLDERS = qmlfolder
+    DEFINES += NO_BACK_BUTTON
 }
 
 # Always on

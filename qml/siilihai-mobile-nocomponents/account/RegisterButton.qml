@@ -8,7 +8,7 @@ SimpleButton {
     text: registerAccount ? "" : "Register a new account"
     anchors.horizontalCenter: parent.horizontalCenter
     onClicked:  { useExitingAccount = false; registerAccount = true }
-    height: 30 + contentC.height
+    height: defaultButtonHeight + contentC.height
     clip: true
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     Column {

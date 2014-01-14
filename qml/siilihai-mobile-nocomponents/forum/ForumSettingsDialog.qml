@@ -19,16 +19,25 @@ SimpleDialog {
                 text: topItem && selectedforum ? selectedforum.alias : ""
 
             }
+            SimpleCheckBox {
+                property bool dontShowByDefault: groupList.count > 100
+                id: showGroupsCheckbox
+                text: "Show all " + groupList.count + " groups"
+                checked: !dontShowByDefault
+                visible: dontShowByDefault
+            }
             ListView {
+                id: groupList
                 width: parent.width
-                height: count * tallButtonHeight + 100 // Ugly
+                height: showGroupsCheckbox.checked ? count * (tallButtonHeight + spacing) + 100 : 0 // Ugly
+                Behavior on height { SmoothedAnimation { duration: 1000 } }
                 interactive: false
                 spacing: 10
                 model: subscribeGroupList
                 header: Text {
                     font.pointSize: largePointSize
                     color: color_b_text
-                    text: "Group subscriptions"
+                    text: count ? "Group subscriptions" : "Getting group list.."
                 }
                 delegate: GroupSubscriptionButton { }
             }
@@ -40,7 +49,7 @@ SimpleDialog {
             }
             ConfirmationButton {
                 text: "Unsubscribe forum"
-                width: parent.width / 3
+                width: parent.width / 2
                 buttonColor: "red"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
@@ -60,7 +69,7 @@ SimpleDialog {
                 }
                 Component.onCompleted: mainItem.backPressed.connect(clicked)
             }
-            Item {width: 1; height: mainItem.height } // Spacer
+            Item {width: 1; height: mainItem.height/2 } // Spacer
         }
     }
 }

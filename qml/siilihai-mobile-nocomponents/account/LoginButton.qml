@@ -6,10 +6,12 @@ SimpleButton {
     objectName: "loginButton"
     text: useExitingAccount ? "" : "Use existing account"
     anchors.horizontalCenter: parent.horizontalCenter
-    onClicked: { useExitingAccount = true; registerAccount = false }
-    height: 30 + contentC.height
+    height: defaultButtonHeight + contentC.height
     clip: true
     Behavior on height { SmoothedAnimation { velocity: 800 } }
+    onClicked: {
+        useExitingAccount = true; registerAccount = false
+    }
     Column {
         id: contentC
         width: parent.width*0.9

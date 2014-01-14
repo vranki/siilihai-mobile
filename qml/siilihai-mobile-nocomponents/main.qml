@@ -99,7 +99,7 @@ Item {
 
     Keys.onReleased: {
         // Handle android back button. Quit if in main view, otherwise press back
-        if (event.key === Qt.Key_Back && !mainViewVisible) {
+        if (event.key === Qt.Key_Back && !mainViewVisible && !loginWizard.topItem) {
             event.accepted = true
             backPressed()
         }

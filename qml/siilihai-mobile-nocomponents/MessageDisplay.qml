@@ -17,9 +17,17 @@ Rectangle {
     height: bodyView.height + headers.height
     radius: 10
 
+    Rectangle {
+        color: "white"
+        width: parent.width * 0.98
+        height: bodyView.height
+        radius: 2
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: bodyView.y
+    }
     Text {
         id: bodyView
-        width: parent.width * 0.98
+        width: parent.width * 0.95
         color: "black"
         // Works not
         //text: htmlHeader + modelData.body + "</body>"
@@ -30,12 +38,6 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         textFormat: Text.RichText
         onLinkActivated: Qt.openUrlExternally(link)
-        Rectangle {
-            color: "white"
-            anchors.fill: parent
-            z: -10
-            radius: 2
-        }
     }
     Item {
         id: headers

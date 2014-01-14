@@ -151,6 +151,14 @@ void SiilihaiMobile::setContextProperties() {
     rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
 
+bool SiilihaiMobile::noBackButton() const
+{
+#ifdef NO_BACK_BUTTON
+    return true;
+#endif
+    return false;
+}
+
 void SiilihaiMobile::deleteNewForum() {
     if(newForum) {
         qQuickView->rootContext()->setContextProperty("newForum", 0);
@@ -393,7 +401,7 @@ void SiilihaiMobile::haltSiilihai() {
     ClientLogic::haltSiilihai();
 }
 
-bool SiilihaiMobile::isHaltRequested() {
+bool SiilihaiMobile::isHaltRequested() const {
     return haltRequested;
 }
 

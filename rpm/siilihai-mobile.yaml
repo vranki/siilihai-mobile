@@ -18,8 +18,8 @@ PkgConfigBR:
 - Qt5Quick
 Requires:
 - qt5-plugin-imageformat-gif
-- qt5-plugin-imageformat-jpeg
 - qt5-plugin-imageformat-ico
+- qt5-plugin-imageformat-jpeg
 - qt5-qtsvg-plugin-imageformat-svg
 Files:
 - /usr/share/icons/hicolor/86x86/apps

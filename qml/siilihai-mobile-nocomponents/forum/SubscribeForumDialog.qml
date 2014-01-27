@@ -25,5 +25,6 @@ SimpleDialog {
         model: forumList
         delegate: SubscribeForumButton { }
         footer: Item {width: 1; height: mainItem.height } // Spacer
+        onModelChanged: returnToBounds()
     }
 }

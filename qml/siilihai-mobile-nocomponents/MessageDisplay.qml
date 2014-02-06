@@ -38,6 +38,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         textFormat: Text.RichText
         onLinkActivated: Qt.openUrlExternally(link)
+        font.pixelSize: 15
     }
     Item {
         id: headers
@@ -52,11 +53,13 @@ Rectangle {
             anchors.left: parent.left
             text: modelData.displayName
             font.bold: !isRead
+            font.pixelSize: 12
         }
         Text {
             anchors.right: parent.right
             color: color2
             text: modelData.lastchange
+            font.pixelSize: 12
         }
         Text {
             id: author
@@ -64,6 +67,7 @@ Rectangle {
             anchors.top: subject.bottom
             color: color2
             text: modelData.authorCleaned
+            font.pixelSize: 12
         }
     }
     Row {

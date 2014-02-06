@@ -26,6 +26,7 @@ Rectangle {
         color: buttonColor
         text: parent.text
         font.bold: boldText
+        font.pixelSize: 12
     }
     MouseArea {
         anchors.fill: parent

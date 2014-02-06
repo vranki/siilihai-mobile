@@ -79,6 +79,8 @@ private:
     void subscribeFailed(QString reason);
     void deleteNewForum();
     void setObjectProperty(QString objectName, QString property, QString value);
+    static bool sortThreadsByOrdernum(QObject *a, QObject *b);
+    static bool sortMessagesByOrdernum(QObject *a, QObject *b);
 
     QQuickView *qQuickView;
     // @todo check if qt quick has smarter way for this

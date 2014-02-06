@@ -174,6 +174,10 @@ void SiilihaiMobile::setObjectProperty(QString objectName, QString property, QSt
     object->setProperty(property.toUtf8(), QVariant::fromValue(value));
 }
 
+bool SiilihaiMobile::sortMessagesByOrdernum(QObject *a, QObject *b) {
+    return qobject_cast<ForumMessage*>(a)->ordernum() < qobject_cast<ForumMessage*>(b)->ordernum();
+}
+
 void SiilihaiMobile::updateCurrentMessageModel() {
     messageList.clear();
     if(currentThread) {
@@ -182,7 +186,12 @@ void SiilihaiMobile::updateCurrentMessageModel() {
             connect(fm, SIGNAL(destroyed()), this, SLOT(messageDeleted()));
         }
     }
+    qSort(messageList.begin(), messageList.end(), sortMessagesByOrdernum);
     qQuickView->rootContext()->setContextProperty("messages", QVariant::fromValue(messageList));
+}
+
+bool SiilihaiMobile::sortThreadsByOrdernum(QObject *a, QObject *b) {
+    return qobject_cast<ForumThread*>(a)->ordernum() < qobject_cast<ForumThread*>(b)->ordernum();
 }
 
 void SiilihaiMobile::updateCurrentThreadModel() {
@@ -193,6 +202,7 @@ void SiilihaiMobile::updateCurrentThreadModel() {
             connect(ft, SIGNAL(destroyed()), this, SLOT(threadDeleted()));
         }
     }
+    qSort(threadList.begin(), threadList.end(), sortThreadsByOrdernum);
     qQuickView->rootContext()->setContextProperty("threads", QVariant::fromValue(threadList));
 }
 

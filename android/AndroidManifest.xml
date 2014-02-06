@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest android:versionName="2.0.6" xmlns:android="http://schemas.android.com/apk/res/android" package="com.siilihai.siilihaimobile" android:installLocation="auto" android:versionCode="2">
-    <application android:label="Siilihai" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:icon="@drawable/icon">
-        <activity android:label="Siilihai" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:screenOrientation="unspecified" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation">
+<manifest android:installLocation="auto" android:versionName="2.0.6" package="com.siilihai.siilihaimobile" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1">
+    <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:icon="@drawable/icon" android:label="Siilihai">
+        <activity android:name="org.qtproject.qt5.android.bindings.QtActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:label="Siilihai" android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -31,8 +31,8 @@
             <!-- Splash screen -->
         </activity>
     </application>
-    <uses-sdk android:targetSdkVersion="14" android:minSdkVersion="9"/>
-    <supports-screens android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="14"/>
+    <supports-screens android:smallScreens="true" android:largeScreens="true" android:anyDensity="true" android:normalScreens="true"/>
     <!-- %%INSERT_PERMISSIONS -->
     <!-- %%INSERT_FEATURES -->
     <uses-permission android:name="android.permission.INTERNET"/>

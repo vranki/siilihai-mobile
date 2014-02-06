@@ -6,8 +6,9 @@ Group: Qt/Qt
 License: GPLv2
 Sources:
 - '%{name}-%{version}.tar.bz2'
-Description: |
+Description: |+
   Siilihai web forum client mobile version
+
 Configure: none
 Builder: qtc5
 PkgConfigBR:

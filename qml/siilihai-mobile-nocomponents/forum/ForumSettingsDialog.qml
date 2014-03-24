@@ -5,6 +5,7 @@ import "../widgets"
 SimpleDialog {
     objectName: "forumSettingsDialog"
     Flickable {
+        id: forumSettingsFlickable
         anchors.fill: parent
         contentWidth: width
         contentHeight: contentColumn.height
@@ -14,32 +15,9 @@ SimpleDialog {
             width: parent.width
             spacing: 25
             Text {
-                font.pointSize: headerPointSize
+                font.pixelSize: headerPixelSize
                 color: color_b_text
                 text: topItem && selectedforum ? selectedforum.alias : ""
-
-            }
-            SimpleCheckBox {
-                property bool dontShowByDefault: groupList.count > 100
-                id: showGroupsCheckbox
-                text: "Show all " + groupList.count + " groups"
-                checked: !dontShowByDefault
-                visible: dontShowByDefault
-            }
-            ListView {
-                id: groupList
-                width: parent.width
-                height: showGroupsCheckbox.checked ? count * (tallButtonHeight + spacing) + 100 : 0 // Ugly
-                Behavior on height { SmoothedAnimation { duration: 1000 } }
-                interactive: false
-                spacing: 10
-                model: subscribeGroupList
-                header: Text {
-                    font.pointSize: largePointSize
-                    color: color_b_text
-                    text: count ? "Group subscriptions" : "Getting group list.."
-                }
-                delegate: GroupSubscriptionButton { }
             }
             UserPassForm {
                 id: authentication
@@ -48,13 +26,44 @@ SimpleDialog {
                 password: selectedforum ? selectedforum.password : ""
             }
             ConfirmationButton {
-                text: "Unsubscribe forum"
-                width: parent.width / 2
-                buttonColor: "red"
+                text: "Unsubscribe"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
                     forumSettingsDialog.topItem = false
                     siilihaimobile.unsubscribeCurrentForum()
+                }
+            }
+            Text {
+                width: parent.width
+                x: parent.width/8
+                font.pixelSize: largePixelSize
+                text: (selectedforum ? selectedforum.unreadCount : "?") + " unread"
+                color: color_b_text
+            }
+            Item {
+                width: parent.width
+                height: defaultButtonHeight
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: largePixelSize
+                    text: "Mark all:"
+                    color: color_b_text
+                }
+                ConfirmationButton {
+                    anchors.right: unreadButton.left
+                    anchors.rightMargin: 3
+                    width: parent.width / 3
+                    text: "read"
+                    onClicked: selectedforum.markRead()
+                }
+                ConfirmationButton {
+                    id: unreadButton
+                    anchors.right: parent.right
+                    width: parent.width / 3
+                    text: "unread"
+                    onClicked: selectedforum.markRead(false)
                 }
             }
             SimpleButton {
@@ -66,8 +75,42 @@ SimpleDialog {
                     selectedforum.password = authentication.password
                     siilihaimobile.applyGroupSubscriptions()
                     forumSettingsDialog.topItem = false
+                    groupList.groupFilterString = ""
                 }
                 Component.onCompleted: mainItem.backPressed.connect(clicked)
+            }
+            Item {width: 1; height: mainItem.height/8 } // Spacer
+            ListView {
+                id: groupList
+                width: parent.width
+                height: count * (tallButtonHeight + spacing) + 300 // Ugly
+                interactive: false
+                spacing: 0
+                property string groupFilterString: ""
+                model: subscribeGroupList
+                header: Column {
+                    width: parent.width
+                    Text {
+                        font.pixelSize: headerPixelSize
+                        color: color_b_text
+                        text: groupList.count ? "Group subscriptions" : "Getting groups.."
+                    }
+                    Text {
+                        font.pixelSize: smallPixelSize
+                        color: color_b_text
+                        text: "Search:"
+                    }
+                    SimpleTextEdit {
+                        clearButton: true
+                        onTextChanged: groupList.groupFilterString = text.toLocaleLowerCase()
+                    }
+                }
+                delegate: GroupSubscriptionButton { }
+            }
+            SimpleButton {
+                text: "Back to top"
+                onClicked: forumSettingsFlickable.contentY = 0
+                visible: groupList.count > 50
             }
             Item {width: 1; height: mainItem.height/2 } // Spacer
         }

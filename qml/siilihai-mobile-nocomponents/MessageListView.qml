@@ -15,6 +15,7 @@ ListView {
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
         drawBorder: false
+        enableClickAnimation: false
     }
     delegate: MessageDisplay {
         width: parent.width * 0.98
@@ -53,6 +54,7 @@ ListView {
     ButtonWithUnreadCount {
         anchors.fill: parent
         z: -10
+        enableClickAnimation: false
     }
     function markAll(r) {
         for(var i=0;i<count;i++) {

@@ -28,7 +28,7 @@ SimpleDialog {
     Flickable {
         anchors.fill: parent
         contentWidth: width
-        contentHeight: childrenRect.height
+        contentHeight: regColumn.height
         MouseArea { width: parent.width; height: regColumn.height; onClicked: hideVkb() } // Hax
         Column {
             id: regColumn
@@ -37,16 +37,24 @@ SimpleDialog {
 
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 30
+            Item {width: 1; height: mainItem.height / 8}
             Text {
                 text: "Welcome to Siilihai, the no-nonsense open source web forum reader"
-                font.pointSize: largePointSize
+                font.pixelSize: headerPixelSize
                 wrapMode: Text.WordWrap
                 color: "white"
                 width: parent.width*0.9
             }
             Text {
+                text: "Powered by TapaTalk"
+                font.pixelSize: smallPixelSize
+                color: "yellow"
+                width: parent.width*0.9
+            }
+            Item {width: 1; height: mainItem.height / 16}
+            Text {
                 text: "You need a Siilihai account to use synchronization between devices"
-                font.pointSize: smallPointSize
+                font.pixelSize: largePixelSize
                 wrapMode: Text.WordWrap
                 color: "white"
                 width: parent.width*0.9
@@ -54,11 +62,12 @@ SimpleDialog {
             Text {
                 id: loginError
                 color: "red"
-                font.pointSize: largePointSize
+                font.pixelSize: largePixelSize
                 visible: text.length > 0
                 width: parent.width
                 wrapMode: Text.Wrap
             }
+            Item {width: 1; height: mainItem.height / 16}
             LoginButton {
                 id: loginButton
             }
@@ -66,13 +75,14 @@ SimpleDialog {
                 id: registerButton
             }
             SimpleButton {
-                text: "Use without account (sync disabled!)"
+                text: "Use without account (no sync!)"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
                     busy = true
                     siilihaimobile.registerUser("", "", "", false)
                 }
             }
+            Item {width: 1; height: mainItem.height / 2}
         }
     }
 

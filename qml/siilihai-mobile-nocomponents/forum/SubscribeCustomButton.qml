@@ -9,7 +9,7 @@ SimpleButton {
     property bool probing: false
     property bool probeOk: false
     onClicked: { enterUrl = true }
-    height: 30 + contentC.height
+    height: defaultButtonHeight + contentC.height
     clip: true
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     Column {
@@ -29,7 +29,9 @@ SimpleButton {
             width: parent.width
             visible: enterUrl
             text: "http://"
+            font.pixelSize: smallPixelSize
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
+            clearButton: true
         }
         Text {
             id: error
@@ -40,7 +42,7 @@ SimpleButton {
         }
         SimpleButton {
             text: "Check for support"
-            width: parent.width / 3
+            width: parent.width * 0.9
             anchors.horizontalCenter: parent.horizontalCenter
             visible: enterUrl
             opacity: probing ? 0.5 : 1
@@ -56,7 +58,7 @@ SimpleButton {
             visible: enterUrl && probeOk && newForum && newForum.supportsLogin
             text: "Username"
             color: "white"
-            font.pointSize: 15
+            font.pixelSize: largePixelSize
         }
         SimpleTextEdit {
             id: username
@@ -68,7 +70,7 @@ SimpleButton {
             visible: login.visible
             text: "Password"
             color: "white"
-            font.pointSize: 15
+            font.pixelSize: largePixelSize
         }
         SimpleTextEdit {
             id: password

@@ -9,6 +9,8 @@ Rectangle {
     property string buttonColor: "white"
     property string bgColor: "transparent"
     property bool boldText: false
+    property int fontSize: defaultButtonHeight / 2.5
+    property int leftMargin: 50
     signal clicked
     clip: true
     radius: 6
@@ -22,15 +24,16 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: centerText ? parent.horizontalCenter : undefined
         anchors.left: centerText ? undefined : parent.left
-        anchors.leftMargin: centerText ? undefined : 50
+        anchors.leftMargin: centerText ? undefined : parent.leftMargin
         color: buttonColor
         text: parent.text
         font.bold: boldText
-        font.pixelSize: 12
+        font.pixelSize: fontSize
     }
     MouseArea {
         anchors.fill: parent
         onClicked: if(enabled) parent.clicked()
+        onPressed: if(enabled) { clickAnimation.restart(); clickOpacityAnimation.restart() }
     }
     // Bg fill
     Rectangle {
@@ -40,6 +43,11 @@ Rectangle {
             GradientStop {
                 position: 0;
                 color: "transparent"
+                SequentialAnimation on color {
+                    id: clickAnimation
+                    running: false
+                    ColorAnimation { from: simpleButton.border.color; to: "transparent" }
+                }
             }
             GradientStop {
                 position: 1;
@@ -47,6 +55,11 @@ Rectangle {
             }
         }
         opacity: 0.3
+        SequentialAnimation on opacity {
+            id: clickOpacityAnimation
+            running: false
+            NumberAnimation { from: 1; to: 0.3 }
+        }
         z: -100
     }
 }

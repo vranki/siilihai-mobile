@@ -6,7 +6,9 @@ SimpleDialog {
     y: shown ? 0 : parent.height
     Behavior on y { SmoothedAnimation { velocity: 2500; easing.type: Easing.InOutQuad  } }
     ListView {
-        anchors.fill: parent
+        width: parent.width*0.9
+        height: parent.height
+        anchors.centerIn: parent
         model: errormessages
         spacing: 20
         delegate: Text {
@@ -14,7 +16,7 @@ SimpleDialog {
             wrapMode: Text.Wrap
             text: modelData
             color: "white"
-            font.pointSize: largePointSize
+            font.pixelSize: largePixelSize
             Rectangle {
                 color: "white"
                 width: parent.width * 0.3
@@ -26,7 +28,7 @@ SimpleDialog {
         }
         footer: Item {
             width: parent.width
-            height: 100
+            height: 200
             SimpleButton {
                 id: closeButton
                 anchors.centerIn: parent

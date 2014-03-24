@@ -15,7 +15,7 @@ ButtonWithUnreadCount {
         anchors.topMargin: 1
         anchors.right: parent.right
         anchors.rightMargin: 1
-        font.pointSize: 14
+        font.pixelSize: largePixelSize
         style: Text.Outline
         color: "white"
         styleColor: "black"

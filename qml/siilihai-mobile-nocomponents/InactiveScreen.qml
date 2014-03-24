@@ -52,7 +52,7 @@ Rectangle {
     }
     Text {
         text: "!"
-        font.pixelSize: parent.height *0.8
+        font.pixelSize: parent.height * 0.8
         anchors.centerIn: parent
         color: "white"
         visible: messageDialog.topItem || credentialsDialog.topItem

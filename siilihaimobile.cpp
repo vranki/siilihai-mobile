@@ -121,6 +121,31 @@ void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
     currentCredentialsRequest->signalCredentialsEntered(remember);
 }
 
+void SiilihaiMobile::postMessage(QString grpId, QString thrId, QString subject, QString body) {
+    if(!currentSub || !currentSub->updateEngine()) {
+        emit messagePosted("No forum selected!");
+        return;
+    }
+    ForumGroup *grp = currentSub->value(grpId);
+    if(!grp) {
+        emit messagePosted("Group doesn't exist");
+        return;
+    }
+    ForumThread *thr = 0;
+    if(!thrId.isEmpty()) {
+        thr = grp->value(thrId);
+        if(!thr) {
+            emit messagePosted("Thread doesn't exist");
+            return;
+        }
+    }
+    if(currentSub->updateEngine()->postMessage(grp, thr, subject, body)) {
+        emit messagePosted(QString::null);
+    } else {
+        emit messagePosted("Sending message failed");
+    }
+}
+
 void SiilihaiMobile::groupListChanged(ForumSubscription *sub) {
     qDebug() << Q_FUNC_INFO << sub->toString();
     // Show subscribe groups after subbing a new forum

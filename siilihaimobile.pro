@@ -36,7 +36,6 @@ CONFIG(with_lib) {
     LIBS += -lsiilihai
 }
 
-# The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp siilihaimobile.cpp
 
 HEADERS += siilihaimobile.h
@@ -45,7 +44,8 @@ OTHER_FILES += \
     rpm/siilihai-mobile.yaml \
     harbour-siilihai-mobile.desktop \
     qml/siilihai-mobile-nocomponents/InactiveScreen.qml \
-    qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml
+    qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml \
+    qml/siilihai-mobile-nocomponents/ComposeMessage.qml
 
 OTHER_FILES += debian/rules \
                debian/control\

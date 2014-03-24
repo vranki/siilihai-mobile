@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     width: parent.width
-    height: 80
+    height: parent.height / 10
     Rectangle {
         color: "black"
         opacity: 0.5
@@ -53,15 +53,16 @@ Item {
                 scrollView.contentY = 0
                 scrollView.returnToBounds()
             }
-        }/*
-        ToolbarButton {
-            text: "R"
-            onClicked: siilihaimobile.reloadUi()
-        }*/
+        }
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
             onClicked: settingsDialog.topItem = true
             visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
+        }
+        ToolbarButton {
+            text: "(R)"
+            onClicked: siilihaimobile.reloadUi()
+            visible: siilihaimobile.developerMode
         }
     }
 }

@@ -25,10 +25,12 @@ public:
     QString selectedThreadId() const;
     void setContextProperties();
     bool noBackButton() const; // Don't show back button in UI (=Android)
+
 signals:
     void selectedForumChanged(int arg);
     void selectedGroupIdChanged(QString arg);
     void selectedThreadIdChanged(QString arg);
+    void messagePosted(QString err);
 
 public slots:
     virtual void haltSiilihai();
@@ -48,6 +50,7 @@ public slots:
     void showSubscribeGroups(); // Remember to call applyGroupSubscriptions afterwards!
     void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
+    void postMessage(QString grpId, QString thrId, QString subject, QString body);
 
 private slots:
     virtual void subscriptionFound(ForumSubscription *sub);

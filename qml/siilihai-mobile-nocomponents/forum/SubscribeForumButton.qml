@@ -4,9 +4,25 @@ import "../widgets"
 
 SimpleButton {
     property bool isSelectedForum: subscribeForumDialog.subscribeForumId === forumId && !enterUrl
+    property bool loadImage: false
     anchors.horizontalCenter: parent.horizontalCenter
-    height: tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0)
+    height: filterMatches ? tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0) : 0
+    property bool filterMatches: (subscribeList.forumFilterString.length == 0)
+                                 || (modelData.alias.toLocaleLowerCase().indexOf(subscribeList.forumFilterString) > -1)
+                                 || (String(modelData.forumUrl).toLocaleLowerCase().indexOf(subscribeList.forumFilterString) > -1);
+
     Behavior on height { SmoothedAnimation { velocity: 800 } }
+
+    onLoadImageChanged: {
+        console.log("Loadimage: " + loadImage)
+        if(loadImage && favicon.source == "") {
+            console.log("Loading image " + faviconUrl)
+            favicon.source = faviconUrl
+        } else if(!loadImage && favicon.status != Image.Ready){
+            console.log("Not loading image")
+            favicon.source = ""
+        }
+    }
 
     Item {
         id: topLine
@@ -17,17 +33,18 @@ SimpleButton {
             color: "white"
             anchors.left: favicon.right
             anchors.leftMargin: 5
-            font.pointSize: 15
+            font.pixelSize: largePixelSize
             anchors.verticalCenter: parent.verticalCenter
         }
         Image {
             id: favicon
             width: height
             height: tallButtonHeight * 0.8
-            source: faviconUrl
+            source: ""
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: parent.height - height + 1
+            visible: filterMatches
         }
     }
 
@@ -49,7 +66,7 @@ SimpleButton {
         Text {
             text: newForum ? newForum.forumUrl : ""
             color: color1
-            font.pointSize: 10
+            font.pixelSize: smallPixelSize
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
@@ -59,7 +76,7 @@ SimpleButton {
         Text {
             text: newForum ? (newForum.supportsLogin ? "" : "Login not supported") : "Getting details .."
             color: "white"
-            font.pointSize: 12
+            font.pixelSize: largePixelSize
             wrapMode: Text.WordWrap
         }
         UserPassForm {

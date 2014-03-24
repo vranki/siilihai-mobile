@@ -5,6 +5,7 @@ SimpleButton {
     buttonColor: "red"
     MouseArea {
         anchors.fill: parent
+        preventStealing: true
         onPressed: {
             hintText.visible = true
             origText = text
@@ -16,6 +17,10 @@ SimpleButton {
             parent.clicked(mouse)
         }
         onReleased: {
+            hintText.visible = false
+            text = origText
+        }
+        onExited: {
             hintText.visible = false
             text = origText
         }

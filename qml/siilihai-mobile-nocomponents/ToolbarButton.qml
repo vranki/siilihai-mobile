@@ -25,10 +25,15 @@ Rectangle {
         font.pixelSize: 25
         anchors.centerIn: parent
     }
-
+    SequentialAnimation on opacity {
+        id: clickOpacityAnimation
+        running: false
+        NumberAnimation { from: 0.3; to: 1 }
+    }
     MouseArea {
         id: mousearea
         anchors.fill: parent
         onClicked: parent.clicked()
+        onPressed: clickOpacityAnimation.restart()
     }
 }

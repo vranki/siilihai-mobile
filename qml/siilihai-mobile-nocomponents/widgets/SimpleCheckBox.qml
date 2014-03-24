@@ -6,8 +6,10 @@ SimpleButton {
     anchors.horizontalCenter: parent.horizontalCenter
     outline: false
     centerText: false
+    leftMargin: checkRect.width + 20
 
     Rectangle {
+        id: checkRect
         height: parent.height / 2
         width: height
         color: "transparent"
@@ -21,7 +23,7 @@ SimpleButton {
         Text {
             text: "✓"
             color: buttonColor
-            font.pointSize: 25
+            font.pixelSize: parent.height
             visible: checked
             anchors.centerIn: parent
         }

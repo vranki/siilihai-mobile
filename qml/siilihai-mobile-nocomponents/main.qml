@@ -11,15 +11,24 @@ Item {
 
     property string color_a_bg: "white"
     property string color_a_text: "black"
+    property string color_a_buttons: "#f7f7f7"
+    property string color_a_buttons_pressed: "#888888"
     property string color_b_bg: "black"
     property string color_b_text: "white"
 
-    property int headerPointSize: 32
-    property int largePointSize: 16
-    property int smallPointSize: 10
+    property string color_input: "yellow"
 
-    property int defaultButtonHeight: 40
-    property int tallButtonHeight: 55
+    property int largerDimension: Math.max(width, height)
+    property int headerPixelSize: largerDimension / 25
+    property int largePixelSize: largerDimension / 50
+    property int smallPixelSize: largerDimension / 66
+
+    property int smallButtonHeight: largerDimension / 25
+    property int defaultButtonHeight: largerDimension / 16
+    property int tallButtonHeight: largerDimension / 13
+
+    property int buttonAnimationDuration: 500
+
     // @todo more smartly
     property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsDialog.topItem
                                    && !messageDialog.topItem && !credentialsDialog.topItem && !forumSettingsDialog.topItem
@@ -84,6 +93,10 @@ Item {
     SettingsDialog {
         id: settingsDialog
     }
+    ComposeMessage {
+        id: composeMessage
+    }
+
     CredentialsDialog { id: credentialsDialog }
     MessageDialog { id: messageDialog }
     InactiveScreen {}

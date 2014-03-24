@@ -55,9 +55,10 @@ SimpleButton {
         }
         SimpleCheckBox {
             id: sync
-            text: "Synchronize between devices"
+            text: "Sync between devices"
             checked: true
             visible: registerAccount
+            width: parent.width
         }
         SimpleButton {
             text: "Register"

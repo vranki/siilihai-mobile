@@ -20,6 +20,6 @@ Item {
         text: siilihaimobile.statusMessage
         color: color2
         anchors.centerIn: parent
-        font.pointSize: 16
+        font.pixelSize: largePixelSize
     }
 }

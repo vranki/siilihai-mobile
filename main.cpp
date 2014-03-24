@@ -8,20 +8,30 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+    qDebug() << Q_FUNC_INFO << "started";
     QGuiApplication app(argc, argv);
+    qDebug() << Q_FUNC_INFO << "QGuiApplication created";
     QCoreApplication::setOrganizationName("Siilihai");
     QCoreApplication::setOrganizationDomain("siilihai.com");
     QCoreApplication::setApplicationName("Siilihai-mobile");
+
     QtQuick2ApplicationViewer viewer;
+    qDebug() << Q_FUNC_INFO << "QtQuick2ApplicationViewer created";
     SiilihaiMobile shm(0, &viewer);
+    qDebug() << Q_FUNC_INFO << "SiilihaiMobile created";
 
     app.setQuitOnLastWindowClosed(false);
 
-
     // Find the main.qml to use..
 #ifdef Q_OS_ANDROID
+    // Android is a bit special.. it loads QML *REALLY* slow so we need a loading screen:
+    viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/LoadingScreen.qml");
+    qDebug() << Q_FUNC_INFO << "Loading..";
+    viewer.showFullScreen();
+    app.processEvents();
     // On android the file.exists() returns false, although this works:
     viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/main.qml");
+    qDebug() << Q_FUNC_INFO << "setMainQmlFile done";
 #else
     // Search from a few known paths
     QStringList mainFileAlternatives;
@@ -43,8 +53,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         return -1;
     }
 #endif
-    // viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto); // @todo how to do this in Qt5?
-    shm.setContextProperties(); // Root ctx may change when loading, so redo this
+
 #ifdef FULLSCREEN
     viewer.showFullScreen();
 #else
@@ -52,12 +61,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.show();
 #endif
 
+    shm.setContextProperties(); // Root ctx may change when loading, so redo this
+    qDebug() << Q_FUNC_INFO << "ctx props set";
+    qDebug() << Q_FUNC_INFO << "viewer open";
+
     // This works on Sailfish, but not on desktop
     app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
-
-    // These don't work anywhere
-    //shm.connect(&app, SIGNAL(lastWindowClosed()), &shm, SLOT(haltSiilihai()));
-    //shm.connect(&viewer, SIGNAL(destroyed()), &shm, SLOT(haltSiilihai()));
 
     shm.launchSiilihai(false);
     int ret = app.exec();

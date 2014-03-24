@@ -8,17 +8,24 @@ Rectangle {
     property string smallText: ""
     property string icon: ""
     property string iconEmblems: ""
-
-    property int uiButtonHeight: 42
+    property string buttonColor: drawBorder ? color_a_buttons : "transparent"
+    property bool enableClickAnimation: true
     property bool drawBorder: true
     property bool busy: false
     signal clicked
 
     width: parent.width
-    height: uiButtonHeight
-    color: drawBorder ? "#f7f7f7" : "transparent"
+    height: defaultButtonHeight
+    color: buttonColor
     radius: 5
-    border.color: drawBorder ? "black" : "transparent"
+    border.color: drawBorder ? color_a_text : "transparent"
+
+    SequentialAnimation on color {
+        id: clickAnimation
+        running: false
+        ColorAnimation { from: color_a_buttons_pressed; to: buttonColor }
+    }
+
     BusyIndicator {
         enabled: parent.busy
         x: parent.width * 0.6
@@ -32,7 +39,7 @@ Rectangle {
         anchors.leftMargin: parent.width * 0.005
         anchors.top: parent.top
         anchors.topMargin: 4
-        height: uiButtonHeight * 0.8
+        height: defaultButtonHeight * 0.8
         width: height
         source: icon
         Text {
@@ -47,10 +54,10 @@ Rectangle {
         anchors.left: iconImage.right
         anchors.right: rightText.left
         width: parent.width * 0.7
-        height: uiButtonHeight
+        height: defaultButtonHeight
         Text {
             text: uibutton.smallText
-            font.pixelSize: uiButtonHeight * 0.25
+            font.pixelSize: defaultButtonHeight * 0.25
             color: "gray"
             anchors.bottom: parent.bottom
             anchors.left: mainLabel.left
@@ -61,7 +68,7 @@ Rectangle {
             x: parent.width / 30
             text: uibutton.text
             color: "black"
-            font.pointSize: uiButtonHeight *0.3
+            font.pixelSize: defaultButtonHeight * 0.3
             width: parent.width * 0.8
             wrapMode: Text.Wrap
         }
@@ -72,11 +79,12 @@ Rectangle {
         anchors.right: parent.right
         text: uibutton.rightText
         color: text !== "0" ? color1 : "#bdbdee"
-        font.pixelSize: uiButtonHeight * 0.7
+        font.pixelSize: defaultButtonHeight * 0.7
     }
 
     MouseArea {
         anchors.fill: parent
         onClicked: parent.clicked()
+        onPressed: if(enableClickAnimation) clickAnimation.restart()
     }
 }

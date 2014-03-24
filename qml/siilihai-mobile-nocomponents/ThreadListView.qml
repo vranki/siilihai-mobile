@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "widgets"
 
 ListView {
     width: parent.width * 0.9
@@ -14,12 +15,28 @@ ListView {
         anchors.horizontalCenter: parent.horizontalCenter
         drawBorder: false
         icon: "gfx/Gnome-folder-open.svg"
+        enableClickAnimation: false
     }
     delegate: ThreadButton {}
-    footer: Item { width: 1; height: toolbar.height}
+    footer: Column {
+        width: parent.width
+        Item { width: 1; height: defaultButtonHeight}
+        SimpleButton {
+            anchors.horizontalCenter: parent.horizontalCenter
+            buttonColor: color_a_text
+            text: "New thread..";
+            onClicked: {
+                composeMessage.newMessage()
+                composeMessage.groupId = selectedgroup.id
+            }
+        }
+        Item { width: 1; height: mainItem.height / 3}
+    }
+
     ButtonWithUnreadCount {
         anchors.fill: parent
         z: -10
+        enableClickAnimation: false
     }
     clip: true
 }

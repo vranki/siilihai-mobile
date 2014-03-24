@@ -8,16 +8,22 @@ SimpleDialog {
         Text {
             text: "Settings"
             color: color_b_text
-            font.pointSize: headerPointSize
+            font.pixelSize: headerPixelSize
         }
         ConfirmationButton {
             text: "Unregister this copy of Siilihai"
             onClicked: siilihaimobile.unregisterSiilihai()
             anchors.horizontalCenter: parent.horizontalCenter
         }
+        SimpleCheckBox {
+            text: "Developer mode"
+            checked: false
+            onCheckedChanged: siilihaimobile.developerMode = checked
+        }
+
         Item {
             width: 1
-            height: 50
+            height: mainItem.height/4
         }
         SimpleButton {
             text: "Close"

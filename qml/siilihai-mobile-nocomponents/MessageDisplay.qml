@@ -14,7 +14,7 @@ Rectangle {
 
     color: isRead ? colorLessDark : colorDark
     width: parent.width
-    height: bodyView.height + headers.height
+    height: bodyView.height + headers.height + buttonRow.height
     radius: 10
 
     Rectangle {
@@ -38,12 +38,12 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         textFormat: Text.RichText
         onLinkActivated: Qt.openUrlExternally(link)
-        font.pixelSize: 15
+        font.pixelSize: largePixelSize
     }
     Item {
         id: headers
         height: author.height + subject.height + 10
-        anchors.left: buttonRow.right
+        anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.right: parent.right
         anchors.rightMargin: 5
@@ -53,13 +53,14 @@ Rectangle {
             anchors.left: parent.left
             text: modelData.displayName
             font.bold: !isRead
-            font.pixelSize: 12
+            font.pixelSize: largePixelSize
         }
         Text {
             anchors.right: parent.right
+            anchors.top: subject.bottom
             color: color2
             text: modelData.lastchange
-            font.pixelSize: 12
+            font.pixelSize: largePixelSize
         }
         Text {
             id: author
@@ -67,27 +68,27 @@ Rectangle {
             anchors.top: subject.bottom
             color: color2
             text: modelData.authorCleaned
-            font.pixelSize: 12
+            font.pixelSize: largePixelSize
         }
     }
     Row {
         id: buttonRow
-        height: headers.height * 0.8
-        anchors.top: parent.top
-        anchors.topMargin: 2
-        anchors.left: parent.left
-        anchors.leftMargin: 5
+        height: smallButtonHeight + 10
+        width: headers.width
+        anchors.top: headers.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         SimpleButton {
-            width: height * 1.5
-            height: parent.height
+            width: parent.width / 3
+            height: smallButtonHeight
             text: isRead ? "Read" : "Unread"
             onClicked: isRead = !isRead
         }
         SimpleButton {
-            width: height * 1.5
-            height: parent.height
+            width: parent.width / 3
+            height: smallButtonHeight
             text: "Open"
             onClicked: Qt.openUrlExternally(url)
+            visible: url
         }
     }
 }

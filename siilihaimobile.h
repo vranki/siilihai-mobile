@@ -12,24 +12,15 @@
 class SiilihaiMobile : public ClientLogic
 {
     Q_OBJECT
-    Q_PROPERTY(int selectedForumId READ selectedForumId WRITE selectForum NOTIFY selectedForumChanged)
-    Q_PROPERTY(QString selectedGroupId READ selectedGroupId WRITE selectGroup NOTIFY selectedGroupIdChanged)
-    Q_PROPERTY(QString selectedThreadId READ selectedThreadId WRITE selectThread NOTIFY selectedThreadIdChanged)
     Q_PROPERTY(bool noBackButton READ noBackButton CONSTANT)
 
 public:
     explicit SiilihaiMobile(QObject *parent, QQuickView *view);
     bool isHaltRequested() const;
-    int selectedForumId() const;
-    QString selectedGroupId() const;
-    QString selectedThreadId() const;
     void setContextProperties();
     bool noBackButton() const; // Don't show back button in UI (=Android)
 
 signals:
-    void selectedForumChanged(int arg);
-    void selectedGroupIdChanged(QString arg);
-    void selectedThreadIdChanged(QString arg);
     void messagePosted(QString err);
 
 public slots:

@@ -3,7 +3,7 @@ import ".."
 import "../widgets"
 
 SimpleButton {
-    property bool isSelectedForum: subscribeForumDialog.subscribeForumId === forumId && !enterUrl
+    property bool isSelectedForum: subscribeForumDialog.subscribeForumId === id && !enterUrl
     property bool loadImage: false
     anchors.horizontalCenter: parent.horizontalCenter
     height: filterMatches ? tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0) : 0
@@ -51,8 +51,8 @@ SimpleButton {
     onClicked: {
         if(isSelectedForum) return
         enterUrl = false
-        subscribeForumDialog.subscribeForumId = forumId
-        siilihaimobile.getForumDetails(modelData.forumId)
+        subscribeForumDialog.subscribeForumId = id
+        siilihaimobile.getForumDetails(modelData.id)
     }
 
     Column {
@@ -90,7 +90,7 @@ SimpleButton {
             text: "Subscribe"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                siilihaimobile.subscribeForumWithCredentials(newForum.forumId, newForum.alias, upf.username, upf.password)
+                siilihaimobile.subscribeForumWithCredentials(newForum.id, newForum.alias, upf.username, upf.password)
                 subscribeForumDialog.topItem = false
                 subscribeForumDialog.subscribeForumId = 0
             }

@@ -7,6 +7,6 @@ ListView {
     spacing: 10
     model: groups
     delegate: GroupButton {
-        onClicked: siilihaimobile.selectedGroupId = id
+        onClicked: siilihaimobile.selectGroup(id)
     }
 }

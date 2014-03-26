@@ -25,8 +25,10 @@ ListView {
             anchors.horizontalCenter: parent.horizontalCenter
             buttonColor: color_a_text
             text: "New thread..";
+            visible: selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
             onClicked: {
                 composeMessage.newMessage()
+                composeMessage.appendBody(siilihaisettings.signature)
                 composeMessage.groupId = selectedgroup.id
             }
         }

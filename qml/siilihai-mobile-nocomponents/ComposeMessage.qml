@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
-    property string errorMessage: ""
+    property string errorMessage
     property string threadId
     property string groupId
 
@@ -11,7 +11,7 @@ SimpleDialog {
     }
 
     Flickable {
-        id: forumSettingsFlickable
+        id: composeFlickable
         anchors.fill: parent
         contentWidth: width
         contentHeight: contentColumn.height
@@ -28,7 +28,6 @@ SimpleDialog {
             SimpleTextEdit {
                 id: subjectEdit
                 font.pixelSize: largePixelSize
-                text: subject
             }
             Text {
                 height: defaultButtonHeight
@@ -36,28 +35,53 @@ SimpleDialog {
                 text: "Message:"
                 color: color_b_text
             }
-            TextEdit {
-                id: bodyEdit
-                width: parent.width*0.98
-                height: mainItem.height * 0.6
+            Rectangle {
+                width: mainItem.width*0.98
+                height: mainItem.height * 0.4
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.family: "Monospace"
-                font.pixelSize: 0
                 color: color_input
-                textFormat: TextEdit.PlainText
-                Rectangle {
+                z: -10
+                opacity: 0.5
+                Flickable {
+                    id: flick
+                    clip: true
                     anchors.fill: parent
-                    color: color_input
-                    z: -10
-                    opacity: 0.5
+                    contentWidth: bodyEdit.width
+                    contentHeight: bodyEdit.height
+                    flickableDirection: Flickable.VerticalFlick
+
+                    function ensureVisible(r) {
+                        if (contentX >= r.x)
+                            contentX = r.x;
+                        else if (contentX+width <= r.x+r.width)
+                            contentX = r.x+r.width-width;
+                        if (contentY >= r.y)
+                            contentY = r.y;
+                        else if (contentY+height <= r.y+r.height)
+                            contentY = r.y+r.height-height;
+                    }
+
+                    TextEdit {
+                        id: bodyEdit
+                        width: flick.width
+                        // height: flick.height
+                        wrapMode: TextEdit.Wrap
+                        onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+                        font.family: "Monospace"
+                        font.pixelSize: largePixelSize
+                        color: color_input
+                        textFormat: TextEdit.PlainText
+                    }
                 }
             }
             Text {
+                width: parent.width
                 height: defaultButtonHeight
                 font.pixelSize: headerPixelSize
                 text: errorMessage
                 color: "red"
             }
+            //            Item { width: 1; height: defaultButtonHeight }
             Item {
                 width: parent.width
                 height: defaultButtonHeight
@@ -90,11 +114,22 @@ SimpleDialog {
         errorMessage = ""
         sendButton.enabled = true
         composeMessage.topItem = true
+        subjectEdit.focus = true
+        flick.contentY = 0
+        composeFlickable.contentY = 0
     }
 
     function messagePosted(msg) {
         errorMessage = msg
         sendButton.enabled = true
         if(!msg) topItem = false
+    }
+
+    function setSubject(ns) {
+        subjectEdit.text = ns
+    }
+
+    function appendBody(nb) {
+        bodyEdit.text = bodyEdit.text + "\n" + nb
     }
 }

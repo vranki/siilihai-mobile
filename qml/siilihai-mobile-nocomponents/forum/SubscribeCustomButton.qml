@@ -82,7 +82,7 @@ SimpleButton {
             text: "Subscribe"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                siilihaimobile.subscribeForumWithCredentials(newForum.forumId, newForum.alias, username.text, password.text)
+                siilihaimobile.subscribeForumWithCredentials(newForum.id, newForum.alias, username.text, password.text)
                 subscribeForumDialog.topItem = false
                 probeOk = false
                 enterUrl = false

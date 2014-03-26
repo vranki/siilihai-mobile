@@ -3,6 +3,7 @@ import QtQuick 2.0
 Rectangle {
     id: simpleButton
     property string text: ""
+    property string icon: ""
     property bool enabled: true
     property bool outline: true
     property bool centerText: true
@@ -61,5 +62,14 @@ Rectangle {
             NumberAnimation { from: 1; to: 0.3 }
         }
         z: -100
+    }
+    Image {
+        anchors.left: parent.left
+        anchors.leftMargin: parent.width * 0.005
+        anchors.top: parent.top
+        anchors.topMargin: 4
+        height: defaultButtonHeight * 0.8
+        width: height
+        source: icon
     }
 }

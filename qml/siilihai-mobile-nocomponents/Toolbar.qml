@@ -12,16 +12,16 @@ Item {
         anchors.fill: parent
         ToolbarButton {
             image: "gfx/Gnome-go-previous.svg"
-            visible: !siilihaimobile.noBackButton && (siilihaimobile.selectedGroupId != "" || siilihaimobile.selectedThreadId != "" || subscribeForumDialog.topItem)
+            visible: !siilihaimobile.noBackButton && selectedgroup || selectedthread || subscribeForumDialog.topItem
             onClicked: {
                 if(subscribeForumDialog.topItem) {
                     subscribeForumDialog.topItem = false
                     return
                 }
-                if(siilihaimobile.selectedThreadId) {
-                    siilihaimobile.selectedThreadId = ""
+                if(selectedthread) {
+                    siilihaimobile.selectThread("")
                 } else {
-                    siilihaimobile.selectedGroupId = ""
+                    siilihaimobile.selectGroup("")
                 }
             }
             Component.onCompleted: mainItem.backPressed.connect(clicked)
@@ -33,11 +33,11 @@ Item {
         }
         ToolbarButton {
             id: scrollDownButton
-            visible: siilihaimobile.selectedGroupId != ""
+            visible: selectedgroup !== undefined
             image: "gfx/Gnome-go-bottom.svg"
             onClicked: {
                 var scrollView = threadListView
-                if(siilihaimobile.selectedThreadId != "")
+                if(selectedthread)
                     scrollView = messageListView
                 scrollView.contentY = scrollView.contentHeight - scrollView.height
                 scrollView.returnToBounds()
@@ -48,7 +48,7 @@ Item {
             image: "gfx/Gnome-go-top.svg"
             onClicked: {
                 var scrollView = threadListView
-                if(siilihaimobile.selectedThreadId != "")
+                if(selectedthread)
                     scrollView = messageListView
                 scrollView.contentY = 0
                 scrollView.returnToBounds()

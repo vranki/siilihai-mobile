@@ -2,12 +2,12 @@ import QtQuick 2.0
 import "widgets"
 
 ButtonWithUnreadCount {
-    property bool isSelectedForum: siilihaimobile.selectedForumId === forumId
+    property bool isSelectedForum: selectedforum && (selectedforum.id === id)
     text: alias
     rightText: unreadCount
     icon: faviconUrl.length > 0 ? faviconUrl : undefined
     iconEmblems: (beingSynced ? "S" : "") + (beingUpdated ? "U" : "")
-    onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectedForumId = forumId
+    onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectForum(id)
     height: defaultButtonHeight + (isSelectedForum ? groupListView.height + settingsButton.height : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     clip: true

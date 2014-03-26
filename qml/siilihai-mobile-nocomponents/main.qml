@@ -52,7 +52,7 @@ Item {
     }
     ThreadListView {
         id: threadListView
-        property bool topItem: siilihaimobile.selectedGroupId
+        property bool topItem: selectedgroup
         width: parent.width
         height: parent.height
         x: topItem ? 0 : parent.width
@@ -62,7 +62,7 @@ Item {
     }
     MessageListView {
         id: messageListView
-        property bool topItem: siilihaimobile.selectedThreadId
+        property bool topItem: selectedthread
         width: parent.width
         height: parent.height
         x: topItem ? 0 : parent.width

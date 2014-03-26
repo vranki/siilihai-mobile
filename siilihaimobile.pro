@@ -45,7 +45,8 @@ OTHER_FILES += \
     harbour-siilihai-mobile.desktop \
     qml/siilihai-mobile-nocomponents/InactiveScreen.qml \
     qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml \
-    qml/siilihai-mobile-nocomponents/ComposeMessage.qml
+    qml/siilihai-mobile-nocomponents/ComposeMessage.qml \
+    qml/siilihai-mobile-nocomponents/widgets/ValueAdjustmet.qml
 
 OTHER_FILES += debian/rules \
                debian/control\
@@ -121,21 +122,8 @@ android|nemo {
     DEFINES += FULLSCREEN
 }
 
-#desktops.files = siilihai-mobile.desktop
-#desktops.path = /usr/share/applications
+OTHER_FILES += debian/changelog
 
-#icons.files = siilihai-mobile.svg
-#icons.path = /usr/share/icons/hicolor/scalable/apps
-
-#INSTALLS += desktops icons
-
-#OTHER_FILES += qml/siilihai-mobile/* qml/siilihai-mobile-nocomponents/*
-
-#OTHER_FILES += debian/control debian/rules siilihaimobile_harmattan.desktop siilihaimobile.desktop debian/changelog
-
-#OTHER_FILES += rpm/*.spec rpm/*.changes rpm/*.sh
-
-#OTHER_FILES += desktops.files
 
 QMAKE_CLEAN += *.o
 

@@ -10,6 +10,9 @@ SimpleDialog {
             color: color_b_text
             font.pixelSize: headerPixelSize
         }
+        ValueAdjustmet {
+            text: "Max threads per group"
+        }
         ConfirmationButton {
             text: "Unregister this copy of Siilihai"
             onClicked: siilihaimobile.unregisterSiilihai()
@@ -20,7 +23,6 @@ SimpleDialog {
             checked: false
             onCheckedChanged: siilihaimobile.developerMode = checked
         }
-
         Item {
             width: 1
             height: mainItem.height/4

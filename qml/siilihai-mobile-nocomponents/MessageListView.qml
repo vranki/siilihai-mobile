@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "widgets"
 
 ListView {
     width: parent.width * 0.9
@@ -23,34 +24,54 @@ ListView {
     }
 
     footer: Column {
-        width: parent.width * 0.5
+        width: parent.width * 0.82
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 20
         Item {
             width: 1
             height: 50
         }
-        ButtonWithUnreadCount {
-            text: "Download more messages"
+        SimpleButton {
+            text: "Get more messages"
             visible: selectedthread !== null ? selectedthread.hasMoreMessages : false
+            buttonColor: color_a_text
+            enabled: visible && !selectedforum.beingUpdated
+            anchors.horizontalCenter: parent.horizontalCenter
             onClicked: siilihaimobile.showMoreMessages()
         }
-        ButtonWithUnreadCount {
+        SimpleButton {
             text: "Mark all read"
+            buttonColor: color_a_text
             onClicked: markAll(true)
+            anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-read.svg"
         }
-        ButtonWithUnreadCount {
+        SimpleButton {
             text: "Mark all unread"
+            buttonColor: color_a_text
             onClicked: markAll(false)
+            anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-unread.svg"
+        }
+        SimpleButton {
+            buttonColor: color_a_text
+            text: "Reply..";
+            visible: selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                composeMessage.newMessage()
+                composeMessage.setSubject(siilihaimobile.addReToSubject(selectedthread.name))
+                composeMessage.appendBody(siilihaisettings.signature)
+                composeMessage.groupId = selectedgroup.id
+                composeMessage.threadId = selectedthread.id
+            }
         }
         Item {
             width: 1
-            height: toolbar.height
+            height: mainItem.height/2
         }
-
     }
+
     ButtonWithUnreadCount {
         anchors.fill: parent
         z: -10

@@ -78,17 +78,32 @@ Rectangle {
         anchors.top: headers.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         SimpleButton {
-            width: parent.width / 3
+            width: parent.width / 4
             height: smallButtonHeight
             text: isRead ? "Read" : "Unread"
             onClicked: isRead = !isRead
         }
         SimpleButton {
-            width: parent.width / 3
+            width: parent.width / 4
             height: smallButtonHeight
             text: "Open"
             onClicked: Qt.openUrlExternally(url)
             visible: url
         }
+        SimpleButton {
+            width: parent.width / 4
+            height: smallButtonHeight
+            text: "Re:";
+            visible: selectedforum.supportsPosting && selectedforum.isAuthenticated
+            onClicked: {
+                composeMessage.newMessage()
+                composeMessage.setSubject(siilihaimobile.addReToSubject(selectedthread.name))
+                composeMessage.appendBody(siilihaimobile.addQuotesToBody(modelData.body))
+                composeMessage.appendBody(siilihaisettings.signature)
+                composeMessage.groupId = selectedgroup.id
+                composeMessage.threadId = selectedthread.id
+            }
+        }
+
     }
 }

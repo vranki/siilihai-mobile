@@ -6,23 +6,53 @@ ListView {
     height: contentHeight
     spacing: 10
     model: messages
-    header: ThreadButton {
-        text: selectedthread ? selectedthread.displayName : "no thread"
-        rightText: selectedthread ? selectedthread.unreadCount : "no threas"
-        smallText: selectedgroup ? selectedgroup.displayName + " - " + selectedforum.alias : ""
-        hmm: selectedthread ? selectedthread.hasMoreMessages : false
-        icon: selectedthread !== null ? (selectedthread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg") : ""
+
+    function gotoIndex(idx) {
+        var pos = contentY;
+        var destPos;
+        messageListView.positionViewAtIndex(idx, ListView.Center);
+        destPos = contentY;
+        anim.from = pos;
+        anim.to = destPos;
+        anim.running = true;
+    }
+    NumberAnimation { id: anim; target: messageListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500; onStopped: returnToBounds() }
+
+    header: Column {
         width: parent.width * 0.95
-        z: -10
-        anchors.horizontalCenter: parent.horizontalCenter
-        drawBorder: false
-        enableClickAnimation: false
+        spacing: 5
+        ThreadButton {
+            text: selectedthread ? selectedthread.displayName : "no thread"
+            rightText: selectedthread ? selectedthread.unreadCount : "no threas"
+            smallText: selectedgroup ? selectedgroup.displayName + " - " + selectedforum.alias : ""
+            hmm: selectedthread ? selectedthread.hasMoreMessages : false
+            icon: selectedthread !== null ? (selectedthread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg") : ""
+            width: parent.width * 0.95
+            z: -10
+            anchors.horizontalCenter: parent.horizontalCenter
+            drawBorder: false
+            enableClickAnimation: false
+        }
+        SimpleButton {
+            text: "Show first unread"
+            buttonColor: color_a_text
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: selectedthread !== null && selectedthread.unreadCount
+            onClicked: {
+                for(var i=0;i<count;i++) {
+                    if(!model[i].isRead) {
+                        gotoIndex(i);
+                        return;
+                    }
+                }
+            }
+        }
+        Item {width: 1; height: defaultButtonHeight}
     }
     delegate: MessageDisplay {
         width: parent.width * 0.98
         anchors.horizontalCenter: parent.horizontalCenter
     }
-
     footer: Column {
         width: parent.width * 0.82
         anchors.horizontalCenter: parent.horizontalCenter
@@ -45,6 +75,7 @@ ListView {
             onClicked: markAll(true)
             anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-read.svg"
+            visible: selectedthread !== null && selectedthread.unreadCount
         }
         SimpleButton {
             text: "Mark all unread"
@@ -52,6 +83,7 @@ ListView {
             onClicked: markAll(false)
             anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-unread.svg"
+            visible: selectedthread !== null && (count - selectedthread.unreadCount)
         }
         SimpleButton {
             buttonColor: color_a_text

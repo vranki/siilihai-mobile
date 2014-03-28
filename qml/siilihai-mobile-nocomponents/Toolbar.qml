@@ -39,8 +39,7 @@ Item {
                 var scrollView = threadListView
                 if(selectedthread)
                     scrollView = messageListView
-                scrollView.contentY = scrollView.contentHeight - scrollView.height
-                scrollView.returnToBounds()
+                scrollView.gotoIndex(scrollView.count-1)
             }
         }
         ToolbarButton {
@@ -50,8 +49,7 @@ Item {
                 var scrollView = threadListView
                 if(selectedthread)
                     scrollView = messageListView
-                scrollView.contentY = 0
-                scrollView.returnToBounds()
+                scrollView.gotoIndex(0)
             }
         }
         ToolbarButton {

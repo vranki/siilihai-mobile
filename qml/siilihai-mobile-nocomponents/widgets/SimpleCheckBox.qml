@@ -29,5 +29,5 @@ SimpleButton {
         }
     }
 
-    onClicked: checked = !checked
+    onClicked: if(enabled) checked = !checked
 }

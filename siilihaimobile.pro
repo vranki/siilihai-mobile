@@ -46,7 +46,8 @@ OTHER_FILES += \
     qml/siilihai-mobile-nocomponents/InactiveScreen.qml \
     qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml \
     qml/siilihai-mobile-nocomponents/ComposeMessage.qml \
-    qml/siilihai-mobile-nocomponents/widgets/ValueAdjustmet.qml
+    qml/siilihai-mobile-nocomponents/widgets/ValueAdjustmet.qml \
+    qml/siilihai-mobile-nocomponents/widgets/SimpleTextArea.qml
 
 OTHER_FILES += debian/rules \
                debian/control\

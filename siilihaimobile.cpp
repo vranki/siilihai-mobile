@@ -264,9 +264,9 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
     disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
     qDebug() << Q_FUNC_INFO << success << motd << sync;
     if (success) {
-        settings->setValue("account/username", regOrLoginUser);
-        settings->setValue("account/password", regOrLoginPass);
-        settings->setValue("preferences/sync_enabled", sync);
+        settings->setUsername(regOrLoginUser);
+        settings->setPassword(regOrLoginPass);
+        settings->setSyncEnabled(sync);
         settings->setValue("account/registered_here", true);
         settings->sync();
         ClientLogic::loginWizardFinished();
@@ -294,8 +294,8 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     ClientLogic::loginFinished(success, motd, sync);
     disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
     if(success && !regOrLoginUser.isEmpty()) {
-        settings->setValue("account/username", regOrLoginUser);
-        settings->setValue("account/password", regOrLoginPass);
+        settings->setUsername(regOrLoginUser);
+        settings->setPassword(regOrLoginPass);
         settings->sync();
     }
     QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
@@ -313,8 +313,8 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
         newForum->setUsername(username);
         newForum->setPassword(password);
     }
-    newForum->setLatestThreads(settings->value("preferences/threads_per_group", 20).toInt());
-    newForum->setLatestMessages(settings->value("preferences/messages_per_thread", 20).toInt());
+    newForum->setLatestThreads(settings->threadsPerGroup());
+    newForum->setLatestMessages(settings->messagesPerThread());
     forumWasSubscribedByUser = true;
     forumAdded(newForum);
     Q_ASSERT(forumDatabase.contains(newForum->id()));

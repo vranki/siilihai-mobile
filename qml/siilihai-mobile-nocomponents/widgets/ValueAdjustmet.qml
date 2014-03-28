@@ -6,32 +6,55 @@ Column {
     property int valueMin: 0
     property int valueMax: 10
 
-    width: parent.width
-    Text {
-        text: parent.text
-        font.pixelSize: largePixelSize
-        color: color_b_text
-    }
-    Rectangle {
+    width: parent.width*0.95
+    anchors.horizontalCenter: parent.horizontalCenter
+    Item {
         width: parent.width
         height: defaultButtonHeight
-        color: "green"
-        Rectangle {
-            width: parent.width / 10
-            height: parent.height
-            x: (value - valueMin) / valueMax - width/2
-            color: "white"
-        }
         Text {
+            text: parent.parent.text
             font.pixelSize: largePixelSize
             color: color_b_text
+            anchors.bottom: parent.bottom
+        }
+        Text {
             text: Math.round(value)
+            font.pixelSize: headerPixelSize
+            color: color_b_text
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
+    }
+    Item {
+        width: parent.width
+        height: defaultButtonHeight
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        Rectangle {
+            anchors.fill: parent
+            color: color_input
+            opacity: 0.3
+            radius: 5
+        }
+        Rectangle {
+            id: slider
+            width: parent.width / 10
+            height: parent.height * 0.7
+            x: (parent.width - width) * ((value - valueMin) / valueMax)
+            anchors.verticalCenter: parent.verticalCenter
+            color: color_input
+            radius: 5
+            Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
         }
         MouseArea {
             anchors.fill: parent
             onMouseXChanged: {
-                value = valueMin + mouseX / width * (valueMax - valueMin)
+                var newValue = valueMin + ((mouseX) / (width - slider.width) * (valueMax - valueMin))
+                if(newValue > valueMax) newValue = valueMax;
+                if(newValue < valueMin) newValue = valueMin;
+                value = newValue
             }
         }
+
     }
 }

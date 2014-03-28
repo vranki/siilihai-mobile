@@ -6,6 +6,19 @@ ListView {
     height: contentHeight
     spacing: 10
     model: threads
+
+    // Copypaste from MessageListView, meh!
+    function gotoIndex(idx) {
+        var pos = contentY;
+        var destPos;
+        threadListView.positionViewAtIndex(idx, ListView.Center);
+        destPos = contentY;
+        anim.from = pos;
+        anim.to = destPos;
+        anim.running = true;
+    }
+    NumberAnimation { id: anim; target: threadListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500 }
+
     header: GroupButton {
         text: selectedgroup ? selectedgroup.displayName : "no group"
         rightText: selectedgroup ? selectedgroup.unreadCount : "no group"

@@ -1,6 +1,7 @@
 TARGET=harbour-siilihai-mobile
 CONFIG += sailfishapp
 QT += core quick xml network svg
+#webkitwidgets
 
 android {
     # Required for android
@@ -8,6 +9,7 @@ android {
     qmlfolder.target = qml
     DEPLOYMENTFOLDERS = qmlfolder
     DEFINES += NO_BACK_BUTTON
+    DEFINES += NO_WEBKITWIDGETS
 }
 
 # Always on

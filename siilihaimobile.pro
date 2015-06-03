@@ -1,7 +1,9 @@
 TARGET=harbour-siilihai-mobile
-CONFIG += sailfishapp
+CONFIG += sailfishapp c++11
 QT += core quick xml network svg
-#webkitwidgets
+
+DEFINES += NO_WEBKITWIDGETS
+# webkitwidgets
 
 android {
     # Required for android
@@ -9,7 +11,6 @@ android {
     qmlfolder.target = qml
     DEPLOYMENTFOLDERS = qmlfolder
     DEFINES += NO_BACK_BUTTON
-    DEFINES += NO_WEBKITWIDGETS
 }
 
 # Always on
@@ -49,7 +50,8 @@ OTHER_FILES += \
     qml/siilihai-mobile-nocomponents/widgets/ConfirmationButton.qml \
     qml/siilihai-mobile-nocomponents/ComposeMessage.qml \
     qml/siilihai-mobile-nocomponents/widgets/ValueAdjustmet.qml \
-    qml/siilihai-mobile-nocomponents/widgets/SimpleTextArea.qml
+    qml/siilihai-mobile-nocomponents/widgets/SimpleTextArea.qml \
+    qml/siilihai-mobile-nocomponents/ForumErrorDialog.qml
 
 OTHER_FILES += debian/rules \
                debian/control\

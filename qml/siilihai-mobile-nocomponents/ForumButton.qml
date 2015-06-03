@@ -5,9 +5,18 @@ ButtonWithUnreadCount {
     property bool isSelectedForum: selectedforum && (selectedforum.id === id)
     text: alias
     rightText: unreadCount
-    icon: faviconUrl.length > 0 ? faviconUrl : undefined
+    icon: faviconUrl //.length > 0 ? faviconUrl : undefined
     iconEmblems: (beingSynced ? "S" : "") + (beingUpdated ? "U" : "")
-    onClicked: isSelectedForum ? siilihaimobile.selectForum(0) : siilihaimobile.selectForum(id)
+    onClicked: {
+        if(isSelectedForum) {
+            siilihaimobile.selectForum(0)
+        } else {
+            siilihaimobile.selectForum(id)
+            for(var i=0;i < selectedforum.errors; i++) {
+                console.log("Forum errors:", selectedforum.errors.length)
+            }
+        }
+    }
     height: defaultButtonHeight + (isSelectedForum ? groupListView.height + settingsButton.height : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     clip: true

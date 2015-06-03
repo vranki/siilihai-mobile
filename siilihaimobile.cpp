@@ -7,6 +7,7 @@
 #include <siilihai/forumdata/forumthread.h>
 #include <siilihai/forumdata/forummessage.h>
 #include <siilihai/forumdata/forumsubscription.h>
+#include <siilihai/forumdata/updateerror.h>
 #include <siilihai/parser/parsermanager.h>
 #include <siilihai/parser/forumparser.h>
 #include <siilihai/parser/forumsubscriptionparsed.h>
@@ -16,6 +17,8 @@
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     ClientLogic(parent), qQuickView(view), currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
     probe(0, protocol), forumWasSubscribedByUser(false) {
+    qmlRegisterType<UpdateError>("org.vranki.siilihai", 1, 0, "UpdateError");
+
     if(!view->rootContext())  {
         closeUi();
         return;
@@ -26,7 +29,6 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
 }
 
 void SiilihaiMobile::subscribeForum() {
-    qDebug() << Q_FUNC_INFO;
     deleteNewForum();
     setObjectProperty("subscribeForumDialog", "topItem", "true");
     protocol.listForums();
@@ -34,7 +36,6 @@ void SiilihaiMobile::subscribeForum() {
 
 // Receiver owns the forums!
 void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
-    qDebug() << Q_FUNC_INFO << forums.size();
     qQuickView->rootContext()->setContextProperty("forumList", 0);
     qDeleteAll(forumList); // Delete 'em old
     forumList.clear();
@@ -443,6 +444,7 @@ void SiilihaiMobile::selectForum(int id) {
             }
         }
         currentSub = forumDatabase.value(id);
+
         subscribeGroupList.clear();
         qQuickView->rootContext()->setContextProperty("selectedforum", currentSub);
 
@@ -458,7 +460,6 @@ void SiilihaiMobile::selectForum(int id) {
 }
 
 void SiilihaiMobile::selectGroup(QString id) {
-    qDebug() << Q_FUNC_INFO << id;
     Q_ASSERT(currentSub || id.isEmpty());
     if (!currentGroup || currentGroup->id() != id) {
         selectThread();

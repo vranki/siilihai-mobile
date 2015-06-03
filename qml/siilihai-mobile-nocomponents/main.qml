@@ -98,6 +98,7 @@ Item {
     }
 
     CredentialsDialog { id: credentialsDialog }
+    ForumErrorDialog { id: forumErrorDialog }
     MessageDialog { id: messageDialog }
     InactiveScreen {}
 

@@ -30,7 +30,7 @@ Item {
     property int buttonAnimationDuration: 500
 
     // @todo more smartly
-    property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsDialog.topItem
+    property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsLoader.active
                                    && !messageDialog.topItem && !credentialsDialog.topItem && !forumSettingsDialog.topItem
                                    && !subscribeForumDialog.topItem && !loginWizard.topItem
     signal backPressed
@@ -90,8 +90,12 @@ Item {
     ForumSettingsDialog {
         id: forumSettingsDialog
     }
-    SettingsDialog {
-        id: settingsDialog
+    Loader { // Load on demand
+        id: settingsLoader
+        source: "SettingsDialog.qml"
+        active: false
+        width: parent.width
+        height: parent.height
     }
     ComposeMessage {
         id: composeMessage

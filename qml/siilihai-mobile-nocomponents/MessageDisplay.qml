@@ -99,7 +99,7 @@ Rectangle {
                 composeMessage.newMessage()
                 composeMessage.setSubject(siilihaimobile.addReToSubject(selectedthread.name))
                 composeMessage.appendBody(siilihaimobile.addQuotesToBody(modelData.body))
-                composeMessage.appendBody(siilihaisettings.signature)
+                composeMessage.appendBody(siilihai.settings.signature)
                 composeMessage.groupId = selectedgroup.id
                 composeMessage.threadId = selectedthread.id
             }

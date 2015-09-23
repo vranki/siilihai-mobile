@@ -93,7 +93,7 @@ ListView {
             onClicked: {
                 composeMessage.newMessage()
                 composeMessage.setSubject(siilihaimobile.addReToSubject(selectedthread.name))
-                composeMessage.appendBody(siilihaisettings.signature)
+                composeMessage.appendBody(siilihai.settings.signature)
                 composeMessage.groupId = selectedgroup.id
                 composeMessage.threadId = selectedthread.id
             }

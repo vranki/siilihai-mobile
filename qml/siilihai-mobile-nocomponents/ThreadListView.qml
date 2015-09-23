@@ -41,7 +41,7 @@ ListView {
             visible: selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
             onClicked: {
                 composeMessage.newMessage()
-                composeMessage.appendBody(siilihaisettings.signature)
+                composeMessage.appendBody(siilihai.settings.signature)
                 composeMessage.groupId = selectedgroup.id
             }
         }

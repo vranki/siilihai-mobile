@@ -2,9 +2,19 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
+    id: settingsDialog
+    topItem: true
+    Component.onCompleted: {
+        console.log("Loaded SD", topItem)
+        signature.text = siilihai.settings.signature
+    }
+
     onTopItemChanged: {
-        if(!topItem) return
-        signature.text = siilihaisettings.signature
+        if(!topItem) {
+            settingsLoader.active = false
+        } else {
+            signature.text = siilihai.settings.signature
+        }
     }
 
     Flickable {
@@ -25,23 +35,23 @@ SimpleDialog {
             ValueAdjustmet {
                 id: tpg
                 text: "Threads per group"
-                value: siilihaisettings.threadsPerGroup
+                value: siilihai.settings.threadsPerGroup
                 valueMin: 5
-                valueMax: siilihaisettings.maxThreadsPerGroup()
+                valueMax: siilihai.settings.maxThreadsPerGroup()
             }
             ValueAdjustmet {
                 id: mpt
                 text: "Messages per thread"
-                value: siilihaisettings.messagesPerThread
+                value: siilihai.settings.messagesPerThread
                 valueMin: 5
-                valueMax: siilihaisettings.maxMessagesPerThread()
+                valueMax: siilihai.settings.maxMessagesPerThread()
             }
             ValueAdjustmet {
                 id: smc
                 text: "Show more count"
-                value: siilihaisettings.showMoreCount
+                value: siilihai.settings.showMoreCount
                 valueMin: 5
-                valueMax: siilihaisettings.maxMessagesPerThread()
+                valueMax: siilihai.settings.maxMessagesPerThread()
             }
             Text {
                 text: "Account"
@@ -49,7 +59,7 @@ SimpleDialog {
                 font.pixelSize: headerPixelSize
             }
             Text {
-                text: siilihaisettings.noAccount ? "No account used" : "Username: " + siilihaisettings.username
+                text: siilihai.settings.noAccount ? "No account used" : "Username: " + siilihaisettings.username
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: color_b_text
                 font.pixelSize: largePixelSize
@@ -57,8 +67,8 @@ SimpleDialog {
             SimpleCheckBox {
                 id: sync
                 text: "Synchronize messages"
-                checked: siilihaisettings.syncEnabled
-                enabled: !siilihaisettings.noAccount
+                checked: siilihai.settings.syncEnabled
+                enabled: !siilihai.settings.noAccount
             }
             ConfirmationButton {
                 text: "Unregister this copy of Siilihai"
@@ -87,13 +97,13 @@ SimpleDialog {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Component.onCompleted: mainItem.backPressed.connect(clicked)
                 onClicked: {
+                    siilihai.settings.threadsPerGroup = tpg.value
+                    siilihai.settings.messagesPerThread = mpt.value
+                    siilihai.settings.showMoreCount = smc.value
+                    siilihai.settings.syncEnabled = sync.checked
+                    siilihai.settings.signature = signature.text
+                    siilihai.settingsChanged(true)
                     topItem = false
-                    siilihaisettings.threadsPerGroup = tpg.value
-                    siilihaisettings.messagesPerThread = mpt.value
-                    siilihaisettings.showMoreCount = smc.value
-                    siilihaisettings.syncEnabled = sync.checked
-                    siilihaisettings.signature = signature.text
-                    siilihaimobile.settingsChanged(true)
                 }
             }
             Item {

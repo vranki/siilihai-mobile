@@ -9,7 +9,7 @@ SimpleDialog {
         width: parent.width*0.9
         height: parent.height
         anchors.centerIn: parent
-        model: selectedforum.errors
+        model: selectedforum ? selectedforum.errors : undefined
         spacing: 20
         delegate: Column {
             width: parent.width

@@ -16,22 +16,23 @@
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     ClientLogic(parent), qQuickView(view), currentSub(0), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
-    probe(0, protocol), forumWasSubscribedByUser(false) {
+    probe(0, m_protocol), forumWasSubscribedByUser(false) {
     qmlRegisterType<UpdateError>("org.vranki.siilihai", 1, 0, "UpdateError");
 
     if(!view->rootContext())  {
         closeUi();
         return;
     }
+    qQuickView->rootContext()->setContextProperty("siilihai", this);
     dismissMessages();
     setContextProperties();
-    connect(&protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
+    connect(&m_protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
 }
 
 void SiilihaiMobile::subscribeForum() {
     deleteNewForum();
     setObjectProperty("subscribeForumDialog", "topItem", "true");
-    protocol.listForums();
+    m_protocol.listForums();
 }
 
 // Receiver owns the forums!
@@ -62,8 +63,8 @@ void SiilihaiMobile::closeUi() {
 }
 
 void SiilihaiMobile::showMainWindow() {
-    qDebug() << Q_FUNC_INFO << "Settings at " << settings->fileName();
-    qQuickView->rootContext()->setContextProperty("siilihaisettings", settings);
+    qDebug() << Q_FUNC_INFO << "Settings at " << m_settings->fileName();
+    qQuickView->rootContext()->setContextProperty("siilihaisettings", m_settings);
     if(state() == SH_OFFLINE)
         showStatusMessage("Started in offline mode");
 }
@@ -250,26 +251,26 @@ void SiilihaiMobile::registerUser(QString user, QString password, QString email,
     qDebug() << Q_FUNC_INFO << user << email << password;
     if(user.isEmpty() && password.isEmpty()) {
         // Use without account
-        settings->setValue("account/noaccount", true);
+        m_settings->setValue("account/noaccount", true);
         QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
         if (lw) QMetaObject::invokeMethod(lw, "registrationFinished", Q_ARG(QVariant, true), Q_ARG(QVariant, ""));
     } else {
         regOrLoginUser = user.trimmed();
         regOrLoginPass = password.trimmed();
-        connect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
-        protocol.registerUser(regOrLoginUser, regOrLoginPass, email, sync);
+        connect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
+        m_protocol.registerUser(regOrLoginUser, regOrLoginPass, email, sync);
     }
 }
 
 void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
-    disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
+    disconnect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
     qDebug() << Q_FUNC_INFO << success << motd << sync;
     if (success) {
-        settings->setUsername(regOrLoginUser);
-        settings->setPassword(regOrLoginPass);
-        settings->setSyncEnabled(sync);
-        settings->setValue("account/registered_here", true);
-        settings->sync();
+        m_settings->setUsername(regOrLoginUser);
+        m_settings->setPassword(regOrLoginPass);
+        m_settings->setSyncEnabled(sync);
+        m_settings->setValue("account/registered_here", true);
+        m_settings->sync();
         ClientLogic::loginWizardFinished();
     } else {
         errorDialog("Registration failed - \n" + motd);
@@ -286,18 +287,18 @@ void SiilihaiMobile::loginUser(QString user, QString password) {
     qDebug() << Q_FUNC_INFO << user << password;
     regOrLoginUser = user.trimmed();
     regOrLoginPass = password.trimmed();
-    connect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
-    protocol.login(user, password);
+    connect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
+    m_protocol.login(user, password);
 }
 
 void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     qDebug() << Q_FUNC_INFO;
     ClientLogic::loginFinished(success, motd, sync);
-    disconnect(&protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
+    disconnect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
     if(success && !regOrLoginUser.isEmpty()) {
-        settings->setUsername(regOrLoginUser);
-        settings->setPassword(regOrLoginPass);
-        settings->sync();
+        m_settings->setUsername(regOrLoginUser);
+        m_settings->setPassword(regOrLoginPass);
+        m_settings->sync();
     }
     QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
     if (lw) QMetaObject::invokeMethod(lw, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
@@ -314,11 +315,11 @@ void SiilihaiMobile::subscribeForumWithCredentials(int id, QString name, QString
         newForum->setUsername(username);
         newForum->setPassword(password);
     }
-    newForum->setLatestThreads(settings->threadsPerGroup());
-    newForum->setLatestMessages(settings->messagesPerThread());
+    newForum->setLatestThreads(m_settings->threadsPerGroup());
+    newForum->setLatestMessages(m_settings->messagesPerThread());
     forumWasSubscribedByUser = true;
     forumAdded(newForum);
-    Q_ASSERT(forumDatabase.contains(newForum->id()));
+    Q_ASSERT(m_forumDatabase.contains(newForum->id()));
     selectForum(newForum->id());
     deleteNewForum();
 }
@@ -397,14 +398,14 @@ void SiilihaiMobile::probeResults(ForumSubscription *probedSub) {
             if (lw) QMetaObject::invokeMethod(lw, "probeFinished", Q_ARG(QVariant, true), Q_ARG(QVariant, ""));
         } else {
             // Not found, adding
-            connect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
-            protocol.addForum(newForum);
+            connect(&m_protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
+            m_protocol.addForum(newForum);
         }
     }
 }
 
 void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
-    disconnect(&protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
+    disconnect(&m_protocol, SIGNAL(forumGot(ForumSubscription*)), this, SLOT(newForumAdded(ForumSubscription*)));
     if(sub) {
         Q_ASSERT(sub->id());
         newForum->copyFrom(sub);
@@ -436,14 +437,14 @@ bool SiilihaiMobile::isHaltRequested() const {
 void SiilihaiMobile::selectForum(int id) {
     qDebug() << Q_FUNC_INFO << id;
 
-    if(currentSub !=  forumDatabase.value(id)) {
+    if(currentSub !=  m_forumDatabase.value(id)) {
         selectGroup();
         if(currentSub) {
             foreach(ForumGroup *grp, currentSub->values()) {
                 disconnect(grp, SIGNAL(destroyed()), this, 0);
             }
         }
-        currentSub = forumDatabase.value(id);
+        currentSub = m_forumDatabase.value(id);
 
         subscribeGroupList.clear();
         qQuickView->rootContext()->setContextProperty("selectedforum", currentSub);

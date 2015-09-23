@@ -54,7 +54,7 @@ Item {
         }
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
-            onClicked: settingsDialog.topItem = true
+            onClicked: settingsLoader.active = true
             visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
         }
         ToolbarButton {

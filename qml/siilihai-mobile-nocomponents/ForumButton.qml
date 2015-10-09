@@ -2,25 +2,26 @@ import QtQuick 2.0
 import "widgets"
 
 ButtonWithUnreadCount {
-    property bool isSelectedForum: selectedforum && (selectedforum.id === id)
-    text: alias
-    rightText: unreadCount
-    icon: faviconUrl //.length > 0 ? faviconUrl : undefined
-    iconEmblems: (beingSynced ? "S" : "") + (beingUpdated ? "U" : "")
+    property bool isSelectedForum: forumListView.selectedforum = modelData
+    text: modelData.alias
+    rightText: modelData.unreadCount
+    icon: modelData.faviconUrl //.length > 0 ? faviconUrl : undefined
+    iconEmblems: (modelData.beingSynced ? "S" : "") + (modelData.beingUpdated ? "U" : "")
     onClicked: {
         if(isSelectedForum) {
-            siilihaimobile.selectForum(0)
+            forumListView.selectedforum = undefined
         } else {
-            siilihaimobile.selectForum(id)
-            for(var i=0;i < selectedforum.errors; i++) {
-                console.log("Forum errors:", selectedforum.errors.length)
+            console.log("Selecting", modelData, modelData.id)
+            forumListView.selectedforum = modelData
+            for(var i=0;i < forumListView.selectedforum.errors; i++) {
+                console.log("Forum errors:", forumListView.selectedforum.errors.length)
             }
         }
     }
     height: defaultButtonHeight + (isSelectedForum ? groupListView.height + settingsButton.height : 0)
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     clip: true
-    busy: beingUpdated || beingSynced || scheduledForUpdate
+    busy: modelData.beingUpdated || modelData.beingSynced || modelData.scheduledForUpdate
     GroupListView {
         id: groupListView
         width: parent.width * 0.9
@@ -28,6 +29,7 @@ ButtonWithUnreadCount {
         height: count * (defaultButtonHeight + spacing)
         visible: isSelectedForum
         y: defaultButtonHeight
+        model: modelData.subscribedGroups
     }
     SimpleButton {
         id: settingsButton

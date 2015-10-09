@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     property int busyforums: 0
-    property int totalforums: subscriptions.length
+    property int totalforums: siilihai.forumDatabase.subscriptions.length
     visible: !Qt.application.active
     anchors.fill: parent
 
@@ -55,7 +55,7 @@ Rectangle {
         font.pixelSize: parent.height * 0.8
         anchors.centerIn: parent
         color: "white"
-        visible: messageDialog.topItem || credentialsDialog.topItem
+        // visible: messageDialog.topItem || credentialsDialog.topItem
     }
     Timer {
         running: parent.visible
@@ -64,8 +64,8 @@ Rectangle {
         interval: busyforums ? 250 : 10000 // Interval could be even longer if there are no busy forums
         onTriggered:  {
             var busycount = 0
-            for(var i=0;i<subscriptions.length;i++) {
-                if(subscriptions[i].beingUpdated || subscriptions[i].beingSynced || subscriptions[i].scheduledForUpdate) busycount++;
+            for(var i=0;i<siilihai.forumDatabase.subscriptions.length;i++) {
+                if(siilihai.forumDatabase.subscriptions[i].beingUpdated || siilihai.forumDatabase.subscriptions[i].beingSynced || siilihai.forumDatabase.subscriptions[i].scheduledForUpdate) busycount++;
             }
             busyforums = busycount
         }

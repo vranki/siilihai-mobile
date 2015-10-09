@@ -88,7 +88,7 @@ ListView {
         SimpleButton {
             buttonColor: color_a_text
             text: "Reply..";
-            visible: selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
+            visible: forumListView.selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 composeMessage.newMessage()

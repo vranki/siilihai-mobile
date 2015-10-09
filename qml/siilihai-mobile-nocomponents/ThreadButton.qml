@@ -1,14 +1,14 @@
 import QtQuick 2.0
 
 ButtonWithUnreadCount {
-    property bool hmm: hasMoreMessages
-    text: displayName
-    rightText: unreadCount
+    property bool hmm: modelData.hasMoreMessages
+    text: modelData.displayName
+    rightText: modelData.unreadCount
     width: parent.width * 0.95
     anchors.horizontalCenter: parent.horizontalCenter
     onClicked: siilihaimobile.selectThread(id)
     clip: true
-    icon: unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
+    icon: modelData.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
     Text {
         text: "+"
         anchors.top: parent.top

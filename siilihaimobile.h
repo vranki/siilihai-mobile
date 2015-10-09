@@ -25,7 +25,6 @@ signals:
 
 public slots:
     virtual void haltSiilihai();
-    void selectForum(int id=0);
     void selectGroup(QString id=QString::null);
     void selectThread(QString id=QString::null);
     void reloadUi();
@@ -36,16 +35,13 @@ public slots:
     void subscribeForumWithCredentials(int id, QString name, QString username=QString::null, QString password=QString::null);
     void getForumDetails(int id);
     void getForumUrlDetails(QString url);
-    void unsubscribeCurrentForum();
     void showMoreMessages();
-    void showSubscribeGroups(); // Remember to call applyGroupSubscriptions afterwards!
+    void showSubscribeGroups(ForumSubscription *sub); // Remember to call applyGroupSubscriptions afterwards!
     void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
-    void postMessage(QString grpId, QString thrId, QString subject, QString body);
+    void postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body);
 
 private slots:
-    virtual void subscriptionFound(ForumSubscription *sub);
-    virtual void subscriptionDeleted(QObject* subobj);
     void groupDeleted();
     void threadDeleted();
     void messageDeleted();
@@ -67,7 +63,6 @@ protected:
     virtual void closeUi();
     virtual void showMainWindow();
     virtual void showCredentialsDialog();
-    virtual void groupListChanged(ForumSubscription* sub);
 
 private:
     void subscribeFailed(QString reason);
@@ -78,10 +73,9 @@ private:
 
     QQuickView *qQuickView;
     // @todo check if qt quick has smarter way for this
-    QList<QObject*> subscriptionList, groupList, threadList, messageList, forumList, subscribeGroupList;
+    QList<QObject*> groupList, threadList, messageList, forumList, subscribeGroupList;
     QStringList errorMessageList;
     QQuickView *quickView;
-    ForumSubscription *currentSub;
     ForumGroup *currentGroup;
     ForumThread *currentThread;
     QString regOrLoginUser, regOrLoginPass;

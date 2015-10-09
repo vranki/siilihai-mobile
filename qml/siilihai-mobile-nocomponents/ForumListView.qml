@@ -4,7 +4,7 @@ import "widgets"
 ListView {
     spacing: 10
     snapMode: ListView.SnapToItem
-    model: subscriptions
+    model: siilihaimobile.forumDatabase.subscriptions
     header: StatusIndicator {}
     delegate: ForumButton {}
     footer: Column {

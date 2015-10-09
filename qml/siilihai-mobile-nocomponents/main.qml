@@ -29,10 +29,6 @@ Item {
 
     property int buttonAnimationDuration: 500
 
-    // @todo more smartly
-    property bool mainViewVisible: !threadListView.topItem && !messageListView.topItem && !settingsLoader.active
-                                   && !messageDialog.topItem && !credentialsDialog.topItem && !forumSettingsDialog.topItem
-                                   && !subscribeForumDialog.topItem && !loginWizard.topItem
     signal backPressed
 
     Image {
@@ -44,22 +40,20 @@ Item {
     }
     ForumListView {
         id: forumListView
-        property bool topItem: !threadListView.topItem && !messageListView.topItem
+        // property bool topItem: !threadListView.topItem && !messageListView.topItem
+        property var selectedforum
         width: parent.width * 0.98
-        height: parent.height - toolbar.height
+        height: parent.height// - toolbar.height
         anchors.horizontalCenter: parent.horizontalCenter
         HideEffect {}
     }
     ThreadListView {
         id: threadListView
-        property bool topItem: selectedgroup
         width: parent.width
         height: parent.height
-        x: topItem ? 0 : parent.width
-        Behavior on x { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
-        HideEffect {}
-        onTopItemChanged: hideVkb()
+        visible: model !== undefined
     }
+    /*
     MessageListView {
         id: messageListView
         property bool topItem: selectedthread
@@ -75,12 +69,10 @@ Item {
         width: parent.width
         height: parent.height
     }
-
     Toolbar {
         id: toolbar
         anchors.bottom: parent.bottom
     }
-
     LoginWizard {
         id: loginWizard
         width: parent.width
@@ -90,6 +82,7 @@ Item {
     ForumSettingsDialog {
         id: forumSettingsDialog
     }
+    */
     Loader { // Load on demand
         id: settingsLoader
         source: "SettingsDialog.qml"
@@ -97,6 +90,7 @@ Item {
         width: parent.width
         height: parent.height
     }
+    /*
     ComposeMessage {
         id: composeMessage
     }
@@ -104,6 +98,7 @@ Item {
     CredentialsDialog { id: credentialsDialog }
     ForumErrorDialog { id: forumErrorDialog }
     MessageDialog { id: messageDialog }
+    */
     InactiveScreen {}
 
     // Hide the virtual keyboard if it is open

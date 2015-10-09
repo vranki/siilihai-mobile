@@ -5,7 +5,6 @@ ListView {
     width: parent.width * 0.9
     height: contentHeight
     spacing: 10
-    model: threads
 
     // Copypaste from MessageListView, meh!
     function gotoIndex(idx) {
@@ -34,6 +33,7 @@ ListView {
     footer: Column {
         width: parent.width
         Item { width: 1; height: defaultButtonHeight}
+        /*
         SimpleButton {
             anchors.horizontalCenter: parent.horizontalCenter
             buttonColor: color_a_text
@@ -45,6 +45,7 @@ ListView {
                 composeMessage.groupId = selectedgroup.id
             }
         }
+        */
         Item { width: 1; height: mainItem.height / 3}
     }
 

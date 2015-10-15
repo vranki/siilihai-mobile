@@ -12,7 +12,7 @@ Rectangle {
     "td.quote { background: #EEEEEE; margin: 5px; }" +
     "</style>\n"
 
-    color: isRead ? colorLessDark : colorDark
+    color: modelData.isRead ? colorLessDark : colorDark
     width: parent.width
     height: bodyView.height + headers.height + buttonRow.height
     radius: 10
@@ -52,7 +52,7 @@ Rectangle {
             color: color2
             anchors.left: parent.left
             text: modelData.displayName
-            font.bold: !isRead
+            font.bold: !modelData.isRead
             font.pixelSize: largePixelSize
         }
         Text {
@@ -80,7 +80,7 @@ Rectangle {
         SimpleButton {
             width: parent.width / 4
             height: smallButtonHeight
-            text: isRead ? "Read" : "Unread"
+            text: modelData.isRead ? "Read" : "Unread"
             onClicked: isRead = !isRead
         }
         SimpleButton {
@@ -88,13 +88,13 @@ Rectangle {
             height: smallButtonHeight
             text: "Open"
             onClicked: Qt.openUrlExternally(url)
-            visible: url
+            visible: modelData.url
         }
         SimpleButton {
             width: parent.width / 4
             height: smallButtonHeight
             text: "Re:";
-            visible: selectedforum.supportsPosting && selectedforum.isAuthenticated
+            visible: forumListView.selectedForum.supportsPosting && forumListView.selectedForum.isAuthenticated
             onClicked: {
                 composeMessage.newMessage()
                 composeMessage.setSubject(siilihaimobile.addReToSubject(selectedthread.name))

@@ -12,16 +12,18 @@ Item {
         anchors.fill: parent
         ToolbarButton {
             image: "gfx/Gnome-go-previous.svg"
-            visible: !siilihaimobile.noBackButton && selectedgroup || selectedthread || subscribeForumDialog.topItem
+            visible: !siilihaimobile.noBackButton && threadListView.selectedGroup || messageListView.selectedThread || subscribeForumDialog.enabled
             onClicked: {
                 if(subscribeForumDialog.topItem) {
                     subscribeForumDialog.topItem = false
                     return
                 }
-                if(selectedthread) {
-                    siilihaimobile.selectThread("")
+                if(messageListView.selectedThread) {
+                    messageListView.active = false
+                    messageListView.selectedThread = undefined
                 } else {
-                    siilihaimobile.selectGroup("")
+                    threadListView.active = false
+                    threadListView.selectedGroup = undefined
                 }
             }
             Component.onCompleted: mainItem.backPressed.connect(clicked)
@@ -29,16 +31,16 @@ Item {
         ToolbarButton {
             image: "gfx/Gnome-view-refresh.svg"
             onClicked: siilihaimobile.updateClicked()
-            visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
+            visible: !subscribeForumDialog.topItem && !threadListView.enabled && !messageListView.enabled
         }
         ToolbarButton {
             id: scrollDownButton
-            visible: selectedgroup !== undefined
+            visible: threadListView.selectedGroup || false
             image: "gfx/Gnome-go-bottom.svg"
             onClicked: {
-                var scrollView = threadListView
-                if(selectedthread)
-                    scrollView = messageListView
+                var scrollView = threadListView.item
+                if(messageListView.selectedThread)
+                    scrollView = messageListView.item
                 scrollView.gotoIndex(scrollView.count-1)
             }
         }
@@ -46,16 +48,16 @@ Item {
             visible: scrollDownButton.visible
             image: "gfx/Gnome-go-top.svg"
             onClicked: {
-                var scrollView = threadListView
-                if(selectedthread)
-                    scrollView = messageListView
+                var scrollView = threadListView.item
+                if(messageListView.selectedThread)
+                    scrollView = messageListView.item
                 scrollView.gotoIndex(0)
             }
         }
         ToolbarButton {
             image: "gfx/Gnome-preferences-system.svg"
             onClicked: settingsLoader.active = true
-            visible: !subscribeForumDialog.topItem && !threadListView.topItem && !messageListView.topItem
+            visible: !subscribeForumDialog.topItem && !threadListView.selectedGroup
         }
         ToolbarButton {
             text: "(R)"

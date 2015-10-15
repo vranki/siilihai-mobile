@@ -3,9 +3,9 @@ import "widgets"
 
 ListView {
     width: parent.width * 0.9
-    height: contentHeight
+    height: parent.height
     spacing: 10
-    model: messages
+    model: parent.model
 
     function gotoIndex(idx) {
         var pos = contentY;
@@ -22,11 +22,11 @@ ListView {
         width: parent.width * 0.95
         spacing: 5
         ThreadButton {
-            text: selectedthread ? selectedthread.displayName : "no thread"
-            rightText: selectedthread ? selectedthread.unreadCount : "no threas"
-            smallText: selectedgroup ? selectedgroup.displayName + " - " + selectedforum.alias : ""
-            hmm: selectedthread ? selectedthread.hasMoreMessages : false
-            icon: selectedthread !== null ? (selectedthread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg") : ""
+            text: selectedThread.displayName
+            rightText: selectedThread.unreadCount
+            smallText: threadListView.selectedGroup.displayName + " - " + forumListView.selectedForum.alias
+            hmm: selectedThread.hasMoreMessages
+            icon: selectedThread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
             width: parent.width * 0.95
             z: -10
             anchors.horizontalCenter: parent.horizontalCenter
@@ -37,7 +37,7 @@ ListView {
             text: "Show first unread"
             buttonColor: color_a_text
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: selectedthread !== null && selectedthread.unreadCount
+            visible: selectedThread.unreadCount
             onClicked: {
                 for(var i=0;i<count;i++) {
                     if(!model[i].isRead) {
@@ -63,9 +63,9 @@ ListView {
         }
         SimpleButton {
             text: "Get more messages"
-            visible: selectedthread !== null ? selectedthread.hasMoreMessages : false
+            visible: selectedThread.hasMoreMessages
             buttonColor: color_a_text
-            enabled: visible && !selectedforum.beingUpdated
+            enabled: visible && !forumListView.selectedForum.beingUpdated
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: siilihaimobile.showMoreMessages()
         }
@@ -75,7 +75,7 @@ ListView {
             onClicked: markAll(true)
             anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-read.svg"
-            visible: selectedthread !== null && selectedthread.unreadCount
+            visible: messageListView.selectedThread.unreadCount
         }
         SimpleButton {
             text: "Mark all unread"
@@ -83,12 +83,13 @@ ListView {
             onClicked: markAll(false)
             anchors.horizontalCenter: parent.horizontalCenter
             icon: "gfx/Gnome-mail-mark-unread.svg"
-            visible: selectedthread !== null && (count - selectedthread.unreadCount)
+            visible: (count - messageListView.selectedThread.unreadCount)
         }
+        /*
         SimpleButton {
             buttonColor: color_a_text
             text: "Reply..";
-            visible: forumListView.selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
+            visible: forumListView.selectedforum && forumListView.selectedforum.supportsPosting && forumListView.selectedforum.isAuthenticated
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 composeMessage.newMessage()
@@ -98,6 +99,7 @@ ListView {
                 composeMessage.threadId = selectedthread.id
             }
         }
+        */
         Item {
             width: 1
             height: mainItem.height/2

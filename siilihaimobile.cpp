@@ -15,7 +15,7 @@
 #include <siilihai/siilihaisettings.h>
 
 SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
-    ClientLogic(parent), qQuickView(view), currentGroup(0), currentThread(0), haltRequested(false), newForum(0),
+    ClientLogic(parent), qQuickView(view), haltRequested(false), newForum(0),
     probe(0, m_protocol), forumWasSubscribedByUser(false) {
     qmlRegisterType<UpdateError>("org.vranki.siilihai", 1, 0, "UpdateError");
 
@@ -69,25 +69,6 @@ void SiilihaiMobile::showMainWindow() {
         showStatusMessage("Started in offline mode");
 }
 
-void SiilihaiMobile::groupDeleted() {
-    qDebug() << Q_FUNC_INFO;
-    ForumGroup *grp = static_cast<ForumGroup*>(sender());
-    updateCurrentGroupModel();
-    subscribeGroupList.removeAll(grp);
-    qQuickView->rootContext()->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
-}
-
-void SiilihaiMobile::threadDeleted() {
-    qDebug() << Q_FUNC_INFO;
-    // ForumThread *thr = static_cast<ForumThread*>(sender());
-    updateCurrentThreadModel();
-}
-
-void SiilihaiMobile::messageDeleted() {
-    qDebug() << Q_FUNC_INFO;
-    updateCurrentMessageModel();
-}
-
 void SiilihaiMobile::showCredentialsDialog() {
     Q_ASSERT(currentCredentialsRequest); // Set in clientlogic
     Q_ASSERT(currentCredentialsRequest->subscription);
@@ -133,13 +114,8 @@ void SiilihaiMobile::subscribeFailed(QString reason) {
 void SiilihaiMobile::setContextProperties() {
     QQmlContext *rootContext = qQuickView->rootContext();
     rootContext->setContextProperty("siilihaimobile", this);
-    rootContext->setContextProperty("groups", QVariant::fromValue(groupList));
-    rootContext->setContextProperty("threads", QVariant::fromValue(threadList));
-    rootContext->setContextProperty("messages", QVariant::fromValue(messageList));
     rootContext->setContextProperty("subscribeGroupList", QVariant::fromValue(subscribeGroupList));
     rootContext->setContextProperty("messageQueue", QVariant::fromValue(errorMessageList));
-    rootContext->setContextProperty("selectedgroup", currentGroup);
-    rootContext->setContextProperty("selectedthread", currentThread);
     rootContext->setContextProperty("newForum", newForum);
     rootContext->setContextProperty("forumList", QVariant::fromValue(forumList));
 }
@@ -169,49 +145,6 @@ void SiilihaiMobile::setObjectProperty(QString objectName, QString property, QSt
 
 bool SiilihaiMobile::sortMessagesByOrdernum(QObject *a, QObject *b) {
     return qobject_cast<ForumMessage*>(a)->ordernum() < qobject_cast<ForumMessage*>(b)->ordernum();
-}
-
-void SiilihaiMobile::updateCurrentMessageModel() {
-    messageList.clear();
-    if(currentThread) {
-        foreach(ForumMessage *fm, currentThread->values()) {
-            messageList.append(fm);
-            connect(fm, SIGNAL(destroyed()), this, SLOT(messageDeleted()));
-        }
-    }
-    qSort(messageList.begin(), messageList.end(), sortMessagesByOrdernum);
-    qQuickView->rootContext()->setContextProperty("messages", QVariant::fromValue(messageList));
-}
-
-bool SiilihaiMobile::sortThreadsByOrdernum(QObject *a, QObject *b) {
-    return qobject_cast<ForumThread*>(a)->ordernum() < qobject_cast<ForumThread*>(b)->ordernum();
-}
-
-void SiilihaiMobile::updateCurrentThreadModel() {
-    threadList.clear();
-    if(currentGroup) {
-        foreach(ForumThread *ft, currentGroup->values()) {
-            threadList.append(ft);
-            connect(ft, SIGNAL(destroyed()), this, SLOT(threadDeleted()));
-        }
-    }
-    qSort(threadList.begin(), threadList.end(), sortThreadsByOrdernum);
-    qQuickView->rootContext()->setContextProperty("threads", QVariant::fromValue(threadList));
-}
-
-void SiilihaiMobile::updateCurrentGroupModel() {
-    groupList.clear();
-    /*
-    if(currentSub) {
-        foreach(ForumGroup *fg, currentSub->values()) {
-            if(fg->isSubscribed()) {
-                groupList.append(fg);
-                connect(fg, SIGNAL(destroyed()), this, SLOT(groupDeleted()));
-            }
-        }
-    }
-    */
-    qQuickView->rootContext()->setContextProperty("groups", QVariant::fromValue(groupList));
 }
 
 void SiilihaiMobile::registerUser(QString user, QString password, QString email, bool sync) {
@@ -377,12 +310,6 @@ void SiilihaiMobile::newForumAdded(ForumSubscription *sub) {
     }
 }
 
-void SiilihaiMobile::showMoreMessages() {
-    qDebug() << Q_FUNC_INFO << currentThread;
-    if(!currentThread) return;
-    moreMessagesRequested(currentThread);
-}
-
 void SiilihaiMobile::haltSiilihai() {
     qDebug() << Q_FUNC_INFO;
     haltRequested = true;
@@ -391,45 +318,6 @@ void SiilihaiMobile::haltSiilihai() {
 
 bool SiilihaiMobile::isHaltRequested() const {
     return haltRequested;
-}
-
-void SiilihaiMobile::selectGroup(QString id) {
-    /*
-    Q_ASSERT(id.isEmpty());
-    if (!currentGroup || currentGroup->id() != id) {
-        selectThread();
-        if(currentGroup) {
-            foreach(ForumThread *thr, currentGroup->values()){
-                disconnect(thr, SIGNAL(destroyed()), this, 0);
-            }
-            disconnect(currentGroup, SIGNAL(destroyed()), this, 0);
-        }
-        currentGroup = currentSub ? currentSub->value(id) : 0;
-        qQuickView->rootContext()->setContextProperty("selectedgroup", currentGroup);
-        updateCurrentThreadModel();
-    }
-    */
-}
-
-void SiilihaiMobile::selectThread(QString id) {
-    qDebug() << Q_FUNC_INFO << id;
-    Q_ASSERT(currentGroup || id.isEmpty());
-    if(!currentThread || currentThread->id() != id) {
-        if(currentThread) {
-            foreach(ForumMessage *msg, currentThread->values()) {
-                disconnect(msg, SIGNAL(destroyed()), this, 0);
-            }
-            disconnect(currentThread, 0, this, 0);
-        }
-        currentThread = 0;
-        if(currentGroup) currentThread = currentGroup->value(id);
-        if(currentThread) {
-            connect(currentThread, SIGNAL(messageAdded(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
-            connect(currentThread, SIGNAL(messageRemoved(ForumMessage*)), this, SLOT(updateCurrentMessageModel()));
-        }
-        updateCurrentMessageModel();
-        qQuickView->rootContext()->setContextProperty("selectedthread", currentThread);
-    }
 }
 
 void SiilihaiMobile::reloadUi() {

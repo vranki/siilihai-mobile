@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 ButtonWithUnreadCount {
-    property bool isSelectedForum: forumListView.selectedforum = modelData
+    property bool isSelectedForum: forumListView.selectedForum = modelData
     text: modelData.alias
     rightText: modelData.unreadCount
     icon: modelData.faviconUrl //.length > 0 ? faviconUrl : undefined
@@ -14,7 +14,7 @@ ButtonWithUnreadCount {
             console.log("Selecting", modelData, modelData.id)
             forumListView.selectedforum = modelData
             for(var i=0;i < forumListView.selectedforum.errors; i++) {
-                console.log("Forum errors:", forumListView.selectedforum.errors.length)
+                console.log("Forum errors:", forumListView.selectedForum.errors.length)
             }
         }
     }

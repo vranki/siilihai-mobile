@@ -25,8 +25,6 @@ signals:
 
 public slots:
     virtual void haltSiilihai();
-    void selectGroup(QString id=QString::null);
-    void selectThread(QString id=QString::null);
     void reloadUi();
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
@@ -35,24 +33,17 @@ public slots:
     void subscribeForumWithCredentials(int id, QString name, QString username=QString::null, QString password=QString::null);
     void getForumDetails(int id);
     void getForumUrlDetails(QString url);
-    void showMoreMessages();
     void showSubscribeGroups(ForumSubscription *sub); // Remember to call applyGroupSubscriptions afterwards!
     void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
     void postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body);
 
 private slots:
-    void groupDeleted();
-    void threadDeleted();
-    void messageDeleted();
-
     void registerFinished(bool success, QString motd, bool sync);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
     void listForumsFinished(QList <ForumSubscription*>);
-    void updateCurrentMessageModel();
-    void updateCurrentThreadModel();
-    void updateCurrentGroupModel(); // Updates the "groups" list
+
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
     void reloadUiReally();
@@ -73,11 +64,9 @@ private:
 
     QQuickView *qQuickView;
     // @todo check if qt quick has smarter way for this
-    QList<QObject*> groupList, threadList, messageList, forumList, subscribeGroupList;
+    QList<QObject*> subscribeGroupList, forumList;
     QStringList errorMessageList;
     QQuickView *quickView;
-    ForumGroup *currentGroup;
-    ForumThread *currentThread;
     QString regOrLoginUser, regOrLoginPass;
     bool haltRequested;
     ForumSubscription *newForum; // the one being subscribed

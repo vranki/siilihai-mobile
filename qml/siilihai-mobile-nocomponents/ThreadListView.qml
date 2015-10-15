@@ -3,8 +3,9 @@ import "widgets"
 
 ListView {
     width: parent.width * 0.9
-    height: contentHeight
+    height: parent.height
     spacing: 10
+    model: parent.model
 
     // Copypaste from MessageListView, meh!
     function gotoIndex(idx) {
@@ -19,10 +20,10 @@ ListView {
     NumberAnimation { id: anim; target: threadListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500 }
 
     header: GroupButton {
-        text: selectedgroup ? selectedgroup.displayName : "no group"
-        rightText: selectedgroup ? selectedgroup.unreadCount : "no group"
-        smallText: selectedgroup ? selectedgroup.hierarchy : "no group"
-        width:parent.width * 0.95
+        text: selectedGroup.displayName
+        rightText: selectedGroup.unreadCount
+        smallText: selectedGroup.hierarchy
+        width: parent.width * 0.95
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
         drawBorder: false
@@ -33,19 +34,19 @@ ListView {
     footer: Column {
         width: parent.width
         Item { width: 1; height: defaultButtonHeight}
-        /*
+
         SimpleButton {
             anchors.horizontalCenter: parent.horizontalCenter
             buttonColor: color_a_text
             text: "New thread..";
-            visible: selectedforum && selectedforum.supportsPosting && selectedforum.isAuthenticated
+            visible: forumListView.selectedForum.supportsPosting && forumListView.selectedForum.isAuthenticated
             onClicked: {
                 composeMessage.newMessage()
                 composeMessage.appendBody(siilihai.settings.signature)
                 composeMessage.groupId = selectedgroup.id
             }
         }
-        */
+
         Item { width: 1; height: mainItem.height / 3}
     }
 

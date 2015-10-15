@@ -7,6 +7,7 @@ ListView {
     model: siilihaimobile.forumDatabase.subscriptions
     header: StatusIndicator {}
     delegate: ForumButton {}
+    property var selectedForum
     footer: Column {
         width: parent.width
         Item { width:1; height: parent.width/4 }

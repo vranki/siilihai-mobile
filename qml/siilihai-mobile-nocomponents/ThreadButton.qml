@@ -6,7 +6,10 @@ ButtonWithUnreadCount {
     rightText: modelData.unreadCount
     width: parent.width * 0.95
     anchors.horizontalCenter: parent.horizontalCenter
-    onClicked: siilihaimobile.selectThread(id)
+    onClicked: {
+        messageListView.selectedThread = modelData
+        messageListView.active = true
+    }
     clip: true
     icon: modelData.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
     Text {

@@ -5,4 +5,8 @@ ButtonWithUnreadCount {
     rightText: modelData.unreadCount
     smallText: modelData.hierarchy
     icon: "gfx/Gnome-folder.svg"
+    onClicked: {
+        threadListView.selectedGroup = modelData
+        threadListView.active = true
+    }
 }

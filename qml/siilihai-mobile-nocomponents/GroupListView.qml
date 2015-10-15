@@ -6,7 +6,5 @@ ListView {
     height: contentHeight
     spacing: 10
     model: groups
-    delegate: GroupButton {
-        onClicked: threadListView.model = modelData.threads
-    }
+    delegate: GroupButton { }
 }

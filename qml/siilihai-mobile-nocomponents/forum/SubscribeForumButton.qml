@@ -3,7 +3,7 @@ import ".."
 import "../widgets"
 
 SimpleButton {
-    property bool isSelectedForum: subscribeForumDialog.subscribeForumId === id && !enterUrl
+    property bool isSelectedForum: subscribeForumDialog.item.subscribeForumId === modelData.id && !enterUrl
     property bool loadImage: false
     anchors.horizontalCenter: parent.horizontalCenter
     height: filterMatches ? tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0) : 0
@@ -16,8 +16,8 @@ SimpleButton {
     onLoadImageChanged: {
         console.log("Loadimage: " + loadImage)
         if(loadImage && favicon.source == "") {
-            console.log("Loading image " + faviconUrl)
-            favicon.source = faviconUrl
+            console.log("Loading image " + modelData.faviconUrl)
+            favicon.source = modelData.faviconUrl
         } else if(!loadImage && favicon.status != Image.Ready){
             console.log("Not loading image")
             favicon.source = ""
@@ -51,7 +51,7 @@ SimpleButton {
     onClicked: {
         if(isSelectedForum) return
         enterUrl = false
-        subscribeForumDialog.subscribeForumId = id
+        subscribeForumDialog.item.subscribeForumId = modelData.id
         siilihaimobile.getForumDetails(modelData.id)
     }
 
@@ -91,8 +91,7 @@ SimpleButton {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 siilihaimobile.subscribeForumWithCredentials(newForum.id, newForum.alias, upf.username, upf.password)
-                subscribeForumDialog.topItem = false
-                subscribeForumDialog.subscribeForumId = 0
+                subscribeForumDialog.active = false
             }
         }
     }

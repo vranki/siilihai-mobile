@@ -67,10 +67,11 @@ Item {
 
     Loader {
         id: subscribeForumDialog
+        objectName: "subscribeForumDialog"
         source: "forum/SubscribeForumDialog.qml"
         width: parent.width
         height: parent.height
-        active: forumList
+        active: false
     }
 
     /*

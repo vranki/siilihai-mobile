@@ -5,7 +5,8 @@ import "../widgets"
 SimpleDialog {
     property bool enterUrl: false
     property int subscribeForumId: 0
-    objectName: "subscribeForumDialog"
+    topItem: true
+
     ListView {
         id: subscribeList
         property string forumFilterString: ""
@@ -32,7 +33,7 @@ SimpleDialog {
             }
             Item {width: 1;height: 50}
         }
-        model: forumList
+        model: siilihai.forumList
         delegate: SubscribeForumButton { loadImage: (!subscribeList.moving && topItem)}
         footer: Item {width: 1; height: mainItem.height } // Spacer
         onModelChanged: {
@@ -40,4 +41,6 @@ SimpleDialog {
             subscribeList.forumFilterString = ""
         }
     }
+
+    Component.onCompleted: siilihai.listForums()
 }

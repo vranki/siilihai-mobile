@@ -29,7 +29,7 @@ public slots:
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
     void loginUser(QString user, QString password);
-    virtual void subscribeForum(); // Call to show dialog
+    virtual void subscribeForum();
     void subscribeForumWithCredentials(int id, QString name, QString username=QString::null, QString password=QString::null);
     void getForumDetails(int id);
     void getForumUrlDetails(QString url);
@@ -42,8 +42,6 @@ private slots:
     void registerFinished(bool success, QString motd, bool sync);
     void loginFinished(bool success, QString motd, bool sync);
     void sendParserReportFinished(bool success);
-    void listForumsFinished(QList <ForumSubscription*>);
-
     void probeResults(ForumSubscription *probedSub);
     void newForumAdded(ForumSubscription *sub);
     void reloadUiReally();

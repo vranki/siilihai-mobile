@@ -26,24 +26,11 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     qQuickView->rootContext()->setContextProperty("siilihai", this);
     dismissMessages();
     setContextProperties();
-    connect(&m_protocol, SIGNAL(listForumsFinished(QList <ForumSubscription*>)), this, SLOT(listForumsFinished(QList <ForumSubscription*>)));
 }
 
 void SiilihaiMobile::subscribeForum() {
-    deleteNewForum();
-    setObjectProperty("subscribeForumDialog", "topItem", "true");
-    m_protocol.listForums();
-}
-
-// Receiver owns the forums!
-void SiilihaiMobile::listForumsFinished(QList <ForumSubscription*> forums) {
-    qQuickView->rootContext()->setContextProperty("forumList", 0);
-    qDeleteAll(forumList); // Delete 'em old
-    forumList.clear();
-    foreach(ForumSubscription *p, forums)
-        forumList.append(p);
-
-    qQuickView->rootContext()->setContextProperty("forumList", QVariant::fromValue(forumList));
+    // deleteNewForum();
+    setObjectProperty("subscribeForumDialog", "active", "true");
 }
 
 void SiilihaiMobile::showLoginWizard() {

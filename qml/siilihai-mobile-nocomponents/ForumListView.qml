@@ -19,7 +19,7 @@ ListView {
             text: "+ Subscribe"
             buttonColor: "gray"
             bgColor: "white"
-            onClicked: siilihaimobile.subscribeForum()
+            onClicked: siilihai.subscribeForum()
             fontSize: height/8
         }
     }

@@ -22,6 +22,8 @@ public:
 
 signals:
     void messagePosted(QString err);
+    void showSubscribeForumDialog();
+    void showForumSettingsDialog(ForumSubscription *sub);
 
 public slots:
     virtual void haltSiilihai();
@@ -29,21 +31,16 @@ public slots:
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
     void loginUser(QString user, QString password);
-    virtual void subscribeForum();
-    void subscribeForumWithCredentials(int id, QString name, QString username=QString::null, QString password=QString::null);
-    void getForumDetails(int id);
-    void getForumUrlDetails(QString url);
-    void showSubscribeGroups(ForumSubscription *sub); // Remember to call applyGroupSubscriptions afterwards!
-    void applyGroupSubscriptions();
     void credentialsEntered(QString u, QString p, bool remember);
     void postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body);
+    virtual void subscribeForum();
+
+protected slots:
+    virtual void groupListChanged(ForumSubscription* sub);
 
 private slots:
     void registerFinished(bool success, QString motd, bool sync);
     void loginFinished(bool success, QString motd, bool sync);
-    void sendParserReportFinished(bool success);
-    void probeResults(ForumSubscription *probedSub);
-    void newForumAdded(ForumSubscription *sub);
     void reloadUiReally();
 
 protected:
@@ -55,20 +52,15 @@ protected:
 
 private:
     void subscribeFailed(QString reason);
-    void deleteNewForum();
     void setObjectProperty(QString objectName, QString property, QString value);
     static bool sortThreadsByOrdernum(QObject *a, QObject *b);
     static bool sortMessagesByOrdernum(QObject *a, QObject *b);
 
     QQuickView *qQuickView;
-    // @todo check if qt quick has smarter way for this
-    QList<QObject*> subscribeGroupList, forumList;
     QStringList errorMessageList;
     QQuickView *quickView;
     QString regOrLoginUser, regOrLoginPass;
     bool haltRequested;
-    ForumSubscription *newForum; // the one being subscribed
-    ForumProbe probe;
     // True if user just added a forum.
     bool forumWasSubscribedByUser;
 };

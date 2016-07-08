@@ -3,7 +3,7 @@ import ".."
 import "../widgets"
 
 SimpleButton {
-    property bool isSelectedForum: subscribeForumDialog.item.subscribeForumId === modelData.id && !enterUrl
+    property bool isSelectedForum: (subscribeForumDialog.subscribeForumId === modelData.id) && !enterUrl
     property bool loadImage: false
     anchors.horizontalCenter: parent.horizontalCenter
     height: filterMatches ? tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0) : 0
@@ -51,20 +51,22 @@ SimpleButton {
     onClicked: {
         if(isSelectedForum) return
         enterUrl = false
-        subscribeForumDialog.item.subscribeForumId = modelData.id
-        siilihaimobile.getForumDetails(modelData.id)
+        subscribeForumDialog.subscribeForumId = modelData.id
+        siilihaimobile.subscriptionManagement.getForum(modelData.id)
     }
 
     Column {
         id: forumDetails
         width: parent.width * 0.9
         anchors.horizontalCenter: parent.horizontalCenter
-        visible: isSelectedForum
+        visible: newForum
         anchors.top: topLine.bottom
         anchors.topMargin: 10
         spacing: 10
+        property bool newForum: siilihaimobile.subscriptionManagement.newForum
+        property bool supportsLogin: newForum ? siilihaimobile.subscriptionManagement.newForum.supportsLogin : false
         Text {
-            text: newForum ? newForum.forumUrl : ""
+            text: forumDetails.newForum ? siilihaimobile.subscriptionManagement.newForum.forumUrl : ""
             color: color1
             font.pixelSize: smallPixelSize
             anchors.horizontalCenter: parent.horizontalCenter
@@ -74,24 +76,25 @@ SimpleButton {
             }
         }
         Text {
-            text: newForum ? (newForum.supportsLogin ? "" : "Login not supported") : "Getting details .."
+            text: forumDetails.supportsLogin ? "" : "Login not supported"
             color: "white"
             font.pixelSize: largePixelSize
             wrapMode: Text.WordWrap
         }
         UserPassForm {
             id: upf
-            visible: newForum && newForum.supportsLogin
+            visible: forumDetails.supportsLogin
             questionText: "Authenticate to forum"
             checked: false
         }
         SimpleButton {
-            visible: newForum
             text: "Subscribe"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                siilihaimobile.subscribeForumWithCredentials(newForum.id, newForum.alias, upf.username, upf.password)
-                subscribeForumDialog.active = false
+                subscribeForumDialog.closeLater()
+                siilihaimobile.subscriptionManagement.subscribeThisForum(upf.username, upf.password)
+                siilihaimobile.subscriptionManagement.resetNewForum()
+                siilihaimobile.subscriptionManagement.resetForumList()
             }
         }
     }

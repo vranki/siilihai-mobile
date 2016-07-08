@@ -5,15 +5,16 @@ ButtonWithUnreadCount {
     property bool isSelectedForum: forumListView.selectedForum = modelData
     text: modelData.alias
     rightText: modelData.unreadCount
-    icon: modelData.faviconUrl //.length > 0 ? faviconUrl : undefined
-    iconEmblems: (modelData.beingSynced ? "S" : "") + (modelData.beingUpdated ? "U" : "")
+    icon: modelData.faviconUrl
+    iconEmblems: (modelData.beingSynced ? "S" : "") + (modelData.beingUpdated ? "U" : "") + (modelData.errors.length ? "!" : "")
     onClicked: {
+        console.log("OC:", isSelectedForum)
         if(isSelectedForum) {
-            forumListView.selectedforum = undefined
+            forumListView.selectedForum = undefined
         } else {
             console.log("Selecting", modelData, modelData.id)
-            forumListView.selectedforum = modelData
-            for(var i=0;i < forumListView.selectedforum.errors; i++) {
+            forumListView.selectedForum = modelData
+            for(var i=0;i < forumListView.selectedForum.errors; i++) {
                 console.log("Forum errors:", forumListView.selectedForum.errors.length)
             }
         }
@@ -43,7 +44,10 @@ ButtonWithUnreadCount {
         width: height*2
         height: defaultButtonHeight*0.8
         buttonColor: "black"
-        onClicked: if(shown) siilihaimobile.showSubscribeGroups()
+        onClicked: if(shown) {
+                       forumListView.selectedForum = modelData
+                       forumSettingsDialog.active = true
+                   }
         Image {
             source: "gfx/Folder-move2.svg"
             anchors.fill: parent

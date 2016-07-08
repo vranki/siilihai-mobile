@@ -6,8 +6,8 @@ Rectangle {
     visible: y > -height
     color: color_b_bg
     opacity: 0.95
-    width: parent.width
-    height: parent.height
+    width: parent ? parent.width : 0
+    height: parent ? parent.height : 0
     Behavior on y { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
     HideEffect {}
 
@@ -16,4 +16,15 @@ Rectangle {
         onClicked: hideVkb()
     }
     onTopItemChanged: hideVkb()
+
+    signal closeDialog
+    signal closeLater
+
+    onCloseLater: terminateTimer.start()
+
+    Timer {
+        id: terminateTimer
+        interval: 50
+        onTriggered: closeDialog()
+    }
 }

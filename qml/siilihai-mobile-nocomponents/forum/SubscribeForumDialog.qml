@@ -3,8 +3,13 @@ import ".."
 import "../widgets"
 
 SimpleDialog {
+    id: subscribeForumDialog
+    property int subscribeForumId: -1 // ID of currently selected forum
     property bool enterUrl: false
-    property int subscribeForumId: 0
+
+    signal terminate
+    onTerminate: terminateTimer.start()
+
     topItem: true
 
     ListView {
@@ -29,18 +34,19 @@ SimpleDialog {
             }
             SimpleTextEdit {
                 clearButton: true
-                onTextChanged: subscribeList.forumFilterString = text.toLocaleLowerCase()
+                onTextChanged: siilihai.subscriptionManagement.forumFilter = text.toLocaleLowerCase()
             }
             Item {width: 1;height: 50}
         }
-        model: siilihai.forumList
+        model: siilihai.subscriptionManagement.forumList
         delegate: SubscribeForumButton { loadImage: (!subscribeList.moving && topItem)}
         footer: Item {width: 1; height: mainItem.height } // Spacer
         onModelChanged: {
             returnToBounds()
-            subscribeList.forumFilterString = ""
+            siilihai.subscriptionManagement.forumFilter = ""
         }
     }
 
-    Component.onCompleted: siilihai.listForums()
+    Component.onCompleted: siilihai.subscriptionManagement.listForums()
+
 }

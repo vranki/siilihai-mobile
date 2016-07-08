@@ -15,6 +15,7 @@ Item {
     property string color_a_buttons_pressed: "#888888"
     property string color_b_bg: "black"
     property string color_b_text: "white"
+    property string color_b_error_bg: "#440000"
 
     property string color_input: "yellow"
 
@@ -72,6 +73,34 @@ Item {
         width: parent.width
         height: parent.height
         active: false
+        Connections {
+            target: subscribeForumDialog.item
+            ignoreUnknownSignals: true
+            onCloseDialog: subscribeForumDialog.active = false
+        }
+        Connections {
+            target: siilihaimobile
+            onShowSubscribeForumDialog: subscribeForumDialog.active = true
+        }
+    }
+
+    Connections {
+        target: siilihaimobile
+        onShowForumSettingsDialog: { console.log("show fsd:", sub) }
+    }
+
+    Loader {
+        id: forumSettingsDialog
+        source: "forum/ForumSettingsDialog.qml"
+        width: parent.width
+        height: parent.height
+        active: false
+
+        Connections {
+            target: forumSettingsDialog.item
+            ignoreUnknownSignals: true
+            onCloseDialog: forumSettingsDialog.active = false
+        }
     }
 
     /*
@@ -85,7 +114,6 @@ Item {
         id: forumSettingsDialog
     }
     */
-
 
     Toolbar {
         id: toolbar

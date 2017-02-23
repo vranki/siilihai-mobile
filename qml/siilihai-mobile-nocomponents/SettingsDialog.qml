@@ -4,16 +4,16 @@ import "widgets"
 SimpleDialog {
     id: settingsDialog
     topItem: true
-    Component.onCompleted: {
-        console.log("Loaded SD", topItem)
-        signature.text = siilihai.settings.signature
-    }
+    Component.onCompleted: signature.text = siilihai.settings.signature
 
     onTopItemChanged: {
         if(!topItem) {
-            settingsLoader.active = false
-        } else {
-            signature.text = siilihai.settings.signature
+            siilihai.settings.threadsPerGroup = tpg.value
+            siilihai.settings.messagesPerThread = mpt.value
+            siilihai.settings.showMoreCount = smc.value
+            siilihai.settings.syncEnabled = sync.checked
+            siilihai.settings.signature = signature.text
+            siilihai.settingsChanged(true)
         }
     }
 
@@ -87,24 +87,6 @@ SimpleDialog {
             }
             SimpleTextArea {
                 id: signature
-            }
-            Item {
-                width: 1
-                height: mainItem.height/8
-            }
-            SimpleButton {
-                text: "Close"
-                anchors.horizontalCenter: parent.horizontalCenter
-                Component.onCompleted: mainItem.backPressed.connect(clicked)
-                onClicked: {
-                    siilihai.settings.threadsPerGroup = tpg.value
-                    siilihai.settings.messagesPerThread = mpt.value
-                    siilihai.settings.showMoreCount = smc.value
-                    siilihai.settings.syncEnabled = sync.checked
-                    siilihai.settings.signature = signature.text
-                    siilihai.settingsChanged(true)
-                    topItem = false
-                }
             }
             Item {
                 width: 1

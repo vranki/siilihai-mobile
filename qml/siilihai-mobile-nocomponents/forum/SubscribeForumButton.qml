@@ -6,20 +6,14 @@ SimpleButton {
     property bool isSelectedForum: (subscribeForumDialog.subscribeForumId === modelData.id) && !enterUrl
     property bool loadImage: false
     anchors.horizontalCenter: parent.horizontalCenter
-    height: filterMatches ? tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0) : 0
-    property bool filterMatches: (subscribeList.forumFilterString.length == 0)
-                                 || (modelData.alias.toLocaleLowerCase().indexOf(subscribeList.forumFilterString) > -1)
-                                 || (String(modelData.forumUrl).toLocaleLowerCase().indexOf(subscribeList.forumFilterString) > -1);
+    height: tallButtonHeight + (isSelectedForum ? forumDetails.height + 20 : 0)
 
     Behavior on height { SmoothedAnimation { velocity: 800 } }
 
     onLoadImageChanged: {
-        console.log("Loadimage: " + loadImage)
         if(loadImage && favicon.source == "") {
-            console.log("Loading image " + modelData.faviconUrl)
             favicon.source = modelData.faviconUrl
         } else if(!loadImage && favicon.status != Image.Ready){
-            console.log("Not loading image")
             favicon.source = ""
         }
     }
@@ -40,11 +34,10 @@ SimpleButton {
             id: favicon
             width: height
             height: tallButtonHeight * 0.8
-            source: ""
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: parent.height - height + 1
-            visible: filterMatches
+            asynchronous: true
         }
     }
 
@@ -91,7 +84,7 @@ SimpleButton {
             text: "Subscribe"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                subscribeForumDialog.closeLater()
+                subscribeForumDialog.topItem = false
                 siilihaimobile.subscriptionManagement.subscribeThisForum(upf.username, upf.password)
                 siilihaimobile.subscriptionManagement.resetNewForum()
                 siilihaimobile.subscriptionManagement.resetForumList()

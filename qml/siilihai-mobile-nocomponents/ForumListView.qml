@@ -10,7 +10,7 @@ ListView {
     property var selectedForum
     footer: Column {
         width: parent.width
-        Item { width:1; height: parent.width/4 }
+        Item { width:1; height: parent.width/8 }
 
         SimpleButton {
             anchors.horizontalCenter: parent.horizontalCenter

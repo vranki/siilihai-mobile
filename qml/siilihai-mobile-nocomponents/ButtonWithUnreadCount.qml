@@ -26,65 +26,82 @@ Rectangle {
         ColorAnimation { from: color_a_buttons_pressed; to: buttonColor }
     }
 
-    BusyIndicator {
-        enabled: parent.busy
-        x: parent.width * 0.6
-        width: parent.width * 0.2
-        anchors.verticalCenter: rightText.verticalCenter
-        height: 10
-    }
-    Image {
-        id: iconImage
-        anchors.left: parent.left
-        anchors.leftMargin: parent.width * 0.005
-        anchors.top: parent.top
-        anchors.topMargin: 4
-        height: defaultButtonHeight * 0.8
-        width: height
-        source: icon
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: iconEmblems
-            style: Text.Outline
-            color: "white"
-            styleColor: "black"
-        }
-    }
+    // The top header of a forum
     Item {
-        anchors.left: iconImage.right
-        anchors.right: rightText.left
-        width: parent.width * 0.7
-        height: defaultButtonHeight
-        Text {
-            text: uibutton.smallText
-            font.pixelSize: defaultButtonHeight * 0.25
-            color: "gray"
-            anchors.bottom: parent.bottom
-            anchors.left: mainLabel.left
-        }
-        Text {
-            id: mainLabel
-            anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 30
-            text: uibutton.text
-            color: "black"
-            font.pixelSize: defaultButtonHeight * 0.3
-            width: parent.width * 0.8
-            wrapMode: Text.Wrap
-        }
-    }
-    Text {
-        id: rightText
-        anchors.top: parent.top
-        anchors.right: parent.right
-        text: uibutton.rightText
-        color: text !== "0" ? color1 : "#bdbdee"
-        font.pixelSize: defaultButtonHeight * 0.7
-    }
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width * 0.98
+        height: defaultButtonHeight * 0.85
+        y: defaultButtonHeight * 0.05
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: parent.clicked()
-        onPressed: if(enableClickAnimation) clickAnimation.restart()
+        Image {
+            id: iconImage
+            anchors.verticalCenter: parent.verticalCenter
+            height: defaultButtonHeight * 0.8
+            width: height
+            source: icon
+            asynchronous: true
+            Rectangle {
+                color: "black"
+                visible: iconImage.status !== Image.Ready
+                opacity: 0.2
+                anchors.fill: parent
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: iconEmblems
+                style: Text.Outline
+                color: "white"
+                styleColor: "black"
+            }
+        }
+        Item {
+            anchors.left: iconImage.right
+            anchors.right: rightText.left
+            width: parent.width * 0.8
+            height: defaultButtonHeight
+
+            Text {
+                id: mainLabel
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: smallLabel.visible ? - parent.height * 0.2 : 0
+                x: parent.width / 30
+                text: uibutton.text
+                color: "black"
+                font.pixelSize: defaultButtonHeight * 0.3
+                width: parent.width * 0.8
+                wrapMode: Text.Wrap
+            }
+            Text {
+                id: smallLabel
+                text: uibutton.smallText
+                font.pixelSize: defaultButtonHeight * 0.25
+                color: "gray"
+                anchors.top: mainLabel.bottom
+                anchors.left: mainLabel.left
+                visible: text
+            }
+        }
+        BusyIndicator {
+            enabled: busy
+            anchors.right: rightText.left
+            width: parent.width * 0.2
+            anchors.verticalCenter: parent.verticalCenter
+            height: parent.height / 2
+        }
+        Text {
+            id: rightText
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width * 0.001
+            text: uibutton.rightText
+            color: text !== "0" ? color1 : "#bdbdee"
+            font.pixelSize: defaultButtonHeight * 0.7
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: uibutton.clicked()
+            onPressed: if(enableClickAnimation) clickAnimation.restart()
+        }
     }
 }

@@ -11,6 +11,7 @@ Rectangle {
         color: color2
         height: parent.height
         width: height*2
+        radius: height
         SequentialAnimation on x {
              running: enabled && Qt.application.active
              loops: Animation.Infinite

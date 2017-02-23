@@ -3,12 +3,13 @@ import ".."
 import "../widgets"
 
 SimpleDialog {
+    id: loginWizard
     property bool useExitingAccount: false
     property bool registerAccount: false
     property bool busy: false
-
-    objectName: "loginWizard"
     opacity: 1
+    topItem: true
+
     Image {
         property double xoffset: 0
         source: "../gfx/siilis3.png"
@@ -29,7 +30,7 @@ SimpleDialog {
         anchors.fill: parent
         contentWidth: width
         contentHeight: regColumn.height
-        MouseArea { width: parent.width; height: regColumn.height; onClicked: hideVkb() } // Hax
+
         Column {
             id: regColumn
             y: 50
@@ -37,7 +38,7 @@ SimpleDialog {
 
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 30
-            Item {width: 1; height: mainItem.height / 8}
+            Item {width: 1; height: mainItem.height / 16}
             Text {
                 text: "Welcome to Siilihai, the no-nonsense open source web forum reader"
                 font.pixelSize: headerPixelSize
@@ -95,12 +96,15 @@ SimpleDialog {
         }
     }
 
-    function loginFinished(success, motd) {
-        busy = false
-        if(success) {
-            topItem = false
-        } else {
-            loginError.text = "Login failed - check username & password"
+    Connections {
+        target: siilihaimobile
+        onLoginFinished: {
+            busy = false
+            if(success) {
+                topItem = false
+            } else {
+                loginError.text = "Login failed - check username & password"
+            }
         }
     }
 }

@@ -28,11 +28,6 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
     setContextProperties();
 }
 
-void SiilihaiMobile::showLoginWizard() {
-    qDebug() << Q_FUNC_INFO;
-    setObjectProperty("loginWizard", "topItem", "true");
-}
-
 void SiilihaiMobile::errorDialog(QString message) {
     if(!message.isEmpty()) errorMessageList.append(message);
     qQuickView->rootContext()->setContextProperty("errormessages", errorMessageList);
@@ -49,23 +44,6 @@ void SiilihaiMobile::showMainWindow() {
     qQuickView->rootContext()->setContextProperty("siilihaisettings", m_settings);
     if(state() == SH_OFFLINE)
         showStatusMessage("Started in offline mode");
-}
-
-void SiilihaiMobile::showCredentialsDialog() {
-    Q_ASSERT(currentCredentialsRequest); // Set in clientlogic
-    Q_ASSERT(currentCredentialsRequest->subscription);
-    Q_ASSERT(!currentCredentialsRequest->subscription->alias().isNull());
-    qDebug() << Q_FUNC_INFO << currentCredentialsRequest->subscription->alias();
-    setObjectProperty("credentialsDialog", "forumAlias", currentCredentialsRequest->subscription->alias());
-    setObjectProperty("credentialsDialog", "topItem", "true");
-}
-
-void SiilihaiMobile::credentialsEntered(QString u, QString p, bool remember) {
-    qDebug() << Q_FUNC_INFO << u << remember;
-    Q_ASSERT(currentCredentialsRequest);
-    currentCredentialsRequest->authenticator.setUser(u);
-    currentCredentialsRequest->authenticator.setPassword(p);
-    currentCredentialsRequest->signalCredentialsEntered(remember);
 }
 
 void SiilihaiMobile::postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body) {
@@ -91,14 +69,6 @@ void SiilihaiMobile::postMessage(ForumSubscription *sub, QString grpId, QString 
 
 void SiilihaiMobile::subscribeForum() {
     emit showSubscribeForumDialog();
-}
-
-void SiilihaiMobile::groupListChanged(ForumSubscription *sub)
-{
-    if(sub->groups().length() == 0 && sub->errorList().length() == 0) {
-        qDebug() << Q_FUNC_INFO << "Forum without groups - open the forum properties dialog.";
-        emit showForumSettingsDialog(sub);
-    }
 }
 
 void SiilihaiMobile::subscribeFailed(QString reason) {
@@ -164,13 +134,13 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
 }
 
 void SiilihaiMobile::loginUser(QString user, QString password) {
-    qDebug() << Q_FUNC_INFO << user << password;
+    qDebug() << Q_FUNC_INFO << user;
     regOrLoginUser = user.trimmed();
     regOrLoginPass = password.trimmed();
-    connect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
+    // connect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
     m_protocol.login(user, password);
 }
-
+/*
 void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     qDebug() << Q_FUNC_INFO;
     ClientLogic::loginFinished(success, motd, sync);
@@ -183,6 +153,7 @@ void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
     if (lw) QMetaObject::invokeMethod(lw, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
 }
+*/
 
 void SiilihaiMobile::haltSiilihai() {
     qDebug() << Q_FUNC_INFO;

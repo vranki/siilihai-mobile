@@ -62,7 +62,6 @@ SimpleButton {
         }
         SimpleTextEdit {
             id: username
-            focus: true
             visible: login.visible
             inputMethodHints: Qt.ImhNoAutoUppercase
         }

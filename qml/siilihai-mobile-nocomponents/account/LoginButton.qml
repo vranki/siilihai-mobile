@@ -10,7 +10,8 @@ SimpleButton {
     clip: true
     Behavior on height { SmoothedAnimation { velocity: 800 } }
     onClicked: {
-        useExitingAccount = true; registerAccount = false
+        useExitingAccount = true
+        registerAccount = false
     }
     Column {
         id: contentC

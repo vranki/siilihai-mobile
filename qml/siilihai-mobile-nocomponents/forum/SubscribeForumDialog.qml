@@ -14,7 +14,6 @@ SimpleDialog {
 
     ListView {
         id: subscribeList
-        property string forumFilterString: ""
         anchors.fill: parent
         header: Column {
             width: parent.width
@@ -35,6 +34,7 @@ SimpleDialog {
             SimpleTextEdit {
                 clearButton: true
                 onTextChanged: siilihai.subscriptionManagement.forumFilter = text.toLocaleLowerCase()
+                onFocusChanged: console.trace()
             }
             Item {width: 1;height: 50}
         }
@@ -43,10 +43,9 @@ SimpleDialog {
         footer: Item {width: 1; height: mainItem.height } // Spacer
         onModelChanged: {
             returnToBounds()
-            siilihai.subscriptionManagement.forumFilter = ""
+            // siilihai.subscriptionManagement.forumFilter = ""
         }
     }
 
     Component.onCompleted: siilihai.subscriptionManagement.listForums()
-
 }

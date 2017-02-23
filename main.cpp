@@ -24,14 +24,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Find the main.qml to use..
 #ifdef Q_OS_ANDROID
-    // Android is a bit special.. it loads QML *REALLY* slow so we need a loading screen:
-    viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/LoadingScreen.qml");
-    qDebug() << Q_FUNC_INFO << "Loading..";
-    viewer.showFullScreen();
-    app.processEvents();
     // On android the file.exists() returns false, although this works:
     viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/main.qml");
-    qDebug() << Q_FUNC_INFO << "setMainQmlFile done";
+    qDebug() << Q_FUNC_INFO << "android setMainQmlFile done";
 #else
     // Search from a few known paths
     QStringList mainFileAlternatives;
@@ -40,7 +35,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                          << "/usr/share/harbour-siilihai-mobile/qml/siilihai-mobile-nocomponents/main.qml";
 
     QFile mainQml;
-    foreach(QString fileName, mainFileAlternatives) {
+    for(QString fileName : mainFileAlternatives) {
         mainQml.setFileName(fileName);
         qDebug() << Q_FUNC_INFO << "File " << fileName << (mainQml.exists() ? " exists, using it" : " does not exist");
         if(mainQml.exists()) {
@@ -49,7 +44,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
     }
     if(!mainQml.exists()) {
-        qDebug() << Q_FUNC_INFO << "Cannot open main.qml!";
+        qDebug() << Q_FUNC_INFO << "Cannot open main.qml! Searched in " << mainFileAlternatives;
         return -1;
     }
 #endif

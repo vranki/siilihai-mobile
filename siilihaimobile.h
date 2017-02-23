@@ -31,24 +31,17 @@ public slots:
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
     void loginUser(QString user, QString password);
-    void credentialsEntered(QString u, QString p, bool remember);
     void postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body);
     virtual void subscribeForum();
 
-protected slots:
-    virtual void groupListChanged(ForumSubscription* sub);
-
 private slots:
     void registerFinished(bool success, QString motd, bool sync);
-    void loginFinished(bool success, QString motd, bool sync);
     void reloadUiReally();
 
 protected:
-    virtual void showLoginWizard();
     virtual void errorDialog(QString message);
     virtual void closeUi();
     virtual void showMainWindow();
-    virtual void showCredentialsDialog();
 
 private:
     void subscribeFailed(QString reason);

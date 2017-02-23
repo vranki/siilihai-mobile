@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 SimpleButton {
     property string origText: text
-    buttonColor: "red"
+    buttonColor: "#ff8888"
     MouseArea {
         anchors.fill: parent
         preventStealing: true

@@ -2,10 +2,10 @@ import QtQuick 2.0
 import "widgets"
 
 ListView {
-    width: parent.width * 0.9
-    height: parent.height
+    width: parent ? parent.width * 0.9 : 0
+    height: parent ? parent.height : 0
     spacing: 10
-    model: parent.model
+    model: parent ? parent.model : 0
 
     function gotoIndex(idx) {
         var pos = contentY;
@@ -16,17 +16,25 @@ ListView {
         anim.to = destPos;
         anim.running = true;
     }
+    Connections {
+        target: mainItem
+        onBackPressed: {
+            messageListView.selectedThread = undefined
+            messageListView.active = false
+        }
+    }
+
     NumberAnimation { id: anim; target: messageListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500; onStopped: returnToBounds() }
 
     header: Column {
         width: parent.width * 0.95
         spacing: 5
         ThreadButton {
-            text: selectedThread.displayName
-            rightText: selectedThread.unreadCount
+            text: selectedThread ? selectedThread.displayName : 0
+            rightText: selectedThread ? selectedThread.unreadCount : 0
             smallText: threadListView.selectedGroup.displayName + " - " + forumListView.selectedForum.alias
-            hmm: selectedThread.hasMoreMessages
-            icon: selectedThread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
+            hmm: selectedThread ? selectedThread.hasMoreMessages : false
+            icon: selectedThread && selectedThread.unreadCount > 0 ? "gfx/Gnome-mail-unread.svg" : "gfx/Gnome-mail-read.svg"
             width: parent.width * 0.95
             z: -10
             anchors.horizontalCenter: parent.horizontalCenter
@@ -37,7 +45,7 @@ ListView {
             text: "Show first unread"
             buttonColor: color_a_text
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: selectedThread.unreadCount
+            visible: selectedThread ? selectedThread.unreadCount : 0
             onClicked: {
                 for(var i=0;i<count;i++) {
                     if(!model[i].isRead) {
@@ -63,7 +71,7 @@ ListView {
         }
         SimpleButton {
             text: "Get more messages"
-            visible: selectedThread.hasMoreMessages
+            visible: selectedThread ? selectedThread.hasMoreMessages : false
             buttonColor: color_a_text
             enabled: visible && !forumListView.selectedForum.beingUpdated
             anchors.horizontalCenter: parent.horizontalCenter
@@ -74,16 +82,16 @@ ListView {
             buttonColor: color_a_text
             onClicked: markAll(true)
             anchors.horizontalCenter: parent.horizontalCenter
-            icon: "gfx/Gnome-mail-mark-read.svg"
-            visible: messageListView.selectedThread.unreadCount
+            icon: "../gfx/Gnome-mail-mark-read.svg"
+            visible: selectedThread ? selectedThread.unreadCount : false
         }
         SimpleButton {
             text: "Mark all unread"
             buttonColor: color_a_text
             onClicked: markAll(false)
             anchors.horizontalCenter: parent.horizontalCenter
-            icon: "gfx/Gnome-mail-mark-unread.svg"
-            visible: (count - messageListView.selectedThread.unreadCount)
+            icon: "../gfx/Gnome-mail-mark-unread.svg"
+            visible: selectedThread ? (count - selectedThread.unreadCount) : false
         }
         /*
         SimpleButton {

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.4
 import "forum"
 import "account"
 
@@ -29,6 +30,11 @@ Item {
     property int tallButtonHeight: largerDimension / 13
 
     property int buttonAnimationDuration: 500
+
+    property bool mainViewVisible: !threadListView.active
+                                   && !forumSettingsDialog.active
+                                   && !subscribeForumDialog.active
+                                   && !settingsLoader.active
 
     signal backPressed
 
@@ -86,7 +92,12 @@ Item {
 
     Connections {
         target: siilihaimobile
-        onShowForumSettingsDialog: { console.log("show fsd:", sub) }
+        onForumSubscribed: {
+            returnToTop();
+            // Open settings for the forum
+            forumListView.selectedForum = sub
+            forumSettingsDialog.active = true
+        }
     }
 
     Loader {
@@ -103,16 +114,25 @@ Item {
         }
     }
 
-    /*
-    LoginWizard {
-        id: loginWizard
+    Loader { // Load on demand
+        id: settingsLoader
+        source: "SettingsDialog.qml"
+        active: false
         width: parent.width
         height: parent.height
+        Connections {
+            target: settingsLoader.item
+            ignoreUnknownSignals: true
+            onCloseDialog: settingsLoader.active = false
+        }
+    }
+    /*
+    ComposeMessage {
+        id: composeMessage
     }
 
-    ForumSettingsDialog {
-        id: forumSettingsDialog
-    }
+    ForumErrorDialog { id: forumErrorDialog }
+    MessageDialog { id: messageDialog }
     */
 
     Toolbar {
@@ -120,38 +140,47 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    Loader { // Load on demand
-        id: settingsLoader
-        source: "SettingsDialog.qml"
-        active: false
+    CredentialsDialog { id: credentialsDialog }
+
+    Loader {
+        id: loginWizardLoader
         width: parent.width
         height: parent.height
-    }
-    /*
-    ComposeMessage {
-        id: composeMessage
+        source: "account/LoginWizard.qml"
+        active: false
+
+        Connections {
+            target: siilihaimobile
+            onShowLoginWizard: loginWizardLoader.active = true
+        }
     }
 
-    CredentialsDialog { id: credentialsDialog }
-    ForumErrorDialog { id: forumErrorDialog }
-    MessageDialog { id: messageDialog }
-    */
     InactiveScreen {}
-
-    // Hide the virtual keyboard if it is open
-    function hideVkb() {
-        console.log("Hide the damn VKB")
-        Qt.inputMethod.hide();
-    }
 
     // Android back button handling
     focus: true // important - otherwise we'll get no key events
-
-    Keys.onReleased: {
-        // Handle android back button. Quit if in main view, otherwise press back
-        if (event.key === Qt.Key_Back && !mainViewVisible && !loginWizard.topItem) {
+/*
+    onClosing: {
+        if (!loginWizardLoader.active) {
             event.accepted = true
             backPressed()
         }
+        close.accepted = false
+    }
+*/
+    Keys.onReleased: {
+        // Handle android back button. Quit if in main view, otherwise press back
+        if (event.key === Qt.Key_Back && !loginWizardLoader.active && !mainViewVisible) {
+            event.accepted = true
+            backPressed()
+        }
+    }
+    // Return to top forum list view
+    function returnToTop() {
+        messageListView.selectedThread = undefined
+        messageListView.active = false
+        threadListView.selectedGroup = undefined
+        threadListView.active = false
+        forumListView.selectedForum = undefined
     }
 }

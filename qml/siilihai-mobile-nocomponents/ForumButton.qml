@@ -8,11 +8,9 @@ ButtonWithUnreadCount {
     icon: modelData.faviconUrl
     iconEmblems: (modelData.beingSynced ? "S" : "") + (modelData.beingUpdated ? "U" : "") + (modelData.errors.length ? "!" : "")
     onClicked: {
-        console.log("OC:", isSelectedForum)
         if(isSelectedForum) {
             forumListView.selectedForum = undefined
         } else {
-            console.log("Selecting", modelData, modelData.id)
             forumListView.selectedForum = modelData
             for(var i=0;i < forumListView.selectedForum.errors; i++) {
                 console.log("Forum errors:", forumListView.selectedForum.errors.length)
@@ -53,6 +51,15 @@ ButtonWithUnreadCount {
             anchors.fill: parent
             z: -10
             fillMode: Image.PreserveAspectFit
+        }
+        Connections {
+            target: siilihaimobile
+            onGroupListChanged: {
+                if(sub === modelData) {
+                    forumListView.selectedForum = modelData
+                    settingsButton.clicked()
+                }
+            }
         }
     }
 }

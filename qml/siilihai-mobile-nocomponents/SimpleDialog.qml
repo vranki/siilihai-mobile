@@ -5,20 +5,19 @@ Rectangle {
     y: topItem ? 0 : -height
     visible: y > -height
     color: color_b_bg
-    opacity: 0.95
     width: parent ? parent.width : 0
     height: parent ? parent.height : 0
     Behavior on y { SmoothedAnimation { velocity: 1500; easing.type: Easing.InOutQuad  } }
     HideEffect {}
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: hideVkb()
-    }
-    onTopItemChanged: hideVkb()
-
     signal closeDialog
     signal closeLater
+
+    Connections {
+        target: mainItem
+        onBackPressed: topItem = false
+    }
+    onTopItemChanged: if(!topItem) closeLater()
 
     onCloseLater: terminateTimer.start()
 

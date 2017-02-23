@@ -2,27 +2,37 @@ import QtQuick 2.0
 import "widgets"
 
 ListView {
-    width: parent.width * 0.9
-    height: parent.height
+    width: parent ? parent.width * 0.9 : 0
+    height: parent ? parent.height : 0
     spacing: 10
-    model: parent.model
+    model: parent ? parent.model : undefined
 
     // Copypaste from MessageListView, meh!
     function gotoIndex(idx) {
         var pos = contentY;
         var destPos;
-        threadListView.positionViewAtIndex(idx, ListView.Center);
+        positionViewAtIndex(idx, ListView.Center);
         destPos = contentY;
         anim.from = pos;
         anim.to = destPos;
         anim.running = true;
     }
-    NumberAnimation { id: anim; target: threadListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500 }
+    NumberAnimation { id: anim; target: parent; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500 }
+
+    Connections {
+        target: mainItem
+        onBackPressed: {
+            if(!messageListView.active) {
+                threadListView.selectedGroup = undefined
+                threadListView.active = false
+            }
+        }
+    }
 
     header: GroupButton {
-        text: selectedGroup.displayName
-        rightText: selectedGroup.unreadCount
-        smallText: selectedGroup.hierarchy
+        text: selectedGroup ? selectedGroup.displayName : ""
+        rightText: selectedGroup ? selectedGroup.unreadCount : 0
+        smallText: selectedGroup ? selectedGroup.hierarchy : 0
         width: parent.width * 0.95
         z: -10
         anchors.horizontalCenter: parent.horizontalCenter
@@ -39,7 +49,7 @@ ListView {
             anchors.horizontalCenter: parent.horizontalCenter
             buttonColor: color_a_text
             text: "New thread..";
-            visible: forumListView.selectedForum.supportsPosting && forumListView.selectedForum.isAuthenticated
+            visible: forumListView.selectedForum && forumListView.selectedForum.supportsPosting && forumListView.selectedForum.isAuthenticated
             onClicked: {
                 composeMessage.newMessage()
                 composeMessage.appendBody(siilihai.settings.signature)

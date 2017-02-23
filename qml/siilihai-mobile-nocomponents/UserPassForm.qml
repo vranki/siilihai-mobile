@@ -31,7 +31,12 @@ Item {
             text: questionText
             id: check
             checked: true
-            onCheckedChanged: if(!checked) { username.text = ""; password.text = ""; hideVkb(); }
+            onCheckedChanged: {
+                if(!checked) {
+                    username.text = ""
+                    password.text = ""
+                }
+            }
             width: parent.width
             visible: optional
         }
@@ -43,8 +48,8 @@ Item {
         }
         SimpleTextEdit {
             id: username
-            focus: true
-            inputMethodHints: Qt.ImhNoAutoUppercase
+            inputMethodHints: Qt.ImhNoAutoUppercase |
+                              Qt.ImhSensitiveData
             opacity: check.checked ? 1 : 0.3
             enabled: check.checked
         }
@@ -56,9 +61,9 @@ Item {
         }
         SimpleTextEdit {
             id: password
-            inputMethodHints: Qt.ImhHiddenText | Qt.ImhNoAutoUppercase
             opacity: check.checked ? 1 : 0.3
             enabled: check.checked
+            echoMode: TextInput.PasswordEchoOnEdit
         }
         Item {width:1; height: 10}
     }

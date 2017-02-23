@@ -104,6 +104,5 @@ Rectangle {
                 composeMessage.threadId = selectedthread.id
             }
         }
-
     }
 }

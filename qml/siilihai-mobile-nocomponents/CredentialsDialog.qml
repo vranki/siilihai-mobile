@@ -2,8 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
-    objectName: "credentialsDialog"
-    property string forumAlias: ""
+    topItem: siilihaimobile.currentCredentialsRequest
 
     Column {
         y: 50
@@ -12,7 +11,7 @@ SimpleDialog {
         UserPassForm {
             id: upf
             optional: true
-            questionText: "Authenticate to " + forumAlias
+            questionText: "Authenticate to " + (siilihaimobile.currentCredentialsRequest ? siilihaimobile.currentCredentialsRequest.forumName : "")
         }
         SimpleCheckBox {
             id: remember
@@ -27,10 +26,9 @@ SimpleDialog {
             text: "Ok"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                if(!topItem) return;
-                topItem = false
-                forumAlias = ""
-                siilihaimobile.credentialsEntered(upf.username, upf.password, remember.checked && upf.checked)
+                siilihaimobile.currentCredentialsRequest.username = upf.username
+                siilihaimobile.currentCredentialsRequest.password = upf.password
+                siilihaimobile.currentCredentialsRequest.signalCredentialsEntered(remember.checked && upf.checked)
                 upf.reset()
             }
         }

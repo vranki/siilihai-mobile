@@ -7,12 +7,23 @@ SimpleDialog {
     objectName: "forumSettingsDialog"
     topItem: true
 
+    onTopItemChanged: {
+        if(!topItem) {
+            forumListView.selectedForum.clearErrors()
+            forumListView.selectedForum.isAuthenticated = authentication.checked
+            forumListView.selectedForum.username = authentication.username
+            forumListView.selectedForum.password = authentication.password
+            siilihaimobile.updateGroupSubscriptions(forumListView.selectedForum)
+            forumSettingsDialog.topItem = false
+        }
+    }
+
     Flickable {
         id: forumSettingsFlickable
         anchors.fill: parent
         contentWidth: width
         contentHeight: contentColumn.height
-        MouseArea { width: parent.width; height: contentColumn.height; onClicked: hideVkb() } // Hax
+
         Column {
             id: contentColumn
             width: parent.width
@@ -21,6 +32,7 @@ SimpleDialog {
                 font.pixelSize: headerPixelSize
                 color: color_b_text
                 text: forumListView.selectedForum.alias
+                anchors.horizontalCenter: parent.horizontalCenter
             }
             ListView {
                 id: errorList
@@ -83,21 +95,7 @@ SimpleDialog {
                     onClicked: forumListView.selectedForum.markRead(false)
                 }
             }
-            SimpleButton {
-                text: "Ok"
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    forumListView.selectedForum.clearErrors()
-                    forumListView.selectedForum.isAuthenticated = authentication.checked
-                    forumListView.selectedForum.username = authentication.username
-                    forumListView.selectedForum.password = authentication.password
-                    siilihaimobile.updateGroupSubscriptions(forumListView.selectedForum)
-                    forumSettingsDialog.closeDialog()
-                }
-                Component.onCompleted: mainItem.backPressed.connect(clicked)
-            }
-            Item {width: 1; height: mainItem.height/8 } // Spacer
-
+            Item {width: 1; height: mainItem.height/16 } // Spacer
 
             ListView {
                 id: groupList
@@ -110,7 +108,7 @@ SimpleDialog {
                 header: Column {
                     width: parent.width
                     Text {
-                        font.pixelSize: 0
+                        font.pixelSize: largePixelSize
                         color: color_b_text
                         text: groupList.count ? "Group subscriptions" : "No known groups"
                     }

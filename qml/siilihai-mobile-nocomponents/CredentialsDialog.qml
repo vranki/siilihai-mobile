@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
-    topItem: siilihaimobile.currentCredentialsRequest
+    topItem: true
 
     Column {
         y: 50

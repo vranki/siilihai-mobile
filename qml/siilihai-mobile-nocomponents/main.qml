@@ -42,14 +42,13 @@ Item {
         source: "gfx/backbround-dark.png"
         fillMode: Image.Tile
         width: parent.width
-        height: parent.height*2 + forumListView.height
+        height: parent.height*2 + forumListView.contentHeight
         y: -parent.height - forumListView.contentY
     }
     ForumListView {
         id: forumListView
-        // property bool topItem: !threadListView.topItem && !messageListView.topItem
         width: parent.width * 0.98
-        height: parent.height// - toolbar.height
+        height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
         HideEffect {}
     }
@@ -139,9 +138,13 @@ Item {
         id: toolbar
         anchors.bottom: parent.bottom
     }
-
-    CredentialsDialog { id: credentialsDialog }
-
+    Loader {
+        id: credentialsDialogLoader
+        width: parent.width
+        height: parent.height
+        source: "CredentialsDialog.qml"
+        active: siilihaimobile.currentCredentialsRequest
+    }
     Loader {
         id: loginWizardLoader
         width: parent.width

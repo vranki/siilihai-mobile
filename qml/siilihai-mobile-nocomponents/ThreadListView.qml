@@ -17,6 +17,7 @@ ListView {
         anim.to = destPos;
         anim.running = true;
     }
+
     NumberAnimation { id: anim; target: parent; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500 }
 
     Connections {

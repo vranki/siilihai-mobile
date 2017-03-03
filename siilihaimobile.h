@@ -30,7 +30,6 @@ public slots:
     void reloadUi();
     void dismissMessages();
     void registerUser(QString user, QString password, QString email, bool sync);
-    void loginUser(QString user, QString password);
     void postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body);
     virtual void subscribeForum();
 

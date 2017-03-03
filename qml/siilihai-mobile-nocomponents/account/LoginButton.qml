@@ -9,6 +9,17 @@ SimpleButton {
     height: defaultButtonHeight + contentC.height
     clip: true
     Behavior on height { SmoothedAnimation { velocity: 800 } }
+
+    Component.onCompleted: {
+        if(siilihaimobile.settings.username) {
+            // Account already exists
+            useExitingAccount = true
+            registerAccount = false
+            upf.username = siilihaimobile.settings.username
+            upf.password = siilihaimobile.settings.password
+        }
+    }
+
     onClicked: {
         useExitingAccount = true
         registerAccount = false

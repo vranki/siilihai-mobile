@@ -133,13 +133,6 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
     if (lw) QMetaObject::invokeMethod(lw, "registrationFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
 }
 
-void SiilihaiMobile::loginUser(QString user, QString password) {
-    qDebug() << Q_FUNC_INFO << user;
-    regOrLoginUser = user.trimmed();
-    regOrLoginPass = password.trimmed();
-    // connect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
-    m_protocol.login(user, password);
-}
 /*
 void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
     qDebug() << Q_FUNC_INFO;

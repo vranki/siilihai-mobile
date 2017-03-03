@@ -28,6 +28,7 @@ Rectangle {
 
     // The top header of a forum
     Item {
+        id: topHeader
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width * 0.98
         height: defaultButtonHeight * 0.85
@@ -35,7 +36,7 @@ Rectangle {
 
         Image {
             id: iconImage
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: topHeader.verticalCenter
             height: defaultButtonHeight * 0.8
             width: height
             source: icon
@@ -44,7 +45,8 @@ Rectangle {
                 color: "black"
                 visible: iconImage.status !== Image.Ready
                 opacity: 0.2
-                anchors.fill: parent
+                width: parent.width
+                height: parent.height
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -92,7 +94,7 @@ Rectangle {
             id: rightText
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: parent.width * 0.001
+            anchors.rightMargin: parent.width * 0.0015
             text: uibutton.rightText
             color: text !== "0" ? color1 : "#bdbdee"
             font.pixelSize: defaultButtonHeight * 0.7

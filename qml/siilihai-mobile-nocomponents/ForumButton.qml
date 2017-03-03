@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 ButtonWithUnreadCount {
-    property bool isSelectedForum: forumListView.selectedForum = modelData
+    property bool isSelectedForum: forumListView.selectedForum === modelData
     text: modelData.alias
     rightText: modelData.unreadCount
     icon: modelData.faviconUrl

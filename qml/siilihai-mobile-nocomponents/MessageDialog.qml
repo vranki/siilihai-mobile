@@ -2,14 +2,22 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
-    property bool shown: errormessages.length > 0
+    property bool shown: messageListView.count
     y: shown ? 0 : parent.height
-    Behavior on y { SmoothedAnimation { velocity: 2500; easing.type: Easing.InOutQuad  } }
+
+    Behavior on y {
+        SmoothedAnimation {
+            velocity: 2500
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     ListView {
+        id: messageListView
         width: parent.width*0.9
         height: parent.height
         anchors.centerIn: parent
-        model: errormessages
+        model: siilihaimobile.errorMessages
         spacing: 20
         delegate: Text {
             width: parent.width
@@ -39,5 +47,4 @@ SimpleDialog {
         }
 
     }
-    onShownChanged: Qt.inputMethod.hide();
 }

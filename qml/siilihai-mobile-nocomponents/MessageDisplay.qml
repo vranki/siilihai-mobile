@@ -81,7 +81,7 @@ Rectangle {
             width: parent.width / 4
             height: smallButtonHeight
             text: modelData.isRead ? "Read" : "Unread"
-            onClicked: isRead = !isRead
+            onClicked: modelData.isRead = !modelData.isRead
         }
         SimpleButton {
             width: parent.width / 4

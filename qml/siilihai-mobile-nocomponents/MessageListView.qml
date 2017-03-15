@@ -8,13 +8,15 @@ ListView {
     model: parent ? parent.model : 0
 
     function gotoIndex(idx) {
-        var pos = contentY;
-        var destPos;
-        messageListView.positionViewAtIndex(idx, ListView.Center);
-        destPos = contentY;
-        anim.from = pos;
-        anim.to = destPos;
-        anim.running = true;
+        var pos = contentY
+        console.log("Old pos", contentY)
+        var destPos
+        messageListView.item.positionViewAtIndex(idx, ListView.Center)
+        destPos = contentY
+        console.log("Destination pos", destPos)
+        anim.from = pos
+        anim.to = destPos
+        anim.running = true
     }
     Connections {
         target: mainItem
@@ -24,7 +26,12 @@ ListView {
         }
     }
 
-    NumberAnimation { id: anim; target: messageListView; property: "contentY"; easing.type: Easing.InOutQuad; duration: 500; onStopped: returnToBounds() }
+    NumberAnimation on contentY {
+        id: anim
+        easing.type: Easing.InOutQuad
+        duration: 500
+        onStopped: returnToBounds()
+    }
 
     header: Column {
         width: parent.width * 0.95
@@ -49,6 +56,7 @@ ListView {
             onClicked: {
                 for(var i=0;i<count;i++) {
                     if(!model[i].isRead) {
+                        console.log("First unread is ", i)
                         gotoIndex(i);
                         return;
                     }

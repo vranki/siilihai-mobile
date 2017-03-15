@@ -87,15 +87,6 @@ SimpleDialog {
         }
     }
 
-    function registrationFinished(success, motd) {
-        busy = false
-        if(success) {
-            topItem = false
-        } else {
-            loginError.text = "Registration failed - check username & password"
-        }
-    }
-
     Connections {
         target: siilihaimobile
         onLoginFinished: {

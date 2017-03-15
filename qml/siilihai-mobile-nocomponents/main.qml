@@ -35,6 +35,7 @@ Item {
                                    && !forumSettingsDialog.active
                                    && !subscribeForumDialog.active
                                    && !settingsLoader.active
+                                   && !messageDialog.shown
 
     signal backPressed
 
@@ -131,9 +132,9 @@ Item {
     }
 
     ForumErrorDialog { id: forumErrorDialog }
-    MessageDialog { id: messageDialog }
-    */
 
+    */
+    MessageDialog { id: messageDialog }
     Toolbar {
         id: toolbar
         anchors.bottom: parent.bottom
@@ -162,18 +163,11 @@ Item {
 
     // Android back button handling
     focus: true // important - otherwise we'll get no key events
-/*
-    onClosing: {
-        if (!loginWizardLoader.active) {
-            event.accepted = true
-            backPressed()
-        }
-        close.accepted = false
-    }
-*/
     Keys.onReleased: {
         // Handle android back button. Quit if in main view, otherwise press back
-        if (event.key === Qt.Key_Back && !loginWizardLoader.active && !mainViewVisible) {
+        if (event.key === Qt.Key_Back
+                && !loginWizardLoader.active
+                && !mainViewVisible) {
             event.accepted = true
             backPressed()
         }

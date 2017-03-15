@@ -29,8 +29,14 @@ SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
-    if(!message.isEmpty()) errorMessageList.append(message);
-    qQuickView->rootContext()->setContextProperty("errormessages", errorMessageList);
+    qDebug() << Q_FUNC_INFO << message;
+    m_errorMessages.append(message);
+    emit errorMessagesChanged(m_errorMessages);
+}
+
+void SiilihaiMobile::dismissMessages() {
+    m_errorMessages.clear();
+    emit errorMessagesChanged(m_errorMessages);
 }
 
 void SiilihaiMobile::closeUi() {
@@ -41,9 +47,8 @@ void SiilihaiMobile::closeUi() {
 
 void SiilihaiMobile::showMainWindow() {
     qDebug() << Q_FUNC_INFO << "Settings at " << m_settings->fileName();
-    qQuickView->rootContext()->setContextProperty("siilihaisettings", m_settings);
     if(state() == SH_OFFLINE)
-        showStatusMessage("Started in offline mode");
+        errorDialog("Working in offline mode");
 }
 
 void SiilihaiMobile::postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body) {
@@ -78,7 +83,6 @@ void SiilihaiMobile::subscribeFailed(QString reason) {
 void SiilihaiMobile::setContextProperties() {
     QQmlContext *rootContext = qQuickView->rootContext();
     rootContext->setContextProperty("siilihaimobile", this);
-    rootContext->setContextProperty("messageQueue", QVariant::fromValue(errorMessageList));
 }
 
 bool SiilihaiMobile::noBackButton() const
@@ -87,6 +91,11 @@ bool SiilihaiMobile::noBackButton() const
     return true;
 #endif
     return false;
+}
+
+QStringList SiilihaiMobile::errorMessages() const
+{
+    return m_errorMessages;
 }
 
 
@@ -102,12 +111,11 @@ bool SiilihaiMobile::sortMessagesByOrdernum(QObject *a, QObject *b) {
 }
 
 void SiilihaiMobile::registerUser(QString user, QString password, QString email, bool sync) {
-    qDebug() << Q_FUNC_INFO << user << email << password;
+    qDebug() << Q_FUNC_INFO << user << email;
     if(user.isEmpty() && password.isEmpty()) {
         // Use without account
         m_settings->setValue("account/noaccount", true);
-        QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
-        if (lw) QMetaObject::invokeMethod(lw, "registrationFinished", Q_ARG(QVariant, true), Q_ARG(QVariant, ""));
+        ClientLogic::loginWizardFinished();
     } else {
         regOrLoginUser = user.trimmed();
         regOrLoginPass = password.trimmed();
@@ -129,24 +137,7 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
     } else {
         errorDialog("Registration failed - \n" + motd);
     }
-    QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
-    if (lw) QMetaObject::invokeMethod(lw, "registrationFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
 }
-
-/*
-void SiilihaiMobile::loginFinished(bool success, QString motd, bool sync) {
-    qDebug() << Q_FUNC_INFO;
-    ClientLogic::loginFinished(success, motd, sync);
-    disconnect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(loginFinished(bool,QString,bool)));
-    if(success && !regOrLoginUser.isEmpty()) {
-        m_settings->setUsername(regOrLoginUser);
-        m_settings->setPassword(regOrLoginPass);
-        m_settings->sync();
-    }
-    QObject *lw = qQuickView->rootObject()->findChild<QObject*>("loginWizard");
-    if (lw) QMetaObject::invokeMethod(lw, "loginFinished", Q_ARG(QVariant, success), Q_ARG(QVariant, motd));
-}
-*/
 
 void SiilihaiMobile::haltSiilihai() {
     qDebug() << Q_FUNC_INFO;
@@ -163,10 +154,6 @@ void SiilihaiMobile::reloadUi() {
     QMetaObject::invokeMethod(this, "reloadUiReally", Qt::QueuedConnection);
 }
 
-void SiilihaiMobile::dismissMessages() {
-    errorMessageList.clear();
-    errorDialog(QString::null);
-}
 
 void SiilihaiMobile::reloadUiReally() {
     QUrl src = qQuickView->source();

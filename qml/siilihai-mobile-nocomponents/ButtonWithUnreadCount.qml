@@ -41,13 +41,7 @@ Rectangle {
             width: height
             source: icon
             asynchronous: true
-            Rectangle {
-                color: "black"
-                visible: iconImage.status !== Image.Ready
-                opacity: 0.2
-                width: parent.width
-                height: parent.height
-            }
+
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: iconEmblems
@@ -85,10 +79,11 @@ Rectangle {
         }
         BusyIndicator {
             enabled: busy
-            anchors.right: rightText.left
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width * 0.2
             width: parent.width * 0.2
             anchors.verticalCenter: parent.verticalCenter
-            height: parent.height / 2
+            height: parent.height / 4
         }
         Text {
             id: rightText

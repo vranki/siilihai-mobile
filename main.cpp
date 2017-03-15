@@ -8,17 +8,13 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    qDebug() << Q_FUNC_INFO << "started";
     QGuiApplication app(argc, argv);
-    qDebug() << Q_FUNC_INFO << "QGuiApplication created";
     QCoreApplication::setOrganizationName("Siilihai");
     QCoreApplication::setOrganizationDomain("siilihai.com");
     QCoreApplication::setApplicationName("Siilihai-mobile");
 
     QtQuick2ApplicationViewer viewer;
-    qDebug() << Q_FUNC_INFO << "QtQuick2ApplicationViewer created";
     SiilihaiMobile shm(0, &viewer);
-    qDebug() << Q_FUNC_INFO << "SiilihaiMobile created";
 
     app.setQuitOnLastWindowClosed(false);
 
@@ -26,7 +22,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     // On android the file.exists() returns false, although this works:
     viewer.setMainQmlFile("qml/siilihai-mobile-nocomponents/main.qml");
-    qDebug() << Q_FUNC_INFO << "android setMainQmlFile done";
 #else
     // Search from a few known paths
     QStringList mainFileAlternatives;
@@ -57,8 +52,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     shm.setContextProperties(); // Root ctx may change when loading, so redo this
-    qDebug() << Q_FUNC_INFO << "ctx props set";
-    qDebug() << Q_FUNC_INFO << "viewer open";
 
     // This works on Sailfish, but not on desktop
     app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));

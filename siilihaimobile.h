@@ -47,12 +47,10 @@ protected:
 
 private:
     void subscribeFailed(QString reason);
-    void setObjectProperty(QString objectName, QString property, QString value);
     static bool sortThreadsByOrdernum(QObject *a, QObject *b);
     static bool sortMessagesByOrdernum(QObject *a, QObject *b);
 
     QQuickView *qQuickView;
-    QQuickView *quickView;
     QString regOrLoginUser, regOrLoginPass;
     bool haltRequested;
     // True if user just added a forum.

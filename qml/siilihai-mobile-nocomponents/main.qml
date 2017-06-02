@@ -35,7 +35,7 @@ Item {
                                    && !forumSettingsDialog.active
                                    && !subscribeForumDialog.active
                                    && !settingsLoader.active
-                                   && !messageDialog.shown
+                                   && !messageDialogLoader.active
 
     signal backPressed
 
@@ -134,7 +134,13 @@ Item {
     ForumErrorDialog { id: forumErrorDialog }
 
     */
-    MessageDialog { id: messageDialog }
+    Loader {
+        id: messageDialogLoader
+        width: parent.width
+        height: parent.height
+        source: "MessageDialog.qml"
+        active: siilihaimobile.errorMessages.length
+    }
     Toolbar {
         id: toolbar
         anchors.bottom: parent.bottom

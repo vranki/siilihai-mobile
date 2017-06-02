@@ -98,24 +98,15 @@ QStringList SiilihaiMobile::errorMessages() const
     return m_errorMessages;
 }
 
-
-void SiilihaiMobile::setObjectProperty(QString objectName, QString property, QString value) {
-    QObject *object = qQuickView->rootObject()->findChild<QObject*>(objectName);
-    if(!object) qDebug() << Q_FUNC_INFO << "Object " << objectName << " does not exist!";
-    Q_ASSERT(object);
-    object->setProperty(property.toUtf8(), QVariant::fromValue(value));
-}
-
 bool SiilihaiMobile::sortMessagesByOrdernum(QObject *a, QObject *b) {
     return qobject_cast<ForumMessage*>(a)->ordernum() < qobject_cast<ForumMessage*>(b)->ordernum();
 }
 
 void SiilihaiMobile::registerUser(QString user, QString password, QString email, bool sync) {
-    qDebug() << Q_FUNC_INFO << user << email;
     if(user.isEmpty() && password.isEmpty()) {
         // Use without account
         m_settings->setValue("account/noaccount", true);
-        ClientLogic::loginWizardFinished();
+        emit ClientLogic::loginFinished(true, QString::null, false);
     } else {
         regOrLoginUser = user.trimmed();
         regOrLoginPass = password.trimmed();
@@ -126,7 +117,6 @@ void SiilihaiMobile::registerUser(QString user, QString password, QString email,
 
 void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
     disconnect(&m_protocol, SIGNAL(loginFinished(bool,QString,bool)), this, SLOT(registerFinished(bool,QString,bool)));
-    qDebug() << Q_FUNC_INFO << success << motd << sync;
     if (success) {
         m_settings->setUsername(regOrLoginUser);
         m_settings->setPassword(regOrLoginPass);
@@ -153,7 +143,6 @@ void SiilihaiMobile::reloadUi() {
     qDebug() << Q_FUNC_INFO;
     QMetaObject::invokeMethod(this, "reloadUiReally", Qt::QueuedConnection);
 }
-
 
 void SiilihaiMobile::reloadUiReally() {
     QUrl src = qQuickView->source();

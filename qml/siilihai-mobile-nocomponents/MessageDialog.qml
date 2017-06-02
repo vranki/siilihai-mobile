@@ -2,15 +2,7 @@ import QtQuick 2.0
 import "widgets"
 
 SimpleDialog {
-    property bool shown: messageListView.count
-    y: shown ? 0 : parent.height
-
-    Behavior on y {
-        SmoothedAnimation {
-            velocity: 2500
-            easing.type: Easing.InOutQuad
-        }
-    }
+    topItem: true
 
     ListView {
         id: messageListView
@@ -45,6 +37,5 @@ SimpleDialog {
                 Component.onCompleted: mainItem.backPressed.connect(clicked)
             }
         }
-
     }
 }

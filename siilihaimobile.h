@@ -43,7 +43,6 @@ private slots:
 protected:
     virtual void errorDialog(QString message);
     virtual void closeUi();
-    virtual void showMainWindow();
 
 private:
     void subscribeFailed(QString reason);

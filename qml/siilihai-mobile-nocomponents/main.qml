@@ -135,6 +135,18 @@ Item {
 
     */
     Loader {
+        id: loginWizardLoader
+        width: parent.width
+        height: parent.height
+        source: "account/LoginWizard.qml"
+        active: false
+
+        Connections {
+            target: siilihaimobile
+            onShowLoginWizard: loginWizardLoader.active = true
+        }
+    }
+    Loader {
         id: messageDialogLoader
         width: parent.width
         height: parent.height
@@ -152,18 +164,7 @@ Item {
         source: "CredentialsDialog.qml"
         active: siilihaimobile.currentCredentialsRequest
     }
-    Loader {
-        id: loginWizardLoader
-        width: parent.width
-        height: parent.height
-        source: "account/LoginWizard.qml"
-        active: false
 
-        Connections {
-            target: siilihaimobile
-            onShowLoginWizard: loginWizardLoader.active = true
-        }
-    }
 
     InactiveScreen {}
 

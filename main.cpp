@@ -56,7 +56,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // This works on Sailfish, but not on desktop
     app.connect(&viewer, SIGNAL(closing(QQuickCloseEvent*)), &shm, SLOT(haltSiilihai()));
 
-    shm.launchSiilihai(false);
+    shm.launchSiilihai();
     int ret = app.exec();
     // Ugly hack to make sure Siilihai quits graceously after swipe close
     qDebug() << Q_FUNC_INFO << "exec() exited";

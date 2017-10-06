@@ -40,15 +40,8 @@ void SiilihaiMobile::dismissMessages() {
 }
 
 void SiilihaiMobile::closeUi() {
-    qDebug() << Q_FUNC_INFO;
     if(!QCoreApplication::closingDown())
         QCoreApplication::quit();
-}
-
-void SiilihaiMobile::showMainWindow() {
-    qDebug() << Q_FUNC_INFO << "Settings at " << m_settings->fileName();
-    if(state() == SH_OFFLINE)
-        errorDialog("Working in offline mode");
 }
 
 void SiilihaiMobile::postMessage(ForumSubscription *sub, QString grpId, QString thrId, QString subject, QString body) {
@@ -130,7 +123,6 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
 }
 
 void SiilihaiMobile::haltSiilihai() {
-    qDebug() << Q_FUNC_INFO;
     haltRequested = true;
     ClientLogic::haltSiilihai();
 }
@@ -140,7 +132,6 @@ bool SiilihaiMobile::isHaltRequested() const {
 }
 
 void SiilihaiMobile::reloadUi() {
-    qDebug() << Q_FUNC_INFO;
     QMetaObject::invokeMethod(this, "reloadUiReally", Qt::QueuedConnection);
 }
 

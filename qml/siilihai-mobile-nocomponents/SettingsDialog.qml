@@ -59,7 +59,7 @@ SimpleDialog {
                 font.pixelSize: headerPixelSize
             }
             Text {
-                text: siilihai.settings.noAccount ? "No account used" : "Username: " + siilihaisettings.username
+                text: siilihai.settings.noAccount ? "No account used" : "Username: " + siilihai.settings.username
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: color_b_text
                 font.pixelSize: largePixelSize
@@ -87,6 +87,7 @@ SimpleDialog {
             }
             SimpleTextArea {
                 id: signature
+                height: mainItem.height * 0.2
             }
             Item {
                 width: 1

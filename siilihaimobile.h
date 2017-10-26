@@ -16,7 +16,8 @@ class SiilihaiMobile : public ClientLogic
     Q_PROPERTY(QStringList errorMessages READ errorMessages NOTIFY errorMessagesChanged)
 
 public:
-    explicit SiilihaiMobile(QObject *parent, QQuickView *view);
+    explicit SiilihaiMobile(QObject *parent=nullptr);
+    void setView(QQuickView *view);
     bool isHaltRequested() const;
     void setContextProperties();
     bool noBackButton() const; // Don't show back button in UI (=Android)
@@ -56,5 +57,4 @@ private:
     bool forumWasSubscribedByUser;
     QStringList m_errorMessages;
 };
-
 #endif // SIILIHAIMOBILE_H

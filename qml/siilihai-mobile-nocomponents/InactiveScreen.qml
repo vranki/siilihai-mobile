@@ -3,7 +3,7 @@ import QtQuick 2.0
 Rectangle {
     property int busyforums: 0
     property int totalforums: siilihai.forumDatabase.subscriptions.length
-    visible: !Qt.application.active
+    visible: Qt.application.state !== Qt.ApplicationActive
     anchors.fill: parent
 
     gradient: Gradient {

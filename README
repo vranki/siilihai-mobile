@@ -1,5 +1,39 @@
-This is a mobile client for Siilihai. It's written using C++ & QML and 
-is intended to be used on Meego Harmattan platform.
+This is a mobile client for Siilihai. It's written using Qt5 C++ & QML and
+is intended to be used on Android and Sailfish platforms.
 
-Heavily WIP.
+WIP, but seems usable.
 
+Build instructions (General Qt/Desktop Linux)
+
+ - get libsiilihai to a directory next to this.
+ - qmake
+ - make
+
+This is easy.
+
+Build instructions (Android)
+
+ - get libsiilihai to a directory next to this.
+ - download Qt5.8 android version (difficult to find)
+ - get Android Studio
+ - get Android NDK
+ - get Android tools r25.2.5
+ - cd Android/Sdk/tools
+ - ln -s <path to Android tools r25.2.5>/templates .
+ - Install Android API level 16 (4.1) development tools for arm/x86 as needed
+ - open the Qt creator, configure the android SDK, NDK etc
+ - open the project in QtC. setup the project for Android deployment
+ - Choose Build | Deploy Project "siilihaimobile"
+ - copy the resulting .apk file /android-build/build/outputs/apk/android-build-debug.apk
+   to a android device and install it.
+
+This is difficult. I bet something fails. Please update this README with new
+findings.
+
+Build instructions (Sailfish)
+
+ - TBD
+
+
+Contains a modified version of spinning-circles.svg by Sam Herbert
+(@sherb), for everyone. More @ http://goo.gl/7AJzbL

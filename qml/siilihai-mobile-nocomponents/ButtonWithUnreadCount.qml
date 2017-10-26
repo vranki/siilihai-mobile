@@ -78,12 +78,11 @@ Rectangle {
             }
         }
         BusyIndicator {
-            enabled: busy
+            enabled: busy && Qt.application.state === Qt.ApplicationActive
             anchors.right: parent.right
             anchors.rightMargin: parent.width * 0.2
-            width: parent.width * 0.2
             anchors.verticalCenter: parent.verticalCenter
-            height: parent.height / 4
+            height: parent.height * 0.85
         }
         Text {
             id: rightText

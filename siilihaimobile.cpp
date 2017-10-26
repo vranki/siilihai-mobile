@@ -14,18 +14,14 @@
 #include <siilihai/tapatalk/forumsubscriptiontapatalk.h>
 #include <siilihai/siilihaisettings.h>
 
-SiilihaiMobile::SiilihaiMobile(QObject *parent, QQuickView *view) :
-    ClientLogic(parent), qQuickView(view), haltRequested(false),
-    forumWasSubscribedByUser(false) {
+SiilihaiMobile::SiilihaiMobile(QObject *parent) :
+    ClientLogic(parent)
+  , haltRequested(false)
+  , forumWasSubscribedByUser(false)
+{
     qmlRegisterType<UpdateError>("org.vranki.siilihai", 1, 0, "UpdateError");
-
-    if(!view->rootContext())  {
-        closeUi();
-        return;
-    }
-    qQuickView->rootContext()->setContextProperty("siilihai", this);
-    dismissMessages();
-    setContextProperties();
+    qmlRegisterType<SiilihaiMobile>("org.vranki.siilihai", 1, 0, "SiilihaiMobile");
+    qRegisterMetaType<SiilihaiState>();
 }
 
 void SiilihaiMobile::errorDialog(QString message) {
@@ -125,6 +121,18 @@ void SiilihaiMobile::registerFinished(bool success, QString motd, bool sync) {
 void SiilihaiMobile::haltSiilihai() {
     haltRequested = true;
     ClientLogic::haltSiilihai();
+}
+
+void SiilihaiMobile::setView(QQuickView *view)
+{
+    qQuickView = view;
+    if(!view->rootContext())  {
+        closeUi();
+        return;
+    }
+    qQuickView->rootContext()->setContextProperty("siilihai", this);
+    dismissMessages();
+    setContextProperties();
 }
 
 bool SiilihaiMobile::isHaltRequested() const {

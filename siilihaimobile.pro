@@ -130,7 +130,7 @@ android|nemo {
     DEFINES += FULLSCREEN
 }
 
-OTHER_FILES += debian/changelog
+OTHER_FILES += debian/changelog README
 
 
 QMAKE_CLEAN += *.o

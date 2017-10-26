@@ -165,8 +165,15 @@ Item {
         active: siilihaimobile.currentCredentialsRequest
     }
 
-
     InactiveScreen {}
+
+    Connections {
+        target: Qt.application
+        onStateChanged: if(Qt.application.state === Qt.ApplicationSuspended) {
+                            console.log("App suspended - Saving data")
+                            siilihai.saveData()
+                        }
+    }
 
     // Android back button handling
     focus: true // important - otherwise we'll get no key events
@@ -186,5 +193,9 @@ Item {
         threadListView.selectedGroup = undefined
         threadListView.active = false
         forumListView.selectedForum = undefined
+    }
+    Component.onDestruction: {
+        console.log("Destroying main.qml, saving data..")
+        siilihai.saveData()
     }
 }

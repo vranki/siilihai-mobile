@@ -50,14 +50,6 @@ Item {
             }
         }
         ToolbarButton {
-            image: "gfx/Gnome-preferences-system.svg"
-            onClicked: settingsLoader.active = true
-            visible: !subscribeForumDialog.active
-                     && !threadListView.selectedGroup
-                     && !settingsLoader.active
-                     && !forumSettingsDialog.active
-        }
-        ToolbarButton {
             text: "(R)"
             onClicked: siilihaimobile.reloadUi()
             visible: siilihaimobile.developerMode

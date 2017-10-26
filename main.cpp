@@ -14,7 +14,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Siilihai-mobile");
 
     QtQuick2ApplicationViewer viewer;
-    SiilihaiMobile shm(0, &viewer);
+    SiilihaiMobile shm;
+    shm.setView(&viewer);
 
     app.setQuitOnLastWindowClosed(false);
 
